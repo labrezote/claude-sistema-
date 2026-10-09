@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Portafolio de Mercadotecnia y Publicidad</title>
+  <meta name="description" content="Portafolio de trabajos en branding, campañas, marcas y empresas.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#inicio" class="brand" id="owner-name">Portafolio</a>
+      <nav class="nav" aria-label="Principal">
+        <a href="#trabajos">Trabajos</a>
+        <a href="#clientes">Marcas y empresas</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="container">
+        <p class="eyebrow" id="owner-role"></p>
+        <h1 id="owner-headline"></h1>
+        <p class="lead" id="owner-bio"></p>
+        <div class="stats" id="stats" aria-label="Resumen"></div>
+      </div>
+    </section>
+
+    <section class="section" id="trabajos">
+      <div class="container">
+        <div class="section-head">
+          <h2>Trabajos</h2>
+          <div class="filters" role="group" aria-label="Filtrar trabajos" id="project-filters"></div>
+        </div>
+        <div class="grid" id="project-grid"></div>
+        <p class="empty" id="project-empty" hidden>No hay trabajos en esta categoría.</p>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="clientes">
+      <div class="container">
+        <div class="section-head">
+          <h2>Marcas y empresas</h2>
+          <div class="filters" role="group" aria-label="Filtrar clientes" id="client-filters"></div>
+        </div>
+        <div class="client-grid" id="client-grid"></div>
+        <p class="empty" id="client-empty" hidden>No hay clientes en esta categoría.</p>
+      </div>
+    </section>
+
+    <section class="section" id="contacto">
+      <div class="container contact">
+        <h2>Hablemos</h2>
+        <p>¿Tienes un proyecto de marca o una campaña en mente?</p>
+        <a class="btn" id="owner-email" href="#">Escribirme</a>
+        <ul class="socials" id="owner-links"></ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p id="footer-text"></p>
+    </div>
+  </footer>
+
+  <dialog id="project-dialog" aria-labelledby="dialog-title">
+    <article class="dialog-body">
+      <button type="button" class="dialog-close" aria-label="Cerrar">&times;</button>
+      <div class="dialog-swatch" id="dialog-swatch"></div>
+      <p class="card-meta" id="dialog-meta"></p>
+      <h3 id="dialog-title"></h3>
+      <p id="dialog-description"></p>
+      <dl class="dialog-facts">
+        <div><dt>Cliente</dt><dd id="dialog-client"></dd></div>
+        <div><dt>Mi rol</dt><dd id="dialog-role"></dd></div>
+        <div><dt>Resultado</dt><dd id="dialog-results"></dd></div>
+      </dl>
+      <ul class="tags" id="dialog-tags"></ul>
+    </article>
+  </dialog>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+# Portafolio de mercadotecnia y publicidad
+
+Sitio estático de una sola página para mostrar trabajos de **branding**, **campañas**, y las **marcas y empresas** con las que has trabajado.
+
+## Estructura
+
+```
+index.html   Estructura de la página
+styles.css   Estilos (incluye modo claro/oscuro automático)
+app.js       Lógica de render, filtros y detalle de proyecto
+data.js      ← TU CONTENIDO: edita solo este archivo
+```
+
+## Cómo personalizarlo
+
+Abre `data.js` y reemplaza los datos de ejemplo:
+
+- **`owner`**: nombre, cargo, biografía, correo y enlaces (LinkedIn, Behance, etc.).
+- **`projects`**: trabajos. `category` debe ser `"branding"` o `"campaña"`. `color` es el color representativo de la tarjeta.
+- **`clients`**: marcas y empresas. `type` debe ser `"marca"` o `"empresa"`.
+
+Para agregar un proyecto, copia un bloque existente, cambia el `id` a uno único y listo.
+
+## Verlo localmente
+
+No requiere instalación. Abre `index.html` en el navegador, o desde la carpeta del proyecto:
+
+```bash
+python3 -m http.server 8000
+# luego visita http://localhost:8000
+```
+
+## Publicarlo (GitHub Pages)
+
+1. En el repositorio, ve a **Settings → Pages**.
+2. En *Source* elige la rama y la carpeta raíz (`/`).
+3. El sitio quedará disponible en `https://labrezote.github.io/claude-sistema-/`.
+
+## Notas
+
+- Todo el contenido actual es **de ejemplo** (clientes y datos ficticios). Reemplázalo antes de publicar.
+- Si quieres imágenes de campañas, puedes añadir una propiedad `image` a cada proyecto y mostrarla en `app.js` en lugar del bloque de color.
