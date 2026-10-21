@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Portafolio de Mercadotecnia y Publicidad</title>
   <meta name="description" content="Portafolio de trabajos en branding, campañas, marcas y empresas.">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23b5402a'/%3E%3Ctext x='16' y='23' font-size='20' font-family='Georgia,serif' font-style='italic' text-anchor='middle' fill='%23fff'%3Ep%3C/text%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23e0785e'/%3E%3Ctext x='16' y='23' font-size='20' font-family='Georgia,serif' font-style='italic' text-anchor='middle' fill='%230a0a0a'%3Ep%3C/text%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -27,15 +27,15 @@
     <section class="hero" id="inicio">
       <div class="container">
         <p class="eyebrow" id="owner-role"></p>
-        <h1 id="owner-headline"></h1>
-        <p class="lead" id="owner-bio"></p>
-        <div class="stats" id="stats" aria-label="Resumen"></div>
+        <h1 id="owner-headline" class="reveal"></h1>
+        <p class="lead reveal" id="owner-bio"></p>
+        <div class="stats reveal" id="stats" aria-label="Resumen"></div>
       </div>
     </section>
 
     <section class="section" id="trabajos">
       <div class="container">
-        <div class="section-head">
+        <div class="section-head reveal">
           <h2>Trabajos</h2>
           <div class="filters" role="group" aria-label="Filtrar trabajos" id="project-filters"></div>
         </div>
@@ -46,17 +46,17 @@
 
     <section class="section section-alt" id="clientes">
       <div class="container">
-        <div class="section-head">
+        <div class="section-head reveal">
           <h2>Marcas y empresas</h2>
           <div class="filters" role="group" aria-label="Filtrar clientes" id="client-filters"></div>
         </div>
-        <div class="client-grid" id="client-grid"></div>
+        <div class="client-grid reveal" id="client-grid"></div>
         <p class="empty" id="client-empty" hidden>No hay clientes en esta categoría.</p>
       </div>
     </section>
 
     <section class="section" id="contacto">
-      <div class="container contact">
+      <div class="container contact reveal">
         <h2>Hablemos</h2>
         <p>¿Tienes un proyecto de marca o una campaña en mente?</p>
         <a class="btn" id="owner-email" href="#">Escribirme</a>
@@ -71,7 +71,14 @@
     </div>
   </footer>
 
+  <nav class="float-nav" aria-label="Secciones">
+    <a href="#trabajos">Trabajos</a>
+    <a href="#clientes">Clientes</a>
+    <a href="#contacto">Contacto</a>
+  </nav>
+
   <script src="data.js"></script>
   <script src="app.js"></script>
+  <script src="motion.js"></script>
 </body>
 </html>

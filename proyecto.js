@@ -82,7 +82,7 @@
           "</dl>" +
         "</div>" +
         '<div class="container">' +
-          '<div class="case-cover" style="background:' + esc(p.color || "#888") + '">' +
+          '<div class="case-cover reveal" style="background:' + esc(p.color || "#888") + '">' +
             '<img src="' + esc(d.hero) + '" alt="Imagen de portada: ' + esc(p.title) + '" width="1600" height="900">' +
           "</div>" +
         "</div>" +
@@ -91,7 +91,7 @@
       '<section class="section">' +
         '<div class="container">' +
           '<p class="eyebrow">Sobre el proyecto</p>' +
-          '<p class="case-statement">' + esc(d.statement) + "</p>" +
+          '<p class="case-statement reveal">' + esc(d.statement) + "</p>" +
           '<div class="case-copy">' + about + "</div>" +
         "</div>" +
       "</section>" +
@@ -99,19 +99,19 @@
       '<section class="section section-alt">' +
         '<div class="container">' +
           '<p class="eyebrow">Resultados</p>' +
-          '<div class="impact">' + impact + "</div>" +
+          '<div class="impact reveal">' + impact + "</div>" +
         "</div>" +
       "</section>" +
 
       '<section class="section">' +
         '<div class="container">' +
-          '<div class="case-gallery">' + gallery + "</div>" +
+          '<div class="case-gallery reveal">' + gallery + "</div>" +
         "</div>" +
       "</section>" +
 
       '<section class="section section-alt">' +
         '<div class="container">' +
-          '<nav class="case-pager" aria-label="Otros proyectos">' +
+          '<nav class="case-pager reveal" aria-label="Otros proyectos">' +
             '<a class="pager-link" href="' + esc(projectUrl(prev.id)) + '"><span>← Anterior</span><strong>' + esc(prev.title) + "</strong></a>" +
             '<a class="pager-link is-next" href="' + esc(projectUrl(next.id)) + '"><span>Siguiente →</span><strong>' + esc(next.title) + "</strong></a>" +
           "</nav>" +
@@ -127,4 +127,7 @@
   setOwner();
   if (index === -1) renderNotFound();
   else renderCase(index);
+
+  $("case").classList.add("case-view");
+  if (window.observeReveal) window.observeReveal($("case"));
 })();
