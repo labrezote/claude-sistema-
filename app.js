@@ -21,6 +21,11 @@
     return String(name).split(/\s+/).slice(0, 2).map(function (w) { return w.charAt(0); }).join("").toUpperCase();
   }
 
+  // Cada trabajo tiene su propia página de caso
+  function projectUrl(id) {
+    return "proyecto.html?id=" + encodeURIComponent(id);
+  }
+
   function setOwner() {
     var o = data.owner;
     document.title = o.name + " · Portafolio de mercadotecnia y publicidad";
@@ -71,14 +76,14 @@
 
     $("project-empty").hidden = list.length > 0;
     $("project-grid").innerHTML = list.map(function (p) {
-      return '<article class="card" tabindex="0" data-id="' + esc(p.id) + '">' +
+      return '<a class="card" href="' + esc(projectUrl(p.id)) + '">' +
         '<div class="card-swatch" style="background:' + esc(p.color || "#888") + '"><span>' + esc(initials(p.client)) + "</span></div>" +
         '<div class="card-body">' +
           '<p class="card-meta">' + esc(CATEGORY_LABELS[p.category] || p.category) + " · " + esc(p.year) + "</p>" +
           "<h3>" + esc(p.title) + "</h3>" +
           '<p class="card-client">' + esc(p.client) + "</p>" +
           "<p>" + esc(p.description) + "</p>" +
-        "</div></article>";
+        "</div></a>";
     }).join("");
   }
 
@@ -121,48 +126,6 @@
       renderClients();
     });
   }
-
-  // ---------- Detalle de proyecto ----------
-  var dialog = $("project-dialog");
-
-  function openProject(id) {
-    var p = data.projects.filter(function (x) { return x.id === id; })[0];
-    if (!p) return;
-    $("dialog-swatch").style.background = p.color || "#888";
-    $("dialog-meta").textContent = (CATEGORY_LABELS[p.category] || p.category) + " · " + p.year;
-    $("dialog-title").textContent = p.title;
-    $("dialog-description").textContent = p.description;
-    $("dialog-client").textContent = p.client;
-    $("dialog-role").textContent = p.role;
-    $("dialog-results").textContent = p.results;
-    $("dialog-tags").innerHTML = (p.tags || []).map(function (t) {
-      return "<li>" + esc(t) + "</li>";
-    }).join("");
-    if (typeof dialog.showModal === "function") dialog.showModal();
-    else dialog.setAttribute("open", "");
-  }
-
-  function closeDialog() {
-    if (typeof dialog.close === "function") dialog.close();
-    else dialog.removeAttribute("open");
-  }
-
-  $("project-grid").addEventListener("click", function (e) {
-    var card = e.target.closest(".card");
-    if (card) openProject(card.getAttribute("data-id"));
-  });
-  $("project-grid").addEventListener("keydown", function (e) {
-    var card = e.target.closest(".card");
-    if (card && (e.key === "Enter" || e.key === " ")) {
-      e.preventDefault();
-      openProject(card.getAttribute("data-id"));
-    }
-  });
-  dialog.querySelector(".dialog-close").addEventListener("click", closeDialog);
-  dialog.addEventListener("click", function (e) {
-    // Cierra al hacer clic en el fondo (fuera del contenido)
-    if (e.target === dialog) closeDialog();
-  });
 
   // ---------- Inicio ----------
   setOwner();
