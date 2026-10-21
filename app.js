@@ -134,4 +134,5 @@
   renderProjects();
   renderClientFilters();
   renderClients();
+  $("strip-slot").innerHTML = window.stripHtml(data.projects, projectUrl);
 })();

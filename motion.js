@@ -24,5 +24,34 @@
     items.forEach(function (el) { io.observe(el); });
   };
 
+  function esc(value) {
+    return String(value == null ? "" : value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
+  // Fila de trabajos que se desplaza sola en bucle. El contenido va dos veces
+  // para que el giro del 50% quede sin saltos.
+  window.stripHtml = function (projects, urlFor) {
+    function group(hidden) {
+      return '<div class="strip-group"' + (hidden ? ' aria-hidden="true"' : "") + ">" +
+        projects.map(function (p) {
+          return '<a class="strip-item" href="' + esc(urlFor(p.id)) + '"' + (hidden ? ' tabindex="-1"' : "") + ">" +
+            '<div class="strip-img" style="background:' + esc(p.color || "#888") + '"></div>' +
+            '<p class="card-meta">' + esc(p.client) + " · " + esc(p.year) + "</p>" +
+            "<h3>" + esc(p.title) + "</h3>" +
+          "</a>";
+        }).join("") +
+      "</div>";
+    }
+
+    return '<div class="strip" role="region" aria-label="Trabajos en movimiento">' +
+      '<div class="strip-track">' + group(false) + group(true) + "</div>" +
+    "</div>";
+  };
+
   window.observeReveal(document);
 })();

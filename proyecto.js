@@ -109,6 +109,11 @@
         "</div>" +
       "</section>" +
 
+      '<section class="strip-section">' +
+        '<div class="container"><p class="eyebrow">Más trabajos</p></div>' +
+        window.stripHtml(list, projectUrl) +
+      "</section>" +
+
       '<section class="section section-alt">' +
         '<div class="container">' +
           '<nav class="case-pager reveal" aria-label="Otros proyectos">' +
