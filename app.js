@@ -32,6 +32,7 @@
     $("owner-name").textContent = o.name;
     $("owner-role").textContent = o.role;
     $("owner-headline").textContent = o.name;
+    if (window.splitWords) window.splitWords($("owner-headline"));
     $("owner-bio").textContent = o.bio;
     $("footer-text").textContent = "© " + new Date().getFullYear() + " " + o.name + ". Todos los derechos reservados.";
     $("owner-email").href = "mailto:" + o.email;
@@ -77,7 +78,10 @@
     $("project-empty").hidden = list.length > 0;
     $("project-grid").innerHTML = list.map(function (p) {
       return '<a class="card" href="' + esc(projectUrl(p.id)) + '">' +
-        '<div class="card-swatch" style="background:' + esc(p.color || "#888") + '"><span>' + esc(initials(p.client)) + "</span></div>" +
+        '<div class="card-swatch" style="background:' + esc(p.color || "#888") + '">' +
+          '<div class="swatch-bg" style="background:' + esc(p.color || "#888") + '"></div>' +
+          '<span class="swatch-logo">' + esc(initials(p.client)) + "</span>" +
+        "</div>" +
         '<div class="card-body">' +
           '<p class="card-meta">' + esc(CATEGORY_LABELS[p.category] || p.category) + " · " + esc(p.year) + "</p>" +
           "<h3>" + esc(p.title) + "</h3>" +

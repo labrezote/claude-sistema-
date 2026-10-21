@@ -24,6 +24,20 @@
     items.forEach(function (el) { io.observe(el); });
   };
 
+  // Separa el texto en palabras que entran una tras otra, con desenfoque
+  window.splitWords = function (el) {
+    if (!el || reduce) return;
+    var text = el.textContent.trim();
+    el.setAttribute("aria-label", text);
+    el.innerHTML = text.split(/\s+/).map(function (word, i) {
+      return '<span class="word" aria-hidden="true" style="--i:' + i + '">' + esc(word) + "</span>";
+    }).join(" ");
+  };
+
+  function initials(name) {
+    return String(name).split(/\s+/).slice(0, 2).map(function (w) { return w.charAt(0); }).join("").toUpperCase();
+  }
+
   function esc(value) {
     return String(value == null ? "" : value)
       .replace(/&/g, "&amp;")
@@ -40,7 +54,10 @@
       return '<div class="strip-group"' + (hidden ? ' aria-hidden="true"' : "") + ">" +
         projects.map(function (p) {
           return '<a class="strip-item" href="' + esc(urlFor(p.id)) + '"' + (hidden ? ' tabindex="-1"' : "") + ">" +
-            '<div class="strip-img" style="background:' + esc(p.color || "#888") + '"></div>' +
+            '<div class="strip-img" style="background:' + esc(p.color || "#888") + '">' +
+              '<div class="swatch-bg" style="background:' + esc(p.color || "#888") + '"></div>' +
+              '<span class="swatch-logo">' + esc(initials(p.client)) + "</span>" +
+            "</div>" +
             '<p class="card-meta">' + esc(p.client) + " · " + esc(p.year) + "</p>" +
             "<h3>" + esc(p.title) + "</h3>" +
           "</a>";

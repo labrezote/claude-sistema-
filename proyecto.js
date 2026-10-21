@@ -122,6 +122,8 @@
           "</nav>" +
         "</div>" +
       "</section>";
+
+    if (window.splitWords) window.splitWords($("case").querySelector(".case-hero h1"));
   }
 
   // ---------- Inicio ----------
