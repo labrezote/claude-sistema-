@@ -374,6 +374,17 @@ p { margin: 0 0 1em; }
 /* ---------- Página de caso ---------- */
 .case-hero { padding: 120px 0 0; }
 
+/* Título al pie de una primera pantalla amplia, como en el diseño base */
+@media (min-width: 761px) {
+  .case-hero > .container:first-child {
+    min-height: 62vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+  .case-hero > .container:first-child .back { margin-bottom: auto; }
+}
+
 .back {
   display: block;
   width: fit-content;
