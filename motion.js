@@ -3,6 +3,20 @@
 
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  // Filtro de distorsión tipo líquido para la imagen de proyecto al pasar el cursor.
+  // Solo se inserta si el usuario no pidió movimiento reducido.
+  if (!reduce && document.body) {
+    document.body.insertAdjacentHTML("afterbegin",
+      '<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">' +
+        '<filter id="swatch-liquid" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">' +
+          '<feTurbulence type="fractalNoise" baseFrequency="0.011 0.019" numOctaves="2" seed="4" result="noise">' +
+            '<animate attributeName="baseFrequency" values="0.011 0.019;0.017 0.027;0.011 0.019" dur="7s" repeatCount="indefinite"/>' +
+          "</feTurbulence>" +
+          '<feDisplacementMap in="SourceGraphic" in2="noise" scale="36" xChannelSelector="R" yChannelSelector="G"/>' +
+        "</filter>" +
+      "</svg>");
+  }
+
   // Marca como visibles los bloques .reveal dentro de root cuando entran en pantalla
   window.observeReveal = function (root) {
     var items = (root || document).querySelectorAll(".reveal:not(.is-in)");
@@ -55,7 +69,7 @@
         projects.map(function (p) {
           return '<a class="strip-item" href="' + esc(urlFor(p.id)) + '"' + (hidden ? ' tabindex="-1"' : "") + ">" +
             '<div class="strip-img" style="background:' + esc(p.color || "#888") + '">' +
-              '<div class="swatch-bg" style="background:' + esc(p.color || "#888") + '"></div>' +
+              '<div class="swatch-bg" style="background-color:' + esc(p.color || "#888") + '"></div>' +
               '<span class="swatch-logo">' + esc(initials(p.client)) + "</span>" +
             "</div>" +
             '<p class="card-meta">' + esc(p.client) + " · " + esc(p.year) + "</p>" +

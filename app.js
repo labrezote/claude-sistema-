@@ -79,7 +79,7 @@
     $("project-grid").innerHTML = list.map(function (p) {
       return '<a class="card" href="' + esc(projectUrl(p.id)) + '">' +
         '<div class="card-swatch" style="background:' + esc(p.color || "#888") + '">' +
-          '<div class="swatch-bg" style="background:' + esc(p.color || "#888") + '"></div>' +
+          '<div class="swatch-bg" style="background-color:' + esc(p.color || "#888") + '"></div>' +
           '<span class="swatch-logo">' + esc(initials(p.client)) + "</span>" +
         "</div>" +
         '<div class="card-body">' +

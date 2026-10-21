@@ -583,16 +583,21 @@ p { margin: 0 0 1em; }
 }
 
 /* ---------- Imagen de proyecto: se desenfoca y aparece el logo ---------- */
+/* Textura suave sobre el color del proyecto: sin ella, la distorsión no se nota */
 .swatch-bg {
   position: absolute;
   inset: -4%;
+  background-image:
+    radial-gradient(circle at 28% 26%, rgba(255, 255, 255, 0.38), transparent 52%),
+    radial-gradient(circle at 76% 74%, rgba(0, 0, 0, 0.28), transparent 58%),
+    repeating-linear-gradient(115deg, rgba(255, 255, 255, 0.09) 0 2px, transparent 2px 22px);
   transition: filter 0.7s var(--ease), transform 0.9s var(--ease);
 }
 .card:hover .swatch-bg,
 .card:focus-visible .swatch-bg,
 .strip-item:hover .swatch-bg,
 .strip-item:focus-visible .swatch-bg {
-  filter: blur(18px) saturate(1.15);
+  filter: url(#swatch-liquid) blur(14px) saturate(1.15);
   transform: scale(1.08);
 }
 
@@ -676,5 +681,7 @@ p { margin: 0 0 1em; }
   .reveal { transform: none; }
   .strip { -webkit-mask-image: none; mask-image: none; overflow-x: auto; }
   .strip-track { width: auto; }
+  .card:hover .swatch-bg,
+  .strip-item:hover .swatch-bg { filter: blur(14px) saturate(1.15); }
   .strip-group[aria-hidden="true"] { display: none; }
 }
