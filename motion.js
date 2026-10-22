@@ -2,6 +2,19 @@
   "use strict";
 
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var hasGsap = typeof window.gsap !== "undefined" && typeof window.ScrollTrigger !== "undefined";
+
+  // Scroll suave con Lenis, sincronizado con el reloj de GSAP y ScrollTrigger.
+  // Si las librerías no cargan (sin red), el sitio sigue funcionando con el scroll nativo.
+  if (!reduce && hasGsap && typeof window.Lenis !== "undefined") {
+    gsap.registerPlugin(ScrollTrigger);
+    var lenis = new Lenis({ duration: 1.1 });
+    window.lenis = lenis;
+    lenis.on("scroll", ScrollTrigger.update);
+    gsap.ticker.add(function (time) { lenis.raf(time * 1000); });
+    gsap.ticker.lagSmoothing(0);
+    document.documentElement.style.scrollBehavior = "auto";
+  }
 
   // Filtro de distorsión tipo líquido para la imagen de proyecto al pasar el cursor.
   // Solo se inserta si el usuario no pidió movimiento reducido.
@@ -22,7 +35,29 @@
     var items = (root || document).querySelectorAll(".reveal:not(.is-in)");
     if (!items.length) return;
 
-    if (reduce || !("IntersectionObserver" in window)) {
+    if (reduce) {
+      items.forEach(function (el) { el.classList.add("is-in"); });
+      return;
+    }
+
+    // Con GSAP, ScrollTrigger revela cada bloque una sola vez. Si un bloque ya quedó
+    // atrás al crearse (scroll restaurado al recargar), también se revela.
+    if (hasGsap) {
+      items.forEach(function (el) {
+        var reveal = function () { el.classList.add("is-in"); };
+        ScrollTrigger.create({
+          trigger: el,
+          start: "top 88%",
+          end: "bottom top",
+          once: true,
+          onEnter: reveal,
+          onLeave: reveal
+        });
+      });
+      return;
+    }
+
+    if (!("IntersectionObserver" in window)) {
       items.forEach(function (el) { el.classList.add("is-in"); });
       return;
     }
