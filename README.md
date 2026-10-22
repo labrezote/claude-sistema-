@@ -38,6 +38,15 @@ python3 -m http.server 8000
 2. En *Source* elige la rama y la carpeta raíz (`/`).
 3. El sitio quedará disponible en `https://labrezote.github.io/claude-sistema-/`.
 
+## Librerías de movimiento
+
+Se cargan desde CDN (jsdelivr), sin paso de compilación:
+
+- **GSAP + ScrollTrigger** (`gsap@3.15.0`, ~29 mil estrellas en GitHub): revela los bloques al entrar en pantalla. Licencia *Standard "no charge"* de GSAP, válida para sitios como este.
+- **Lenis** (`lenis@1.3.26`, ~17 mil estrellas, MIT): scroll suave, sincronizado con GSAP.
+
+Si la red no permite cargarlas, el sitio sigue funcionando con el scroll nativo y la revelación con `IntersectionObserver`. Con `prefers-reduced-motion` no se activa ninguna de las dos.
+
 ## Notas
 
 - Todo el contenido actual es **de ejemplo** (clientes y datos ficticios). Reemplázalo antes de publicar.
