@@ -3,8 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Studio Crudo — Identidad</title>
-  <meta name="description" content="Identidad visual, tipografía y referencias de Studio Crudo.">
+  <title>Studio Crudo — Branding y campañas</title>
+  <meta name="description" content="Studio Crudo: branding, campañas y marcas. Imagen real, contada en píxel.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -15,106 +18,177 @@
     <span class="loader-label" id="loader-label">CARGANDO 0%</span>
   </div>
 
-  <header class="top">
-    <a class="logo" href="#inicio">CRUDO<span class="blink">_</span></a>
-    <nav>
-      <a href="#identidad">Identidad</a>
-      <a href="#tipografia">Tipografía</a>
-      <a href="#referencias">Referencias</a>
-      <a href="#contacto">Contacto</a>
-    </nav>
-  </header>
+  <div class="frame">
 
-  <main>
-    <!-- HERO: foto real que se pixela con el scroll; la lupa muestra la foto sin filtro -->
-    <section id="inicio" class="hero">
-      <canvas id="photo" aria-label="Cielo con nubes, pixelado en el scroll"></canvas>
+    <header class="top">
+      <a class="logo" href="#inicio">CRUDO<span class="blink">_</span></a>
+      <nav class="mono">
+        <a href="#trabajos">/ Trabajos</a>
+        <a href="#identidad">/ Identidad</a>
+        <a href="#estudio">/ Estudio</a>
+        <a href="#contacto">/ Contacto</a>
+      </nav>
+      <a class="btn btn-ghost mono" href="#contacto">Cotizar</a>
+    </header>
+
+    <!-- HERO: cielo real convertido en trama; la lupa devuelve la foto -->
+    <section id="inicio" class="hero marks">
       <div class="hero-copy">
-        <p class="tag">Estudio de identidad · real + píxel</p>
-        <h1 class="display">CRUDO</h1>
-        <p class="lede">Mueve el cursor o desliza: la nube se pixela, y la lupa devuelve la foto real.</p>
-      </div>
-    </section>
-
-    <!-- BANDA ONDULANTE -->
-    <div class="band" aria-hidden="true">
-      <div class="band-track">
-        <span class="wave" data-text="CARGANDO IDENTIDAD ■ REAL O PÍXEL ■ "></span>
-        <span class="wave" data-text="CARGANDO IDENTIDAD ■ REAL O PÍXEL ■ "></span>
-      </div>
-    </div>
-
-    <!-- IDENTIDAD -->
-    <section id="identidad" class="section">
-      <header class="section-head">
-        <p class="eyebrow">01 — Identidad</p>
-        <h2 class="display-sm">Sistema base</h2>
-      </header>
-
-      <div class="logo-grid">
-        <figure class="panel panel-logo">
-          <p class="wordmark">CRUDO</p>
-          <figcaption>Logotipo · Crudo Loop</figcaption>
-        </figure>
-        <figure class="panel panel-sky">
-          <img src="assets/img/ref-06.webp" alt="Nube en píxeles con una S" loading="lazy">
-          <figcaption>Símbolo · nube y píxel</figcaption>
-        </figure>
+        <p class="chip mono">Estudio de branding<span class="blink">_</span></p>
+        <h1 class="serif">Marcas en alta resolución, <em>contadas en píxel.</em></h1>
+        <p class="lede">
+          Branding, campañas y marcas para negocios que quieren verse reales
+          y recordarse distintos.
+        </p>
+        <div class="actions">
+          <a class="btn btn-solid mono" href="#trabajos">Ver trabajos</a>
+          <a class="btn btn-ghost mono" href="#estudio">Cómo trabajamos</a>
+        </div>
       </div>
 
-      <div class="palette" aria-label="Paleta de color">
-        <div class="swatch" style="--c:#0b0b0b;--t:#efefee"><span>Negro</span><code>#0B0B0B</code></div>
-        <div class="swatch" style="--c:#efefee"><span>Papel</span><code>#EFEFEE</code></div>
-        <div class="swatch" style="--c:#7fa2c6"><span>Cielo</span><code>#7FA2C6</code></div>
-        <div class="swatch" style="--c:#ebecf2"><span>Nube</span><code>#EBECF2</code></div>
-        <div class="swatch" style="--c:#35475e;--t:#efefee"><span>Pizarra</span><code>#35475E</code></div>
-      </div>
-    </section>
-
-    <!-- TIPOGRAFÍA -->
-    <section id="tipografia" class="section">
-      <header class="section-head">
-        <p class="eyebrow">02 — Tipografía</p>
-        <h2 class="display-sm">Crudo Loop</h2>
-      </header>
-
-      <div class="specimen">
-        <p class="big-aa">Aa</p>
-        <div class="specimen-text">
-          <p class="sample">RETRO FLUIDO</p>
-          <p class="sample sample-sm">Trazos de píxel con esquinas redondas, pensados para títulos y pantallas de carga.</p>
-          <p class="glyphs">ABCDEFGHIJKLM<br>NOPQRSTUVWXYZ<br>0123456789 .!?-:/</p>
+      <div class="hero-visual">
+        <div class="status mono">
+          <span class="status-dot"></span>Estudio abierto · recibiendo proyectos
+        </div>
+        <span class="bars mono" aria-hidden="true">||||||||||||||</span>
+        <canvas id="hero-canvas" aria-label="Cielo con nubes convertido en trama de píxeles"></canvas>
+        <div class="modes mono" role="toolbar" aria-label="Estilo de trama">
+          <button type="button" data-mode="lines">Líneas</button>
+          <button type="button" data-mode="dots">Puntos</button>
+          <button type="button" data-mode="dither">Dither</button>
+          <button type="button" data-mode="blocks">Bloques</button>
         </div>
       </div>
     </section>
 
-    <!-- REFERENCIAS -->
-    <section id="referencias" class="section">
+    <!-- DATOS -->
+    <section class="stats-row marks">
+      <ul class="cats mono" aria-label="Servicios">
+        <li>Branding</li>
+        <li>Campañas</li>
+        <li>Marcas</li>
+        <li>Digital</li>
+      </ul>
+      <dl class="stats">
+        <div>
+          <dt class="mono">Proyectos</dt>
+          <dd><span class="count" data-to="8">0</span><span class="blink">_</span></dd>
+        </div>
+        <div>
+          <dt class="mono">Autos vendidos · JEEP</dt>
+          <dd><span class="count" data-to="150" data-suffix="+">0</span><span class="blink">_</span></dd>
+        </div>
+        <div>
+          <dt class="mono">Categorías</dt>
+          <dd><span class="count" data-to="4">0</span><span class="blink">_</span></dd>
+        </div>
+      </dl>
+    </section>
+  </div>
+
+  <!-- BANDA ONDULANTE -->
+  <div class="band" aria-hidden="true">
+    <div class="band-track">
+      <span class="wave" data-text="REAL O PÍXEL ■ BRANDING ■ CAMPAÑAS ■ MARCAS ■ "></span>
+      <span class="wave" data-text="REAL O PÍXEL ■ BRANDING ■ CAMPAÑAS ■ MARCAS ■ "></span>
+    </div>
+  </div>
+
+  <!-- TRABAJOS -->
+  <section id="trabajos" class="works">
+    <div class="frame frame-light">
+      <header class="section-head marks">
+        <p class="eyebrow mono">01 / Trabajos</p>
+        <h2 class="serif">Proyectos seleccionados</h2>
+        <div class="scroller-ctrl mono">
+          <button type="button" id="prev" aria-label="Anterior">←</button>
+          <button type="button" id="next" aria-label="Siguiente">→</button>
+        </div>
+      </header>
+    </div>
+    <div class="cards" id="cards"></div>
+  </section>
+
+  <div class="frame">
+    <!-- IDENTIDAD -->
+    <section id="identidad" class="section marks">
       <header class="section-head">
-        <p class="eyebrow">03 — Referencias</p>
-        <h2 class="display-sm">Moodboard</h2>
+        <p class="eyebrow mono">02 / Identidad</p>
+        <h2 class="serif">Sistema base</h2>
       </header>
 
-      <div class="mood">
-        <figure><img src="assets/img/ref-01.jpg" alt="Referencia 01"></figure>
-        <figure><img src="assets/img/ref-02.jpg" alt="Referencia 02"></figure>
-        <figure><img src="assets/img/ref-03.jpg" alt="Referencia 03"></figure>
-        <figure><img src="assets/img/ref-04.jpg" alt="Referencia 04"></figure>
-        <figure><img src="assets/img/ref-05.webp" alt="Referencia 05"></figure>
-        <figure><img src="assets/img/ref-07.png" alt="Referencia 07: loading culture"></figure>
+      <div class="id-grid">
+        <figure class="panel panel-logo">
+          <p class="wordmark">CRUDO</p>
+          <figcaption class="mono">Logotipo · Crudo Loop</figcaption>
+        </figure>
+        <div class="type-list">
+          <div class="type-row">
+            <p class="mono type-label">Display · Crudo Loop</p>
+            <p class="type-sample type-pixel">RETRO FLUIDO 0123</p>
+          </div>
+          <div class="type-row">
+            <p class="mono type-label">Titulares · Instrument Serif</p>
+            <p class="type-sample serif">Imagen real, <em>contada en píxel</em></p>
+          </div>
+          <div class="type-row">
+            <p class="mono type-label">Datos · IBM Plex Mono</p>
+            <p class="type-sample mono">ESTUDIO ABIERTO / 150+ AUTOS_</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="palette" aria-label="Paleta de color">
+        <div class="swatch" style="--c:#0b0b0b;--t:#f4f4f2"><span>Negro</span><code>#0B0B0B</code></div>
+        <div class="swatch" style="--c:#f4f4f2"><span>Papel</span><code>#F4F4F2</code></div>
+        <div class="swatch" style="--c:#6b6cf5;--t:#f4f4f2"><span>Índigo</span><code>#6B6CF5</code></div>
+        <div class="swatch" style="--c:#2a2fe8;--t:#f4f4f2"><span>Eléctrico</span><code>#2A2FE8</code></div>
+        <div class="swatch" style="--c:#7fa2c6"><span>Cielo</span><code>#7FA2C6</code></div>
+        <div class="swatch" style="--c:#c8ff3d"><span>Lima</span><code>#C8FF3D</code></div>
       </div>
     </section>
-  </main>
 
+    <!-- ESTUDIO -->
+    <section id="estudio" class="section marks">
+      <header class="section-head">
+        <p class="eyebrow mono">03 / Estudio</p>
+        <h2 class="serif">Cómo trabajamos</h2>
+      </header>
+      <ol class="steps">
+        <li><span class="mono">01</span><h3 class="serif">Escuchar</h3><p>Entendemos el negocio, su público y lo que lo hace distinto.</p></li>
+        <li><span class="mono">02</span><h3 class="serif">Construir</h3><p>Identidad, sistema visual y piezas listas para usarse.</p></li>
+        <li><span class="mono">03</span><h3 class="serif">Lanzar</h3><p>Campañas y contenido que se miden en resultados.</p></li>
+      </ol>
+    </section>
+  </div>
+
+  <!-- FOOTER: cielo en dither eléctrico -->
   <footer id="contacto" class="footer">
-    <p class="display-sm">¿Hablamos?</p>
-    <p class="footer-mail">
-      <!-- TODO: correo real -->
-      contacto@tudominio.com
-    </p>
-    <p class="small">© <span id="year"></span> Studio Crudo</p>
+    <canvas id="footer-canvas" aria-hidden="true"></canvas>
+    <div class="footer-inner">
+      <p class="serif quote">“Una marca se ve en alta resolución y se recuerda en píxel.”</p>
+      <a class="footer-mail" href="mailto:contacto@tudominio.com">contacto@tudominio.com</a>
+      <!-- TODO: correo y redes reales -->
+      <p class="mono small">© <span id="year"></span> Studio Crudo</p>
+    </div>
   </footer>
 
+  <!-- DETALLE DE PROYECTO -->
+  <dialog id="caso" class="caso">
+    <button class="close mono" type="button">× Cerrar</button>
+    <p class="mono caso-cat" id="caso-cat"></p>
+    <h3 class="serif caso-title" id="caso-title"></h3>
+    <p class="caso-client mono" id="caso-client"></p>
+    <p class="caso-metric mono" id="caso-metric" hidden></p>
+    <p class="caso-summary" id="caso-summary"></p>
+    <div class="caso-slots">
+      <div class="slot mono">Imagen 01</div>
+      <div class="slot mono">Imagen 02</div>
+      <div class="slot mono">Resultados</div>
+    </div>
+  </dialog>
+
+  <script src="assets/img/sky-data.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
