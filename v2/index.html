@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Studio Crudo — Identidad</title>
+  <meta name="description" content="Identidad visual, tipografía y referencias de Studio Crudo.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Barra de carga: se llena con el scroll -->
+  <div id="loader" aria-hidden="true">
+    <div class="loader-blocks" id="loader-blocks"></div>
+    <span class="loader-label" id="loader-label">CARGANDO 0%</span>
+  </div>
+
+  <header class="top">
+    <a class="logo" href="#inicio">CRUDO<span class="blink">_</span></a>
+    <nav>
+      <a href="#identidad">Identidad</a>
+      <a href="#tipografia">Tipografía</a>
+      <a href="#referencias">Referencias</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- HERO: foto real que se pixela con el scroll; la lupa muestra la foto sin filtro -->
+    <section id="inicio" class="hero">
+      <canvas id="photo" aria-label="Cielo con nubes, pixelado en el scroll"></canvas>
+      <div class="hero-copy">
+        <p class="tag">Estudio de identidad · real + píxel</p>
+        <h1 class="display">CRUDO</h1>
+        <p class="lede">Mueve el cursor o desliza: la nube se pixela, y la lupa devuelve la foto real.</p>
+      </div>
+    </section>
+
+    <!-- BANDA ONDULANTE -->
+    <div class="band" aria-hidden="true">
+      <div class="band-track">
+        <span class="wave" data-text="CARGANDO IDENTIDAD ■ REAL O PÍXEL ■ "></span>
+        <span class="wave" data-text="CARGANDO IDENTIDAD ■ REAL O PÍXEL ■ "></span>
+      </div>
+    </div>
+
+    <!-- IDENTIDAD -->
+    <section id="identidad" class="section">
+      <header class="section-head">
+        <p class="eyebrow">01 — Identidad</p>
+        <h2 class="display-sm">Sistema base</h2>
+      </header>
+
+      <div class="logo-grid">
+        <figure class="panel panel-logo">
+          <p class="wordmark">CRUDO</p>
+          <figcaption>Logotipo · Crudo Loop</figcaption>
+        </figure>
+        <figure class="panel panel-sky">
+          <img src="assets/img/ref-06.webp" alt="Nube en píxeles con una S" loading="lazy">
+          <figcaption>Símbolo · nube y píxel</figcaption>
+        </figure>
+      </div>
+
+      <div class="palette" aria-label="Paleta de color">
+        <div class="swatch" style="--c:#0b0b0b;--t:#efefee"><span>Negro</span><code>#0B0B0B</code></div>
+        <div class="swatch" style="--c:#efefee"><span>Papel</span><code>#EFEFEE</code></div>
+        <div class="swatch" style="--c:#7fa2c6"><span>Cielo</span><code>#7FA2C6</code></div>
+        <div class="swatch" style="--c:#ebecf2"><span>Nube</span><code>#EBECF2</code></div>
+        <div class="swatch" style="--c:#35475e;--t:#efefee"><span>Pizarra</span><code>#35475E</code></div>
+      </div>
+    </section>
+
+    <!-- TIPOGRAFÍA -->
+    <section id="tipografia" class="section">
+      <header class="section-head">
+        <p class="eyebrow">02 — Tipografía</p>
+        <h2 class="display-sm">Crudo Loop</h2>
+      </header>
+
+      <div class="specimen">
+        <p class="big-aa">Aa</p>
+        <div class="specimen-text">
+          <p class="sample">RETRO FLUIDO</p>
+          <p class="sample sample-sm">Trazos de píxel con esquinas redondas, pensados para títulos y pantallas de carga.</p>
+          <p class="glyphs">ABCDEFGHIJKLM<br>NOPQRSTUVWXYZ<br>0123456789 .!?-:/</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- REFERENCIAS -->
+    <section id="referencias" class="section">
+      <header class="section-head">
+        <p class="eyebrow">03 — Referencias</p>
+        <h2 class="display-sm">Moodboard</h2>
+      </header>
+
+      <div class="mood">
+        <figure><img src="assets/img/ref-01.jpg" alt="Referencia 01"></figure>
+        <figure><img src="assets/img/ref-02.jpg" alt="Referencia 02"></figure>
+        <figure><img src="assets/img/ref-03.jpg" alt="Referencia 03"></figure>
+        <figure><img src="assets/img/ref-04.jpg" alt="Referencia 04"></figure>
+        <figure><img src="assets/img/ref-05.webp" alt="Referencia 05"></figure>
+        <figure><img src="assets/img/ref-07.png" alt="Referencia 07: loading culture"></figure>
+      </div>
+    </section>
+  </main>
+
+  <footer id="contacto" class="footer">
+    <p class="display-sm">¿Hablamos?</p>
+    <p class="footer-mail">
+      <!-- TODO: correo real -->
+      contacto@tudominio.com
+    </p>
+    <p class="small">© <span id="year"></span> Studio Crudo</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
