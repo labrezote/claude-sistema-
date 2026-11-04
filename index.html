@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Studio Crudo — Trabajos</title>
+  <meta name="description" content="Branding, campañas y marcas. Trabajos de Studio Crudo.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Intro: bloques de píxel que se disuelven al entrar -->
+  <canvas id="intro" aria-hidden="true"></canvas>
+
+  <header class="nav">
+    <a class="logo px" href="#inicio">CRUDO<span class="blink">_</span></a>
+    <nav>
+      <a href="#trabajos">Trabajos</a>
+      <a href="#estudio">Estudio</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section id="inicio" class="hero">
+      <p class="px kicker">[ Branding · Campañas · Marcas ]</p>
+      <h1 class="px title">
+        <span>STUDIO</span>
+        <span class="accent">CRUDO</span>
+      </h1>
+      <p class="lede">
+        Marcas que se ven crudas y se sienten reales. Identidad, campañas y
+        piezas digitales para negocios que quieren ser recordados.
+      </p>
+      <a class="cta px" href="#trabajos">Ver trabajos →</a>
+    </section>
+
+    <!-- TICKER -->
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker-track px">
+        <span>BRANDING ■ CAMPAÑAS ■ MARCAS ■ DIGITAL ■ EMPRESAS ■</span>
+        <span>BRANDING ■ CAMPAÑAS ■ MARCAS ■ DIGITAL ■ EMPRESAS ■</span>
+      </div>
+    </div>
+
+    <!-- TRABAJOS -->
+    <section id="trabajos" class="works">
+      <header class="section-head">
+        <h2 class="px">Trabajos</h2>
+        <p class="px count"><span id="count-visible">0</span> / <span id="count-total">0</span></p>
+      </header>
+
+      <div class="filters" id="filters" role="toolbar" aria-label="Filtrar por categoría"></div>
+
+      <div class="grid" id="grid"></div>
+    </section>
+
+    <!-- ESTUDIO -->
+    <section id="estudio" class="studio">
+      <div class="studio-text">
+        <h2 class="px">Estudio</h2>
+        <p>
+          Trabajamos branding, campañas y marcas para negocios de todos los
+          tamaños: desde una organizadora de eventos hasta una miel artesanal.
+          <!-- TODO: texto real del estudio -->
+        </p>
+      </div>
+      <dl class="stats">
+        <div>
+          <dt class="px">Proyectos</dt>
+          <dd class="px" id="stat-proyectos">0</dd>
+        </div>
+        <div>
+          <dt class="px">Campaña JEEP</dt>
+          <dd class="px">150+</dd>
+        </div>
+      </dl>
+    </section>
+  </main>
+
+  <footer id="contacto" class="footer">
+    <p class="px">¿Hablamos?</p>
+    <p class="footer-mail">
+      <!-- TODO: correo y redes reales -->
+      contacto@tudominio.com
+    </p>
+    <p class="px small">© <span id="year"></span> Studio Crudo</p>
+  </footer>
+
+  <!-- DETALLE DE PROYECTO -->
+  <dialog id="caso" class="caso">
+    <button class="close px" type="button" aria-label="Cerrar">× CERRAR</button>
+    <p class="px caso-cat" id="caso-cat"></p>
+    <h3 class="px caso-title" id="caso-title"></h3>
+    <p class="caso-client" id="caso-client"></p>
+    <p class="caso-metric px" id="caso-metric" hidden></p>
+    <p class="caso-summary" id="caso-summary"></p>
+    <!-- Aquí irán imágenes, procesos y resultados del caso -->
+    <div class="caso-slots">
+      <div class="slot px">IMAGEN 01</div>
+      <div class="slot px">IMAGEN 02</div>
+      <div class="slot px">RESULTADOS</div>
+    </div>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
