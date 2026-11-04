@@ -1,5 +1,5 @@
 /* =========================================================
-   Studio Crudo — esqueleto del portafolio
+   Piedra Bruta — portafolio
    Para agregar un proyecto, copia un objeto de PROJECTS.
    ========================================================= */
 
@@ -307,6 +307,209 @@ function pixelTrail() {
   });
 }
 
+/* ---------- Mascota: piedra con ojos de papelería ---------- */
+
+function rockMascot() {
+  const stage = document.getElementById("rock-stage");
+  const rock = document.getElementById("rock");
+  const shadow = document.getElementById("rock-shadow");
+  const eyes = [...rock.querySelectorAll(".eye")].map((el) => ({
+    el,
+    pupil: el.querySelector(".pupil"),
+    x: 0, y: 0, vx: 0, vy: 0, max: 10,
+  }));
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // Sombra en píxel: elipse de baja resolución que se encoge al saltar
+  const SW = 24, SH = 4;
+  shadow.width = SW;
+  shadow.height = SH;
+  const sctx = shadow.getContext("2d");
+  function drawShadow(lift) {
+    sctx.clearRect(0, 0, SW, SH);
+    const k = Math.max(0.35, 1 - lift / 180);
+    const rx = (SW / 2) * k, ry = (SH / 2) * k;
+    for (let y = 0; y < SH; y++) {
+      for (let x = 0; x < SW; x++) {
+        const dx = (x + 0.5 - SW / 2) / rx;
+        const dy = (y + 0.5 - SH / 2) / ry;
+        const d = dx * dx + dy * dy;
+        if (d < 1) {
+          sctx.fillStyle = d < 0.45 ? `rgba(0,0,0,${0.75 * k})` : `rgba(0,0,0,${0.4 * k})`;
+          sctx.fillRect(x, y, 1, 1);
+        }
+      }
+    }
+  }
+
+  function measure() {
+    for (const e of eyes) {
+      const r = e.el.clientWidth / 2;
+      const pr = e.pupil.clientWidth / 2;
+      e.max = Math.max(1, r - pr - 1);
+    }
+  }
+  measure();
+  addEventListener("resize", measure);
+
+  if (reduce) {
+    // Sin animación: pupilas en reposo, abajo
+    drawShadow(0);
+    for (const e of eyes) e.pupil.style.transform = `translate(0px, ${e.max}px)`;
+    return;
+  }
+
+  // Estado de la piedra
+  const G = 2600;        // gravedad del salto (px/s²)
+  const EYE_G = 1500;    // gravedad que sienten las pupilas
+  let lift = 0, liftV = 0;          // altura (px, positivo = arriba)
+  let ang = 0, angV = 0, angTarget = 0; // inclinación (grados)
+  let sq = 0, sqV = 0;              // aplastamiento al caer
+  let nextHop = performance.now() + 2200;
+
+  let prev = null, prevV = { x: 0, y: 0 };
+
+  function hop(power, spin = 0) {
+    if (lift > 4) return;
+    liftV = power;
+    angV += spin;
+    sqV -= power * 0.0012; // se estira al despegar
+  }
+
+  function dust() {
+    const base = stage.clientHeight * 0.76;
+    for (let i = 0; i < 10; i++) {
+      const d = document.createElement("span");
+      d.className = "dust" + (i % 3 === 0 ? " blue" : "");
+      const size = 4 + Math.round(Math.random() * 2) * 4;
+      d.style.width = d.style.height = `${size}px`;
+      d.style.left = `${50 + (Math.random() - 0.5) * 50}%`;
+      d.style.top = `${base}px`;
+      stage.appendChild(d);
+      const dx = (Math.random() - 0.5) * 220;
+      const dy = -30 - Math.random() * 60;
+      d.animate(
+        [
+          { transform: "translate(0,0)", opacity: 1 },
+          { transform: `translate(${dx * 0.6}px, ${dy}px)`, opacity: 1, offset: 0.5 },
+          { transform: `translate(${dx}px, ${dy * 0.3}px)`, opacity: 0 },
+        ],
+        { duration: 650, easing: "steps(8)" }
+      ).onfinish = () => d.remove();
+    }
+  }
+
+  rock.addEventListener("click", () => {
+    hop(620 + Math.random() * 180, (Math.random() < 0.5 ? -1 : 1) * (160 + Math.random() * 120));
+    for (const e of eyes) {
+      e.vx += (Math.random() - 0.5) * 900;
+      e.vy -= 300 + Math.random() * 400;
+    }
+  });
+
+  // La piedra se inclina un poco hacia el cursor
+  addEventListener("pointermove", (ev) => {
+    const r = stage.getBoundingClientRect();
+    const cx = r.left + r.width / 2;
+    const dx = (ev.clientX - cx) / (innerWidth / 2);
+    angTarget = Math.max(-1, Math.min(1, dx)) * 7;
+  });
+
+  let last = performance.now();
+  function frame(now) {
+    let dt = Math.min(0.033, (now - last) / 1000);
+    last = now;
+
+    // Saltitos espontáneos
+    if (now > nextHop) {
+      hop(300 + Math.random() * 120, (Math.random() - 0.5) * 60);
+      nextHop = now + 2500 + Math.random() * 3500;
+    }
+
+    // Subpasos para una física estable
+    const steps = 3;
+    const h = dt / steps;
+    for (let i = 0; i < steps; i++) {
+      // salto
+      liftV -= G * h;
+      lift += liftV * h;
+      if (lift <= 0) {
+        lift = 0;
+        if (liftV < -250) {
+          sqV += -liftV * 0.0016;
+          if (liftV < -480) dust();
+          angV += (Math.random() - 0.5) * 80;
+          liftV = -liftV * 0.18;
+          if (liftV < 60) liftV = 0;
+        } else {
+          liftV = 0;
+        }
+      }
+      // inclinación (resorte amortiguado)
+      angV += (-(ang - angTarget) * 90 - angV * 9) * h;
+      ang += angV * h;
+      // aplastamiento (resorte)
+      sqV += (-sq * 420 - sqV * 18) * h;
+      sq += sqV * h;
+    }
+    sq = Math.max(-0.18, Math.min(0.22, sq));
+
+    rock.style.transform =
+      `translateY(${-lift}px) rotate(${ang}deg) scale(${1 + sq * 0.6}, ${1 - sq})`;
+    drawShadow(lift);
+
+    // Aceleración real de la piedra en pantalla (salto + scroll)
+    const r = stage.getBoundingClientRect();
+    const pos = { x: r.left, y: r.top - lift };
+    let ax = 0, ay = 0;
+    if (prev && dt > 0) {
+      const v = { x: (pos.x - prev.x) / dt, y: (pos.y - prev.y) / dt };
+      ax = (v.x - prevV.x) / dt;
+      ay = (v.y - prevV.y) / dt;
+      prevV = v;
+    }
+    prev = pos;
+    const LIM = 30000;
+    ax = Math.max(-LIM, Math.min(LIM, ax));
+    ay = Math.max(-LIM, Math.min(LIM, ay));
+
+    // Fuerza que sienten las pupilas, en el marco girado de la piedra
+    const fx = -ax, fy = EYE_G - ay;
+    const t = (-ang * Math.PI) / 180;
+    const c = Math.cos(t), sn = Math.sin(t);
+    const lx = fx * c - fy * sn;
+    const ly = fx * sn + fy * c;
+
+    for (const e of eyes) {
+      for (let i = 0; i < steps; i++) {
+        e.vx += lx * h;
+        e.vy += ly * h;
+        e.vx *= 1 - 2.2 * h;
+        e.vy *= 1 - 2.2 * h;
+        e.x += e.vx * h;
+        e.y += e.vy * h;
+        const d = Math.hypot(e.x, e.y);
+        if (d > e.max) {
+          const nx = e.x / d, ny = e.y / d;
+          e.x = nx * e.max;
+          e.y = ny * e.max;
+          const vn = e.vx * nx + e.vy * ny;
+          if (vn > 0) {
+            e.vx -= 1.45 * vn * nx; // rebote suave contra el borde
+            e.vy -= 1.45 * vn * ny;
+          }
+          e.vx *= 0.985;
+          e.vy *= 0.985;
+        }
+      }
+      e.pupil.style.transform = `translate(${e.x.toFixed(2)}px, ${e.y.toFixed(2)}px)`;
+    }
+
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+
 /* ---------- Arranque ---------- */
 
 document.getElementById("stat-proyectos").textContent = PROJECTS.length;
@@ -316,3 +519,4 @@ buildFilters();
 renderGrid();
 pixelIntro();
 pixelTrail();
+rockMascot();

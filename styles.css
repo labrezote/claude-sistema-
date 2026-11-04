@@ -69,7 +69,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   border-bottom: 1px solid var(--line);
 }
 
-.logo { font-size: 22px; text-decoration: none; }
+.logo { font-size: 18px; text-decoration: none; }
 
 .nav nav { display: flex; gap: 18px; }
 .nav nav a {
@@ -83,17 +83,33 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 /* ---------- Hero ---------- */
 .hero {
   min-height: 88vh;
+  display: grid;
+  grid-template-areas: "rock" "text";
+  align-content: end;
+  gap: 24px;
+  padding: 32px var(--gutter) 40px;
+}
+.hero-text {
+  grid-area: text;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
   gap: 20px;
-  padding: 48px var(--gutter) 40px;
+  min-width: 0;
+}
+
+@media (min-width: 900px) {
+  .hero {
+    grid-template-areas: "text rock";
+    grid-template-columns: 1.15fr 1fr;
+    align-items: center;
+    align-content: center;
+  }
 }
 
 .kicker { color: var(--muted); font-size: 13px; }
 
 .title {
-  font-size: clamp(56px, 17vw, 240px);
+  font-size: clamp(48px, 14vw, 150px);
   line-height: 0.86;
   letter-spacing: -0.01em;
 }
@@ -120,6 +136,110 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   color: var(--ink);
   box-shadow: 6px 6px 0 var(--blue);
 }
+
+@media (min-width: 900px) {
+  .title { font-size: clamp(64px, 8.5vw, 150px); }
+}
+
+/* ---------- Piedra con ojos ---------- */
+.rock-stage {
+  grid-area: rock;
+  position: relative;
+  justify-self: center;
+  width: min(100%, 520px);
+  aspect-ratio: 400 / 360;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.rock {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 83.33%; /* 300 / 360 */
+  transform-origin: 50% 93%;
+  will-change: transform;
+  cursor: grab;
+  filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.55));
+}
+.rock:active { cursor: grabbing; }
+.rock:focus-visible { outline: 2px dashed var(--blue-soft); outline-offset: 6px; }
+
+.rock-svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+/* Ojos de papelería: plástico transparente, fondo blanco y pupila suelta */
+.eye {
+  position: absolute;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 42%, #ffffff 0 52%, #f0efec 70%, #d6d4cf 92%, #bdbab4 100%);
+  box-shadow:
+    0 3px 6px rgba(0, 0, 0, 0.5),
+    0 1px 1px rgba(0, 0, 0, 0.6),
+    inset 0 0 0 1.5px rgba(255, 255, 255, 0.85),
+    inset 0 -6px 10px rgba(0, 0, 0, 0.16);
+  overflow: hidden;
+}
+.eye-l { left: 30%; top: 26%; width: 22%; }
+.eye-r { left: 54%; top: 23%; width: 18.5%; }
+
+.pupil {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 54%;
+  height: 54%;
+  margin: -27% 0 0 -27%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 34%, #3a3a3a 0, #121212 38%, #000 70%);
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.35);
+  will-change: transform;
+}
+
+/* Domo de plástico: brillo encima de la pupila */
+.eye::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background:
+    radial-gradient(ellipse 34% 22% at 34% 24%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0) 100%),
+    radial-gradient(ellipse 12% 8% at 70% 78%, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 100%),
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0) 62%, rgba(255, 255, 255, 0.35) 88%, rgba(255, 255, 255, 0) 100%);
+  pointer-events: none;
+}
+
+/* Sombra y polvo en píxel */
+.rock-shadow {
+  position: absolute;
+  left: 14%;
+  width: 72%;
+  top: 74.5%;
+  height: 7%;
+  image-rendering: pixelated;
+  pointer-events: none;
+}
+
+.rock-hint {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.dust {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--paper);
+  pointer-events: none;
+}
+.dust.blue { background: var(--blue); }
 
 /* ---------- Ticker ---------- */
 .ticker {
@@ -309,4 +429,5 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .ticker-track, .blink { animation: none; }
   .trail { display: none; }
   .card, .cta { transition: none; }
+  .rock { cursor: default; }
 }
