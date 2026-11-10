@@ -8,12 +8,11 @@
 window.PB_DATA = {
   CATEGORIES: { branding: "Branding", campanas: "Campañas", marcas: "Marcas", software: "Software" },
   PROJECTS: [
-    { photo: "", title: "Secret Room: identidad para eventos de música electrónica", client: "Secret Room · @secretroom.mx", category: "branding", mood: "fogata", sym: "baila", year: "2025",
-      url: "https://www.instagram.com/secretroom.mx/",
-      summary: "Secret Room es una organizadora de eventos de música electrónica. Diseñamos su identidad: un isotipo en forma de S que también se lee como un rayo y como una puerta que se abre, acompañado de un logotipo en mayúsculas espaciadas. La marca funciona en negro y en blanco para flyers, redes y pantallas del evento.",
+    { photo: "", title: "Secret Room: identidad para eventos de música electrónica", client: "Secret Room · @secretroom.mx", category: "branding", mood: "fogata", sym: "baila", year: "2026",
+      url: "https://www.instagram.com/secretroom.mx/", interactive: "secretroom",
+      summary: "Secret Room es una serie de eventos de música electrónica en Santomar. Diseñamos su identidad: una S que se lee como rayo y como puerta, y un sistema de flyers en el que cada fecha reinterpreta la S con su propia textura, color y ambiente: piedra maya, ámbar, planeta Tierra, metal orgánico y hierro forjado.",
       metric: "",
-      details: [["Rol", "Branding e identidad"], ["Giro", "Eventos de música electrónica"], ["Versiones", "Positiva y negativa"]],
-      gallery: [["assets/secretroom/logo-oscuro.webp", "Logotipo en negativo: blanco sobre negro"], ["assets/secretroom/logo-claro.webp", "Logotipo en positivo: negro sobre claro"]] },
+      details: [["Rol", "Branding, flyers y dirección de arte"], ["Giro", "Eventos de música electrónica"], ["Sede", "Santomar"], ["Temporada", "5 eventos · 2026"]] },
     { photo: "", title: "Identidad para despacho de abogados", client: "Despacho jurídico", category: "branding", mood: "papelnoche", sym: "bruta", year: "2025", summary: "Branding para despacho de abogados. Descripción pendiente.", metric: "" },
     { photo: "", title: "Pilón: tarjetas de lealtad para Apple y Google Wallet", client: "Pilón · pilon.app", category: "software", mood: "agave", sym: "idea", year: "2026",
       url: "https://www.pilon.app", interactive: "pilon",
