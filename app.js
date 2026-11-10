@@ -8,7 +8,12 @@
 window.PB_DATA = {
   CATEGORIES: { branding: "Branding", campanas: "Campañas", marcas: "Marcas", software: "Software" },
   PROJECTS: [
-    { photo: "", title: "Identidad para organizadora de eventos", client: "Organizadora de música electrónica", category: "branding", mood: "fogata", sym: "baila", year: "2025", summary: "Branding para eventos de música electrónica. Descripción pendiente.", metric: "" },
+    { photo: "", title: "Secret Room: identidad para eventos de música electrónica", client: "Secret Room · @secretroom.mx", category: "branding", mood: "fogata", sym: "baila", year: "2025",
+      url: "https://www.instagram.com/secretroom.mx/",
+      summary: "Secret Room es una organizadora de eventos de música electrónica. Diseñamos su identidad: un isotipo en forma de S que también se lee como un rayo y como una puerta que se abre, acompañado de un logotipo en mayúsculas espaciadas. La marca funciona en negro y en blanco para flyers, redes y pantallas del evento.",
+      metric: "",
+      details: [["Rol", "Branding e identidad"], ["Giro", "Eventos de música electrónica"], ["Versiones", "Positiva y negativa"]],
+      gallery: [["assets/secretroom/logo-oscuro.webp", "Logotipo en negativo: blanco sobre negro"], ["assets/secretroom/logo-claro.webp", "Logotipo en positivo: negro sobre claro"]] },
     { photo: "", title: "Identidad para despacho de abogados", client: "Despacho jurídico", category: "branding", mood: "papelnoche", sym: "bruta", year: "2025", summary: "Branding para despacho de abogados. Descripción pendiente.", metric: "" },
     { photo: "", title: "Pilón: tarjetas de lealtad para Apple y Google Wallet", client: "Pilón · pilon.app", category: "software", mood: "agave", sym: "idea", year: "2026",
       url: "https://www.pilon.app", interactive: "pilon",
@@ -114,7 +119,7 @@ function openCase(i) {
   document.getElementById("case-title").textContent = p.title;
   document.getElementById("case-dl").innerHTML = [["Cliente", p.client], ["Categoría", CATEGORIES[p.category]], ["Año", p.year], ...(p.metric ? [["Resultado", p.metric]] : []), ...(p.details || [])].map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join("");
   document.getElementById("case-sum").textContent = p.summary;
-  const link = document.getElementById("case-link"); link.hidden = !p.url; if (p.url) { link.href = p.url; link.textContent = "Visitar " + p.url.replace(/^https?:\/\/(www\.)?/, "") + " ↗"; }
+  const link = document.getElementById("case-link"); link.hidden = !p.url; if (p.url) { link.href = p.url; link.textContent = p.url.includes("instagram.com") ? "Ver @" + p.url.split("instagram.com/")[1].replace(/\/$/, "") + " en Instagram ↗" : "Visitar " + p.url.replace(/^https?:\/\/(www\.)?/, "") + " ↗"; }
   const feats = document.getElementById("case-features"); feats.hidden = !p.features;
   feats.innerHTML = (p.features || []).map(([t, d], k) => `<li><span class="mono">${String(k + 1).padStart(2, "0")}</span><h4>${t}</h4><p>${d}</p></li>`).join("");
   const ix = document.getElementById("case-interactive");
