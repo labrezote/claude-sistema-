@@ -9,17 +9,78 @@ body{background:var(--noche);color:var(--hueso)}
 .hero .bsym{position:absolute;left:50%;top:44%;width:clamp(120px,15vw,230px);transform:translate(-50%,-125%);z-index:1}
 .sub{text-shadow:0 1px 12px rgba(0,0,0,.55);position:absolute;left:0;right:0;top:calc(44% + clamp(30px,6vw,96px));text-align:center;z-index:1;font-family:"Archivo";font-size:clamp(15px,1.6vw,22px)}
 .sub i{font-family:"Instrument Serif",serif;font-style:italic;font-size:1.25em;text-transform:none}
-.index{max-width:1240px;margin:0 auto;padding-top:96px;padding-bottom:96px}
-.index h2{font-size:clamp(28px,4vw,48px);margin-bottom:24px}
-.row{display:grid;grid-template-columns:60px 1fr 160px 120px;gap:16px;align-items:center;padding:18px 0;border-top:1px solid var(--linea);position:relative}
-.row:last-child{border-bottom:1px solid var(--linea)}
-.row .ti{font-family:"Archivo";font-stretch:105%;font-weight:600;text-transform:uppercase;font-size:clamp(16px,2vw,24px);letter-spacing:-.01em}
+.index{max-width:1320px;margin:0 auto;padding-top:96px;padding-bottom:110px}
+.w-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:16px 24px;margin-bottom:26px}
+.w-head h2{font-size:clamp(32px,5vw,64px);line-height:.95}
+.w-head h2 sup{font-family:"IBM Plex Mono",monospace;font-size:.28em;font-weight:400;vertical-align:top;margin-left:6px;color:var(--ceniza)}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.chip{padding:8px 12px;border:1px solid var(--linea)}
+.chip[aria-pressed="true"]{background:var(--hueso);color:var(--noche);border-color:var(--hueso)}
+.sep{width:1px;height:26px;background:var(--linea);margin:0 6px}
+/* Índice: vista previa fija + lista */
+.list-view{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:40px;align-items:start}
+.stage{position:sticky;top:24px;display:flex;flex-direction:column;gap:12px}
+.stage .pv{position:relative;aspect-ratio:4/5;overflow:hidden;background:var(--noche-2)}
+.stage .pv .sym{position:absolute;left:50%;top:46%;width:40%;transform:translate(-50%,-50%);transition:transform .35s}
+.stage .pv .n{position:absolute;left:5%;top:4%;font-size:12px}
+.stage .pv .c{position:absolute;right:5%;top:4%;font-size:12px}
+.stage .pv .metric{position:absolute;left:5%;bottom:5%;font-size:12px;border:1px solid var(--hueso);padding:5px 8px}
+.stage .cap{display:flex;justify-content:space-between;gap:12px;color:var(--ceniza)}
+.stage canvas{transition:opacity .25s}
+.rows{border-top:1px solid var(--linea)}
+.row{display:grid;grid-template-columns:52px 1fr auto;gap:16px;align-items:center;padding:20px 4px;border-bottom:1px solid var(--linea);text-align:left;width:100%;transition:background .2s,padding .2s;color:var(--ceniza)}
+.row .ti{font-family:"Archivo";font-stretch:105%;font-weight:600;text-transform:uppercase;font-size:clamp(17px,1.9vw,26px);line-height:1.05;letter-spacing:-.01em;color:var(--hueso);opacity:.45;transition:opacity .2s}
+.row .cl{display:block;margin-top:6px}
+.row.on{padding-left:14px}
+.row.on .ti,.row:hover .ti{opacity:1}
+.row .go{opacity:0;transition:opacity .2s}
+.row.on .go{opacity:1;color:var(--hueso)}
 .row .thumb{display:none}
-.row:hover .ti{padding-left:10px;transition:padding .2s}
-.preview{position:fixed;width:260px;aspect-ratio:4/5;pointer-events:none;z-index:9;opacity:0;transition:opacity .2s;overflow:hidden}
-.preview .sym{position:absolute;left:50%;top:46%;width:42%;transform:translate(-50%,-50%)}
-.preview.on{opacity:1}
-@media (max-width:760px){.row{grid-template-columns:70px 1fr;}.row .cat,.row .go{display:none}.row .thumb{display:block;position:relative;aspect-ratio:1;overflow:hidden}.row .thumb .sym{position:absolute;left:50%;top:50%;width:60%;transform:translate(-50%,-50%)}.t.hide-m{display:none}}
+/* Mosaico */
+.grid-view{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
+.tile{display:flex;flex-direction:column;gap:12px;text-align:left}
+.tile .pv{position:relative;aspect-ratio:5/4;overflow:hidden;container-type:inline-size}
+.tile .pv .sym{position:absolute;left:50%;top:46%;width:24%;transform:translate(-50%,-50%);transition:transform .35s}
+.tile:hover .pv .sym,.tile:focus-visible .pv .sym{transform:translate(-50%,-54%) rotate(-5deg)}
+.tile .pv .n{position:absolute;left:4%;top:5%;font-size:11px}
+.tile .pv .c{position:absolute;right:4%;top:5%;font-size:11px}
+.tile .pv .tt{position:absolute;left:4%;right:4%;bottom:6%;font-family:"Archivo";font-stretch:110%;font-weight:600;text-transform:uppercase;font-size:5.2cqw;line-height:1;letter-spacing:-.01em}
+.tile .meta{display:flex;justify-content:space-between;gap:12px;color:var(--ceniza)}
+.grid-view .tile.big{grid-column:span 2}
+.grid-view .tile.big .pv{aspect-ratio:16/8}
+.grid-view .tile.big .pv .sym{width:14%}
+.grid-view .tile.big .pv .tt{font-size:3.6cqw}
+.row .thumb,.stage .pv,.tile .pv{color:var(--hueso)}
+[hidden]{display:none!important}
+@media (max-width:860px){
+  .list-view{grid-template-columns:1fr}.stage{display:none}
+  .row{grid-template-columns:1fr;gap:10px;padding:18px 0}.row.on{padding-left:0}
+  .row .num,.row .go{display:none}.row .ti{opacity:1}
+  .row .thumb{display:block;position:relative;aspect-ratio:5/4;overflow:hidden;order:-1}
+  .row .thumb .sym{position:absolute;left:50%;top:46%;width:26%;transform:translate(-50%,-50%)}
+  .row .thumb .n{position:absolute;left:4%;top:5%;font-size:11px;color:var(--hueso)}
+  .grid-view{grid-template-columns:1fr}.grid-view .tile.big{grid-column:auto}
+  .grid-view .tile.big .pv{aspect-ratio:5/4}.grid-view .tile.big .pv .sym{width:24%}.grid-view .tile.big .pv .tt{font-size:5.2cqw}
+  .sep{display:none}
+  .t.hide-m{display:none}
+}
+/* Ficha del proyecto */
+.case{position:fixed;inset:0;z-index:50;background:var(--noche);overflow-y:auto;display:none}
+.case.open{display:block}
+.case .cv{position:relative;height:72svh;overflow:hidden}
+.case .cv .sym{position:absolute;left:50%;top:48%;width:min(26vw,240px);transform:translate(-50%,-50%)}
+.case .bar{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:center;padding-top:14px;padding-bottom:14px;background:rgba(14,14,12,.88);backdrop-filter:blur(8px)}
+.case .bar .nav{display:flex;gap:8px}
+.case .bar button{border:1px solid var(--linea);padding:8px 12px}
+.case .bar button:hover{border-color:var(--hueso)}
+.case .body{max-width:1100px;margin:0 auto;padding-top:36px;padding-bottom:80px;display:grid;gap:22px}
+.case h3{font-family:"Archivo";font-stretch:110%;font-weight:600;text-transform:uppercase;font-size:clamp(30px,5vw,64px);line-height:.95;letter-spacing:-.015em}
+.case dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--linea);border:1px solid var(--linea);margin:0}
+.case dl div{background:var(--noche);padding:14px;display:flex;flex-direction:column;gap:4px}
+.case dt{color:var(--ceniza)} .case dd{margin:0;font-size:16px}
+.case .sum{max-width:62ch;font-size:19px;line-height:1.55;color:#d8d3c7}
+.case .slots{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:12px}
+.case .slot{aspect-ratio:4/3;border:1px dashed var(--linea);display:grid;place-items:center;color:var(--ceniza)}
 .end{min-height:70svh;position:relative;overflow:hidden;display:grid;place-items:center;text-align:center}
 .end .in{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:12px}
 .end h2{font-size:clamp(48px,9vw,120px)}
@@ -37,20 +98,114 @@ body{background:var(--noche);color:var(--hueso)}
   <span class="t m hide-m" style="left:38%;bottom:6%">Labre Yahel Sandoval Brito</span>
   <span class="t" style="right:6%;bottom:8%;text-align:right" id="svc"></span>
 </section>
-<section class="index gut" id="trabajos"><h2 class="wm">Trabajos</h2><div id="rows"></div></section>
-<div class="preview onphoto" id="pv"><canvas class="photo"></canvas><span class="sym"></span></div>
+<section class="index gut" id="trabajos">
+  <div class="w-head">
+    <h2 class="wm">Trabajos<sup id="count"></sup></h2>
+    <div class="ctrl mono" role="toolbar" aria-label="Filtros y vista">
+      <span id="filters" class="ctrl"></span><span class="sep" aria-hidden="true"></span>
+      <button class="chip" type="button" data-view="list" aria-pressed="true">Índice</button>
+      <button class="chip" type="button" data-view="grid" aria-pressed="false">Mosaico</button>
+    </div>
+  </div>
+  <div class="list-view" id="list-view">
+    <div class="stage" aria-hidden="true">
+      <div class="pv onphoto" id="stage"><canvas class="photo"></canvas><span class="n mono"></span><span class="c mono"></span><span class="sym"></span><span class="metric mono" hidden></span></div>
+      <div class="cap mono"><span id="stage-client"></span><span id="stage-year"></span></div>
+    </div>
+    <div class="rows" id="rows"></div>
+  </div>
+  <div class="grid-view" id="grid-view" hidden></div>
+</section>
+<div class="case" id="case" role="dialog" aria-modal="true" aria-labelledby="case-title">
+  <div class="bar gut mono"><button type="button" id="case-close">← Trabajos</button><span class="nav"><button type="button" id="case-prev">Anterior</button><button type="button" id="case-next">Siguiente</button></span></div>
+  <div class="cv onphoto" id="case-cv"><canvas class="photo"></canvas><span class="sym"></span></div>
+  <div class="body gut">
+    <p class="mono" id="case-kicker" style="color:var(--ceniza)"></p>
+    <h3 id="case-title"></h3>
+    <dl class="mono" id="case-dl"></dl>
+    <p class="sum" id="case-sum"></p>
+    <!-- Aquí irán las imágenes reales del proyecto -->
+    <div class="slots mono"><div class="slot">Imagen 01</div><div class="slot">Imagen 02</div><div class="slot">Resultados</div></div>
+  </div>
+</div>
 <section class="end onphoto" id="contacto" data-mood="fogata" data-seed="4"><canvas class="photo"></canvas><div class="in"><span class="sym" data-s="saluda" style="width:150px"></span><h2 class="wm">Hablemos</h2><p class="mono">hola@piedrabruta.mx · @piedrabruta</p></div></section>
 <script src="../marca.js"></script><script src="comun.js"></script>
 <script>
 const { PROJECTS, CATEGORIES, SERVICES } = PB_DATA, M = window.Marca;
 document.querySelectorAll("[data-s]").forEach((e) => (e.innerHTML = M.symSVG(e.dataset.s)));
 document.getElementById("svc").innerHTML = SERVICES.slice(2).join("<br>");
-document.getElementById("rows").innerHTML = PROJECTS.map((p, i) => `<a class="row" href="#" data-i="${i}"><span class="mono">${String(i + 1).padStart(2, "0")}</span><span class="thumb onphoto" data-mood="${p.mood}" data-seed="${10 + i}"><canvas class="photo"></canvas><span class="sym">${M.symSVG(p.sym)}</span></span><span><span class="ti">${p.title}</span><br><span class="mono" style="color:var(--ceniza)">${p.client}</span></span><span class="mono cat">${CATEGORIES[p.category]}</span><span class="mono go">Ver →</span></a>`).join("");
-const pv = document.getElementById("pv");
-document.querySelectorAll(".row").forEach((r) => {
-  r.addEventListener("mouseenter", () => { const p = PROJECTS[+r.dataset.i]; pv.querySelector(".sym").innerHTML = M.symSVG(p.sym); pv.classList.add("on"); M.drawPhoto(pv.querySelector("canvas"), p.mood, 10 + +r.dataset.i); M.fixStrokes(pv); });
-  r.addEventListener("mouseleave", () => pv.classList.remove("on"));
-  r.addEventListener("mousemove", (e) => { pv.style.left = e.clientX + 24 + "px"; pv.style.top = e.clientY - 160 + "px"; });
-});
+const N = (i) => String(i + 1).padStart(2, "0");
+let filter = "todos", view = "list", current = 0, list = PROJECTS.map((p, i) => ({ ...p, i }));
+function filters() {
+  const f = document.getElementById("filters");
+  f.innerHTML = [["todos", "Todos"], ...Object.entries(CATEGORIES)].map(([k, l]) => `<button class="chip" type="button" data-f="${k}" aria-pressed="${k === filter}">${l}</button>`).join("");
+  f.querySelectorAll("[data-f]").forEach((b) => b.addEventListener("click", () => { filter = b.dataset.f; render(); }));
+}
+function setStage(p) {
+  const st = document.getElementById("stage");
+  st.querySelector(".n").textContent = N(p.i);
+  st.querySelector(".c").textContent = CATEGORIES[p.category];
+  st.querySelector(".sym").innerHTML = M.symSVG(p.sym);
+  const me = st.querySelector(".metric"); me.hidden = !p.metric; me.textContent = p.metric;
+  M.drawPhoto(st.querySelector("canvas"), p.mood, 10 + p.i);
+  document.getElementById("stage-client").textContent = p.client;
+  document.getElementById("stage-year").textContent = p.year;
+  M.fixStrokes(st);
+  document.querySelectorAll(".row").forEach((r) => r.classList.toggle("on", +r.dataset.i === p.i));
+}
+let io;
+function render() {
+  filters();
+  list = PROJECTS.map((p, i) => ({ ...p, i })).filter((p) => filter === "todos" || p.category === filter);
+  document.getElementById("count").textContent = `(${list.length})`;
+  document.getElementById("rows").innerHTML = list.map((p) => `<button class="row" type="button" data-i="${p.i}">
+      <span class="thumb onphoto" data-mood="${p.mood}" data-seed="${10 + p.i}"><canvas class="photo"></canvas><span class="n mono">${N(p.i)}</span><span class="sym">${M.symSVG(p.sym)}</span></span>
+      <span class="mono num">${N(p.i)}</span>
+      <span><span class="ti">${p.title}</span><span class="cl mono">${CATEGORIES[p.category]} · ${p.client}${p.metric ? " · " + p.metric : ""}</span></span>
+      <span class="mono go">Ver caso →</span></button>`).join("");
+  // Mosaico: una pieza grande y dos chicas; si al final queda una sola, también va grande
+  const big = list.map((_, k) => k % 6 === 0 || k % 6 === 3);
+  let tail = 0; for (let k = list.length - 1; k >= 0 && !big[k]; k--) tail++;
+  if (tail % 2) big[list.length - 1] = true;
+  document.getElementById("grid-view").innerHTML = list.map((p, k) => `<button class="tile${big[k] ? " big" : ""}" type="button" data-i="${p.i}">
+      <span class="pv onphoto" data-mood="${p.mood}" data-seed="${10 + p.i}"><canvas class="photo"></canvas><span class="n mono">${N(p.i)}</span><span class="c mono">${CATEGORIES[p.category]}</span><span class="sym">${M.symSVG(p.sym)}</span><span class="tt">${p.title}</span></span>
+      <span class="meta mono"><span>${p.client}</span><span>${p.metric || p.year}</span></span></button>`).join("");
+  document.querySelectorAll(".row, .tile").forEach((el) => {
+    el.addEventListener("click", () => openCase(+el.dataset.i));
+    if (el.classList.contains("row")) { el.addEventListener("mouseenter", () => setStage(PROJECTS[+el.dataset.i] && { ...PROJECTS[+el.dataset.i], i: +el.dataset.i })); el.addEventListener("focus", () => setStage({ ...PROJECTS[+el.dataset.i], i: +el.dataset.i })); }
+  });
+  document.getElementById("list-view").hidden = view !== "list";
+  document.getElementById("grid-view").hidden = view !== "grid";
+  document.querySelectorAll("[data-view]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.view === view)));
+  if (list.length) setStage(list[0]);
+  paintAll(document.getElementById("trabajos"));
+  // Sin mouse: el proyecto frente a ti al hacer scroll se vuelve el activo
+  if (io) io.disconnect();
+  io = new IntersectionObserver((ents) => ents.forEach((e) => { if (e.isIntersecting && matchMedia("(min-width: 861px)").matches) setStage({ ...PROJECTS[+e.target.dataset.i], i: +e.target.dataset.i }); }), { rootMargin: "-45% 0px -45% 0px" });
+  document.querySelectorAll(".row").forEach((r) => io.observe(r));
+}
+document.querySelectorAll("[data-view]").forEach((b) => b.addEventListener("click", () => { view = b.dataset.view; render(); }));
+/* Ficha */
+const cs = document.getElementById("case");
+let lastFocus = null;
+function openCase(i) {
+  current = list.findIndex((p) => p.i === i); if (current < 0) current = 0;
+  const p = list[current];
+  document.getElementById("case-kicker").textContent = `${N(p.i)} · ${CATEGORIES[p.category]}`;
+  document.getElementById("case-title").textContent = p.title;
+  document.getElementById("case-dl").innerHTML = [["Cliente", p.client], ["Categoría", CATEGORIES[p.category]], ["Año", p.year], ...(p.metric ? [["Resultado", p.metric]] : [])].map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join("");
+  document.getElementById("case-sum").textContent = p.summary;
+  const cv = document.getElementById("case-cv"); cv.querySelector(".sym").innerHTML = M.symSVG(p.sym);
+  if (!cs.classList.contains("open")) lastFocus = document.activeElement;
+  cs.classList.add("open"); cs.scrollTop = 0; document.body.style.overflow = "hidden";
+  M.drawPhoto(cv.querySelector("canvas"), p.mood, 40 + p.i); M.fixStrokes(cv);
+  document.getElementById("case-close").focus();
+}
+function closeCase() { cs.classList.remove("open"); document.body.style.overflow = ""; if (lastFocus) lastFocus.focus(); }
+document.getElementById("case-close").addEventListener("click", closeCase);
+document.getElementById("case-prev").addEventListener("click", () => openCase(list[(current - 1 + list.length) % list.length].i));
+document.getElementById("case-next").addEventListener("click", () => openCase(list[(current + 1) % list.length].i));
+addEventListener("keydown", (e) => { if (!cs.classList.contains("open")) return; if (e.key === "Escape") closeCase(); if (e.key === "ArrowRight") document.getElementById("case-next").click(); if (e.key === "ArrowLeft") document.getElementById("case-prev").click(); });
+render();
 paintAll();
 </script></body></html>
