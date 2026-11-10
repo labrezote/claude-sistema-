@@ -392,15 +392,15 @@ footer { padding-block: 32px 48px; border-top: 1px solid var(--linea); color: va
   const rockAt = (tx, ty, sc) => `<path transform="translate(${tx} ${ty}) scale(${sc})" d="${ROCK}"/>`;
   function rockParts(tx, ty, sc, eyes) {
     const P = (x, y) => [x * sc + tx, y * sc + ty];
-    const [lx, ly] = P(160, 132), [rx, ry] = P(236, 126), rL = 33 * sc, rR = 26 * sc;
+    const [lx, ly] = P(160, 132), [rx, ry] = P(236, 126), rL = 36 * sc, rR = 27 * sc;
     const cut = [P(246, 40), P(258, 84), P(316, 130), P(352, 118)].map((q, i) => (i ? "L" : "M") + q[0].toFixed(1) + " " + q[1].toFixed(1)).join(" ");
     const arc = (x, y, r) => `<path d="M${x - r} ${y - r * .1} Q${x} ${y + r * .8} ${x + r} ${y - r * .1}" stroke-width="${Math.max(4, r * .45)}"/>`;
     const pupil = (x, y, r, dx, dy, k = .47) => `<circle cx="${x + r * dx}" cy="${y + r * dy}" r="${r * k}"/>`;
     let holes = "", over = "", eyeLines = "", eyeRing = "";
-    const ring = (x, y, r) => `<circle cx="${x}" cy="${y}" r="${r * .82}"/>`;
+    const ring = (x, y, r) => `<circle cx="${x}" cy="${y}" r="${r}"/>`;
     if (eyes === "open" || eyes === "up" || eyes === "wide") {
       holes = `<circle cx="${lx}" cy="${ly}" r="${rL}"/><circle cx="${rx}" cy="${ry}" r="${rR}"/>`;
-      const [dx, dy, k] = eyes === "up" ? [.15, -.42, .47] : eyes === "wide" ? [0, .02, .42] : [-.25, .4, .47];
+      const [dx, dy, k] = eyes === "up" ? [.15, -.45, .47] : eyes === "wide" ? [0, .02, .42] : [-.28, .42, .47];
       over = pupil(lx, ly, rL, dx, dy, k) + pupil(rx, ry, rR, dx, dy, k);
       eyeRing = ring(lx, ly, rL) + ring(rx, ry, rR);
     } else if (eyes === "wink") {
