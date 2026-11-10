@@ -2,182 +2,135 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Piedra Bruta — Estudio</title>
-  <meta name="description" content="Piedra Bruta: branding, campañas y marcas. Estudio de Labre Yahel Sandoval Brito.">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Piedra Bruta — Estudio de marcas</title>
+  <meta name="description" content="Piedra Bruta: branding, campañas y marcas talladas a mano. Estudio de Labre Yahel Sandoval Brito.">
+  <meta name="theme-color" content="#0e0e0c">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <!-- Filtros SVG de la marca (trazo derretido) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs id="fx"></defs></svg>
 
-  <!-- Intro: bloques de píxel que se disuelven al entrar -->
-  <canvas id="intro" aria-hidden="true"></canvas>
-
-  <header class="nav">
-    <a class="logo px" href="#inicio">PIEDRA BRUTA<span class="blink">_</span></a>
-    <nav>
+  <header class="nav" id="nav">
+    <nav class="nav-l" aria-label="Secciones">
       <a href="#trabajos">Trabajos</a>
       <a href="#estudio">Estudio</a>
+    </nav>
+    <a class="logo wm" href="#inicio" aria-label="Piedra Bruta, inicio">Piedra Brut<span class="cutA">a</span></a>
+    <nav class="nav-r" aria-label="Contacto">
+      <a href="#proceso">Proceso</a>
       <a href="#contacto">Contacto</a>
     </nav>
   </header>
 
   <main>
-    <!-- HERO -->
-    <section id="inicio" class="hero">
-      <div class="hero-text">
-        <p class="px kicker">[ Branding · Campañas · Marcas ]</p>
-        <h1 class="px title">
-          <span>PIEDRA</span>
-          <span class="accent">BRUTA</span>
-        </h1>
-        <p class="lede">
-          Toda marca empieza como piedra bruta. Nosotros la tallamos:
-          identidad, campañas y piezas digitales para negocios que quieren
-          ser recordados.
-        </p>
-        <a class="cta px" href="#trabajos">Ver trabajos →</a>
+    <!-- PORTADA -->
+    <!-- Para usar una foto real: pon la imagen en assets/ y escribe su ruta en data-photo, p. ej. data-photo="assets/portada.jpg" -->
+    <section id="inicio" class="hero onphoto" data-mood="monte" data-seed="1" data-photo="">
+      <canvas class="photo" aria-hidden="true"></canvas>
+      <div class="hero-mark">
+        <span class="sym float" id="hero-sym"></span>
+        <h1 class="hero-melt" id="hero-melt"><span class="sr">Piedra Bruta</span></h1>
       </div>
-
-      <!-- Mascota: piedra realista con ojos de papelería -->
-      <div class="rock-stage" id="rock-stage">
-        <canvas class="rock-shadow" id="rock-shadow" aria-hidden="true"></canvas>
-        <button class="rock" id="rock" type="button" aria-label="Piedra Bruta. Tócala para que salte">
-          <svg class="rock-svg" viewBox="0 0 400 300" aria-hidden="true">
-            <defs>
-              <filter id="stone" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">
-                <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="5" seed="4" result="noise"/>
-                <feDiffuseLighting in="noise" lighting-color="#ffffff" surfaceScale="5" result="light">
-                  <feDistantLight azimuth="225" elevation="48"/>
-                </feDiffuseLighting>
-                <feComposite in="light" in2="SourceGraphic" operator="arithmetic" k1="1.3" k2="0" k3="0" k4="0" result="lit"/>
-                <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="9" result="grain"/>
-                <feColorMatrix in="grain" type="matrix" values="0 0 0 0 0.08  0 0 0 0 0.07  0 0 0 0 0.06  3.2 0 0 0 -1.75" result="specks"/>
-                <feColorMatrix in="grain" type="matrix" values="0 0 0 0 1  0 0 0 0 0.98  0 0 0 0 0.94  0 3.2 0 0 -1.9" result="flecks"/>
-                <feMerge result="stoneAll">
-                  <feMergeNode in="lit"/>
-                  <feMergeNode in="specks"/>
-                  <feMergeNode in="flecks"/>
-                </feMerge>
-                <feComposite in="stoneAll" in2="SourceGraphic" operator="in"/>
-              </filter>
-              <radialGradient id="volume" cx="34%" cy="28%" r="78%">
-                <stop offset="0" stop-color="#fff" stop-opacity="0.32"/>
-                <stop offset="0.42" stop-color="#fff" stop-opacity="0"/>
-                <stop offset="0.78" stop-color="#000" stop-opacity="0.35"/>
-                <stop offset="1" stop-color="#000" stop-opacity="0.7"/>
-              </radialGradient>
-              <linearGradient id="base-dark" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0.7" stop-color="#000" stop-opacity="0"/>
-                <stop offset="1" stop-color="#000" stop-opacity="0.45"/>
-              </linearGradient>
-              <clipPath id="rock-clip">
-                <path id="rock-shape" d="M58 214 C38 182 44 140 70 112 C88 92 104 70 138 56 C170 42 206 36 240 42 C282 48 318 66 342 98 C364 128 372 168 360 204 C350 236 322 260 284 272 C240 284 186 286 140 278 C102 271 74 246 58 214 Z"/>
-              </clipPath>
-            </defs>
-            <g clip-path="url(#rock-clip)">
-              <g filter="url(#stone)">
-                <rect width="400" height="300" fill="#8c867b"/>
-                <!-- facetas talladas -->
-                <path d="M70 112 L138 56 L180 120 L96 168 Z" fill="#a39d91"/>
-                <path d="M138 56 L240 42 L262 104 L180 120 Z" fill="#9b958a"/>
-                <path d="M240 42 L342 98 L300 140 L262 104 Z" fill="#878176"/>
-                <path d="M342 98 L372 168 L330 196 L300 140 Z" fill="#6f6a61"/>
-                <path d="M180 120 L262 104 L300 140 L250 192 L170 186 Z" fill="#938d82"/>
-                <path d="M96 168 L180 120 L170 186 L120 240 L58 214 Z" fill="#857f74"/>
-                <path d="M170 186 L250 192 L240 284 L140 278 L120 240 Z" fill="#746f66"/>
-                <path d="M250 192 L330 196 L360 204 L284 272 L240 284 Z" fill="#625d55"/>
-              </g>
-              <rect width="400" height="300" fill="url(#volume)"/>
-              <rect width="400" height="300" fill="url(#base-dark)"/>
-              <!-- grietas -->
-              <g fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M262 104 L276 128 L271 150 L286 170" stroke="#2a2723" stroke-width="2" opacity="0.55"/>
-                <path d="M263 103 L277 127 L272 149 L287 169" stroke="#fff" stroke-width="1" opacity="0.18" transform="translate(-1.5 -1)"/>
-                <path d="M120 240 L138 222 L134 204" stroke="#2a2723" stroke-width="1.6" opacity="0.5"/>
-                <path d="M200 60 L208 78 L203 92" stroke="#2a2723" stroke-width="1.2" opacity="0.4"/>
-              </g>
-            </g>
-          </svg>
-          <span class="eye eye-l"><span class="pupil"></span></span>
-          <span class="eye eye-r"><span class="pupil"></span></span>
-        </button>
-        <p class="px rock-hint" aria-hidden="true">[ tócala ]</p>
+      <div class="hero-foot mono">
+        <span>Branding · Campañas · Marcas</span>
+        <a href="#trabajos" class="down">Ver trabajos ↓</a>
+        <span>Labre Yahel Sandoval Brito</span>
       </div>
-    </section>
-
-    <!-- TICKER -->
-    <div class="ticker" aria-hidden="true">
-      <div class="ticker-track px">
-        <span>BRANDING ■ CAMPAÑAS ■ MARCAS ■ DIGITAL ■ EMPRESAS ■</span>
-        <span>BRANDING ■ CAMPAÑAS ■ MARCAS ■ DIGITAL ■ EMPRESAS ■</span>
-      </div>
-    </div>
-
-    <!-- TRABAJOS -->
-    <section id="trabajos" class="works">
-      <header class="section-head">
-        <h2 class="px">Trabajos</h2>
-        <p class="px count"><span id="count-visible">0</span> / <span id="count-total">0</span></p>
-      </header>
-
-      <div class="filters" id="filters" role="toolbar" aria-label="Filtrar por categoría"></div>
-
-      <div class="grid" id="grid"></div>
     </section>
 
     <!-- ESTUDIO -->
-    <section id="estudio" class="studio">
-      <div class="studio-text">
-        <h2 class="px">Estudio</h2>
-        <p>
-          Piedra Bruta es el estudio de Labre Yahel Sandoval Brito, con
-          formación en mercadotecnia y publicidad. Trabajamos branding, campañas y marcas
-          para negocios de todos los tamaños: desde una organizadora de
-          eventos hasta una miel artesanal.
-          <!-- TODO: texto real del estudio -->
-        </p>
+    <section id="estudio" class="band studio">
+      <div class="wrap studio-grid">
+        <p class="label mono">01 — Estudio</p>
+        <div class="studio-text">
+          <h2 class="big">Marcas talladas a mano sobre piedra bruta.</h2>
+          <p>Toda marca empieza como piedra bruta: material con peso, textura y potencial, pero sin forma. En Piedra Bruta la tallamos. Hacemos identidad, campañas y piezas digitales para negocios de todos los tamaños, desde una miel artesanal hasta una agencia de autos.</p>
+          <p>Piedra Bruta es el estudio de Labre Yahel Sandoval Brito, con formación en mercadotecnia y publicidad.</p>
+        </div>
+        <span class="sym studio-sym" id="studio-sym"></span>
       </div>
-      <dl class="stats">
-        <div>
-          <dt class="px">Proyectos</dt>
-          <dd class="px" id="stat-proyectos">0</dd>
-        </div>
-        <div>
-          <dt class="px">Campaña JEEP</dt>
-          <dd class="px">150+</dd>
-        </div>
-      </dl>
+      <div class="wrap services">
+        <p class="label mono">Servicios</p>
+        <ul class="mono">
+          <li>Branding e identidad</li>
+          <li>Naming</li>
+          <li>Campañas publicitarias</li>
+          <li>Redes sociales</li>
+          <li>Fotografía y video</li>
+          <li>Sitios web y digital</li>
+        </ul>
+        <dl class="stats">
+          <div><dt class="mono">Proyectos</dt><dd class="wm" id="stat-proyectos">0</dd></div>
+          <div><dt class="mono">Campaña JEEP</dt><dd class="wm">150+</dd><dd class="mono small">autos vendidos</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- TRABAJOS -->
+    <section id="trabajos" class="band works">
+      <div class="wrap">
+        <header class="section-head">
+          <p class="label mono">02 — Trabajos</p>
+          <p class="count mono"><span id="count-visible">0</span> / <span id="count-total">0</span></p>
+        </header>
+        <div class="filters" id="filters" role="toolbar" aria-label="Filtrar por categoría"></div>
+        <div class="grid" id="grid"></div>
+      </div>
+    </section>
+
+    <!-- PROCESO -->
+    <section id="proceso" class="band process">
+      <div class="wrap">
+        <header class="section-head">
+          <p class="label mono">03 — Proceso</p>
+        </header>
+        <h2 class="big">Así tallamos una marca.</h2>
+        <ol class="steps" id="steps"></ol>
+      </div>
+    </section>
+
+    <!-- CONTACTO -->
+    <section id="contacto" class="contact onphoto" data-mood="atardecer" data-seed="90" data-photo="">
+      <canvas class="photo" aria-hidden="true"></canvas>
+      <div class="contact-inner">
+        <span class="sym" id="contact-sym"></span>
+        <h2 class="wm contact-title">Hablemos</h2>
+        <p class="mono">Cuéntanos qué vendes y a quién. Lo demás lo tallamos juntos.</p>
+        <!-- TODO: correo y redes reales -->
+        <p class="mono contact-mail">hola@piedrabruta.mx</p>
+        <p class="mono small">Instagram · @piedrabruta</p>
+      </div>
     </section>
   </main>
 
-  <footer id="contacto" class="footer">
-    <p class="px">¿Hablamos?</p>
-    <p class="footer-mail">
-      <!-- TODO: correo y redes reales -->
-      contacto@tudominio.com
-    </p>
-    <p class="px small">© <span id="year"></span> Piedra Bruta — por Labre Sandoval</p>
+  <footer class="footer mono">
+    <span>© <span id="year"></span> Piedra Bruta</span>
+    <span>Labre Yahel Sandoval Brito · Dirección creativa</span>
   </footer>
 
   <!-- DETALLE DE PROYECTO -->
   <dialog id="caso" class="caso">
-    <button class="close px" type="button" aria-label="Cerrar">× CERRAR</button>
-    <p class="px caso-cat" id="caso-cat"></p>
-    <h3 class="px caso-title" id="caso-title"></h3>
-    <p class="caso-client" id="caso-client"></p>
-    <p class="caso-metric px" id="caso-metric" hidden></p>
+    <button class="close mono" type="button" aria-label="Cerrar">Cerrar ×</button>
+    <div class="caso-cover onphoto" id="caso-cover"><canvas class="photo" aria-hidden="true"></canvas><span class="sym" id="caso-sym"></span></div>
+    <p class="mono caso-cat" id="caso-cat"></p>
+    <h3 class="wm caso-title" id="caso-title"></h3>
+    <p class="mono caso-client" id="caso-client"></p>
+    <p class="caso-metric mono" id="caso-metric" hidden></p>
     <p class="caso-summary" id="caso-summary"></p>
     <!-- Aquí irán imágenes, procesos y resultados del caso -->
-    <div class="caso-slots">
-      <div class="slot px">IMAGEN 01</div>
-      <div class="slot px">IMAGEN 02</div>
-      <div class="slot px">RESULTADOS</div>
+    <div class="caso-slots mono">
+      <div class="slot">Imagen 01</div>
+      <div class="slot">Imagen 02</div>
+      <div class="slot">Resultados</div>
     </div>
   </dialog>
 
+  <script src="marca.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
