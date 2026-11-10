@@ -101,6 +101,10 @@ legend { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 12px;
 .mcard .line .sym { width: 1.25em; color: inherit; flex: none; }
 .mcard .plate { overflow: hidden; }
 .mcard .plate.cutdemo { place-items: end start; padding-bottom: 0; }
+.vlock { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; width: 100%; color: inherit; text-align: center; }
+.vlock > .sym { width: var(--sy, 24%); color: inherit; }
+.vlock .mw { display: block; color: inherit; }
+.mcard .plate.light .vlock .sym, .mcard .plate.light .mw { color: var(--noche); }
 .mcard .caption { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 12px; color: var(--ceniza); }
 .fonts { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); margin-top: 20px; }
 .fcard { padding: 18px; border: 1px solid var(--linea); display: flex; flex-direction: column; gap: 10px; }
@@ -110,6 +114,7 @@ legend { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 12px;
 .fcard p { font-size: 14px; color: var(--ceniza); }
 .fcard.on { border-color: var(--hueso); }
 
+svg .ln, svg .ln * { stroke-width: var(--sw); }
 /* Sistema tipográfico */
 .mono { font-family: "IBM Plex Mono", ui-monospace, Menlo, monospace; }
 .arch { font-family: "Archivo", "Helvetica Neue", Arial, sans-serif; font-stretch: 110%; }
@@ -247,7 +252,7 @@ footer { padding-block: 32px 48px; border-top: 1px solid var(--linea); color: va
 
 <section>
   <div class="wrap">
-    <div class="head"><h2>Logotipo</h2><p>El nombre va completo, nunca partido en sílabas. Su detalle propio es el corte: la A final pierde la esquina superior derecha, como la piedra de Bruta.</p></div>
+    <div class="head"><h2>Logotipo</h2><p>Bruta va arriba y centrada; el nombre, completo, debajo. Puede escribirse en Archivo, con la A tallada, o en su versión derretida en tres intensidades: suave, media e intensa.</p></div>
     <div class="marks" id="marks"></div>
   </div>
 </section>
@@ -328,7 +333,7 @@ footer { padding-block: 32px 48px; border-top: 1px solid var(--linea); color: va
       </div>
       <div class="app">
         <div class="cards">
-          <div class="bc front"><span class="stack"><span>Piedra</span><span>Brut<span class="cutA">a</span></span></span><div class="r"><p class="who">Labre Yahel Sandoval Brito<small>Dirección creativa · Mercadotecnia y publicidad</small></p><span class="sym"></span></div></div>
+          <div class="bc front"><span class="sym bc-top" style="width:40px"></span><span class="stack"><span>Piedra</span><span>Brut<span class="cutA">a</span></span></span><div class="r"><p class="who">Labre Yahel Sandoval Brito<small>Dirección creativa · Mercadotecnia y publicidad</small></p></div></div>
           <div class="bc back" id="bc-back"><canvas></canvas><span class="sym"></span></div>
         </div>
         <h3>Tarjeta de presentación</h3><p>Frente en blanco hueso con el nombre y los datos centrados; reverso con foto y la Mirada en blanco.</p>
@@ -347,6 +352,13 @@ footer { padding-block: 32px 48px; border-top: 1px solid var(--linea); color: va
 (() => {
   /* ===== Filtros: trazo derretido (desplazamiento + desenfoque + umbral) ===== */
   const fx = document.getElementById("fx");
+  [["melt-suave", 16, 2.8], ["melt-intensa", 60, 5.5]].forEach(([id, sc, bl]) => fx.insertAdjacentHTML("beforeend", `
+    <filter id="${id}" x="-10%" y="-20%" width="120%" height="140%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.011 0.018" numOctaves="2" seed="5" result="t"/>
+      <feDisplacementMap in="SourceGraphic" in2="t" scale="${sc}" xChannelSelector="R" yChannelSelector="G" result="d"/>
+      <feGaussianBlur in="d" stdDeviation="${bl}" result="b"/>
+      <feColorMatrix in="b" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -8"/>
+    </filter>`));
   fx.insertAdjacentHTML("beforeend", `
     <filter id="melt" x="-10%" y="-20%" width="120%" height="140%" color-interpolation-filters="sRGB">
       <feTurbulence type="fractalNoise" baseFrequency="0.011 0.018" numOctaves="2" seed="5" result="t"/>
@@ -357,6 +369,7 @@ footer { padding-block: 32px 48px; border-top: 1px solid var(--linea); color: va
   fx.insertAdjacentHTML("beforeend", `
     <filter id="outline" x="-10%" y="-10%" width="120%" height="120%"><feMorphology in="SourceAlpha" operator="erode" radius="3.2" result="e"/><feComposite in="SourceGraphic" in2="e" operator="out"/></filter>
     <filter id="outline-melt" x="-10%" y="-20%" width="120%" height="140%"><feMorphology in="SourceAlpha" operator="erode" radius="5" result="e"/><feComposite in="SourceGraphic" in2="e" operator="out"/></filter>`);
+  [3, 7, 11].forEach((seed, i) => fx.insertAdjacentHTML("beforeend", `<filter id="wob${i}" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="${seed}" result="t"/><feDisplacementMap in="SourceGraphic" in2="t" scale="6" xChannelSelector="R" yChannelSelector="G"/></filter>`));
   [3, 7, 11].forEach((seed, i) => {
     fx.insertAdjacentHTML("beforeend", `
       <filter id="goo${i}" x="-25%" y="-25%" width="150%" height="150%" color-interpolation-filters="sRGB">
@@ -371,68 +384,72 @@ footer { padding-block: 32px 48px; border-top: 1px solid var(--linea); color: va
   const ray = (cx, cy, a, r0, r1, w) => `<line x1="${cx + Math.cos(a) * r0}" y1="${cy + Math.sin(a) * r0}" x2="${cx + Math.cos(a) * r1}" y2="${cy + Math.sin(a) * r1}" stroke-width="${w}"/>`;
   const spiral = (R = 62, turns = 5.2) => { let d = ""; for (let t = 0; t <= 1; t += 0.01) { const a = t * Math.PI * turns, r = 8 + t * R; d += (t ? " L" : "M") + (100 + Math.cos(a) * r).toFixed(1) + " " + (100 + Math.sin(a) * r).toFixed(1); } return d; };
   const sun = (cx, cy, r, n, len, w, rot) => `<circle cx="${cx}" cy="${cy}" r="${r}"/>` + Array.from({ length: n }, (_, k) => ray(cx, cy, rot + (k / n) * Math.PI * 2, r * .6, r + len * (0.7 + ((k * 37) % 10) / 22), w)).join("");
-  /* Bruta en distintas poses: misma piedra, ojos y corte; cambian brazos, piernas y gestos */
+  /* Bruta en distintas poses: misma piedra, ojos y corte; cambian brazos, piernas y gestos.
+     body = formas rellenas · lines = trazos (brazos, piernas, accesorios) · cut = corte de la piedra
+     holes = huecos (ojos) · eyeLines = ojos cerrados · over = pupilas y puntos siempre rellenos */
   const ROCK = "M60 214 C40 182 46 138 72 110 C92 88 110 66 146 52 C178 40 214 36 246 40 L300 52 L352 118 C368 146 372 178 362 208 C350 240 322 262 284 274 C240 286 186 288 140 280 C102 273 74 248 60 214 Z";
   const heart = (x, y, r) => `M${x} ${y + r * .85} C${x - r * 1.5} ${y - r * .1} ${x - r * .6} ${y - r * 1.15} ${x} ${y - r * .35} C${x + r * .6} ${y - r * 1.15} ${x + r * 1.5} ${y - r * .1} ${x} ${y + r * .85} Z`;
-  function bru({ tx, ty, sc, eyes = "open", limbs = "", extra = "", w = 11, goo = 1, id, name, note }) {
+  const rockAt = (tx, ty, sc) => `<path transform="translate(${tx} ${ty}) scale(${sc})" d="${ROCK}"/>`;
+  function rockParts(tx, ty, sc, eyes) {
     const P = (x, y) => [x * sc + tx, y * sc + ty];
     const [lx, ly] = P(160, 132), [rx, ry] = P(236, 126), rL = 33 * sc, rR = 26 * sc;
     const cut = [P(246, 40), P(258, 84), P(316, 130), P(352, 118)].map((q, i) => (i ? "L" : "M") + q[0].toFixed(1) + " " + q[1].toFixed(1)).join(" ");
-    const line = (x, y, r) => `<path d="M${x - r} ${y - r * .1} Q${x} ${y + r * .8} ${x + r} ${y - r * .1}" fill="none" stroke="#000" stroke-width="${Math.max(4, r * .4)}" stroke-linecap="round"/>`;
-    let holes = `<path d="${cut}" fill="none" stroke="#000" stroke-width="${Math.max(4, 12 * sc)}" stroke-linejoin="round"/>`, over = "";
+    const arc = (x, y, r) => `<path d="M${x - r} ${y - r * .1} Q${x} ${y + r * .8} ${x + r} ${y - r * .1}" stroke-width="${Math.max(4, r * .45)}"/>`;
     const pupil = (x, y, r, dx, dy, k = .47) => `<circle cx="${x + r * dx}" cy="${y + r * dy}" r="${r * k}"/>`;
+    let holes = "", over = "", eyeLines = "", eyeRing = "";
+    const ring = (x, y, r) => `<circle cx="${x}" cy="${y}" r="${r * .82}"/>`;
     if (eyes === "open" || eyes === "up" || eyes === "wide") {
-      const m = 1;
-      holes += `<circle cx="${lx}" cy="${ly}" r="${rL * m}"/><circle cx="${rx}" cy="${ry}" r="${rR * m}"/>`;
+      holes = `<circle cx="${lx}" cy="${ly}" r="${rL}"/><circle cx="${rx}" cy="${ry}" r="${rR}"/>`;
       const [dx, dy, k] = eyes === "up" ? [.15, -.42, .47] : eyes === "wide" ? [0, .02, .42] : [-.25, .4, .47];
-      over = pupil(lx, ly, rL * m, dx, dy, k) + pupil(rx, ry, rR * m, dx, dy, k);
+      over = pupil(lx, ly, rL, dx, dy, k) + pupil(rx, ry, rR, dx, dy, k);
+      eyeRing = ring(lx, ly, rL) + ring(rx, ry, rR);
+    } else if (eyes === "wink") {
+      holes = `<circle cx="${lx}" cy="${ly}" r="${rL}"/>`; over = pupil(lx, ly, rL, -.25, .4); eyeLines = arc(rx, ry, rR); eyeRing = ring(lx, ly, rL);
     } else if (eyes === "closed") {
-      holes += line(lx, ly, rL) + line(rx, ry, rR);
+      eyeLines = arc(lx, ly, rL) + arc(rx, ry, rR);
     } else if (eyes === "heart") {
-      holes += `<path d="${heart(lx, ly, rL * 1.05)}"/><path d="${heart(rx, ry, rR * 1.05)}"/>`;
+      holes = `<path d="${heart(lx, ly, rL * 1.05)}"/><path d="${heart(rx, ry, rR * 1.05)}"/>`;
+      eyeRing = `<path d="${heart(lx, ly, rL * .9)}"/><path d="${heart(rx, ry, rR * .9)}"/>`;
     }
-    return { id, name, note, goo,
-      body: `<path transform="translate(${tx} ${ty}) scale(${sc})" d="${ROCK}"/><g fill="none" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round">${limbs}</g>${extra}`,
-      holes, over };
+    return { body: rockAt(tx, ty, sc), cut, cw: Math.max(4, 12 * sc), holes, over, eyeLines, eyeRing };
+  }
+  function bru({ tx, ty, sc, eyes = "open", limbs = "", lines = "", fills = "", dots = "", goo = 1, id, name, note }) {
+    const r = rockParts(tx, ty, sc, eyes);
+    return { id, name, note, goo, cut: r.cut, cw: r.cw, holes: r.holes, eyeLines: r.eyeLines, eyeRing: r.eyeRing,
+      body: r.body + fills,
+      lines: (limbs ? `<g stroke-width="11">${limbs}</g>` : "") + lines,
+      over: r.over + dots };
   }
 
   const SYMBOLS = [
-    { id: "bruta", name: "Bruta", note: "La mascota: piedra con la esquina tallada, ojos huecos y pupilas sueltas.", goo: 0,
-      body: `<path transform="translate(10 32) scale(.45)" d="M60 214 C40 182 46 138 72 110 C92 88 110 66 146 52 C178 40 214 36 246 40 L300 52 L352 118 C368 146 372 178 362 208 C350 240 322 262 284 274 C240 286 186 288 140 280 C102 273 74 248 60 214 Z"/>`,
-      holes: `<circle cx="76" cy="96" r="16"/><circle cx="116" cy="94" r="12"/><path d="M118 40 L126 70 L154 92 L180 84" fill="none" stroke="#000" stroke-width="6" stroke-linejoin="round"/>`,
-      over: `<circle cx="72" cy="102" r="7.5"/><circle cx="113" cy="99" r="5.5"/>` },
-    { id: "corre", name: "Bruta corre", note: "Bruta con piernas y brazos, en movimiento. Para eventos, avisos y campañas.", goo: 1,
-      body: `<path transform="translate(28 10) scale(.36)" d="M60 214 C40 182 46 138 72 110 C92 88 110 66 146 52 C178 40 214 36 246 40 L300 52 L352 118 C368 146 372 178 362 208 C350 240 322 262 284 274 C240 286 186 288 140 280 C102 273 74 248 60 214 Z"/>
-        <g fill="none" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"><path d="M82 110 L68 140 L48 148"/><path d="M118 112 L138 136 L134 168"/><path d="M48 82 L26 70"/><path d="M158 76 L180 58"/></g>`,
-      holes: `<circle cx="85" cy="58" r="13"/><circle cx="113" cy="56" r="10"/><path d="M116 22 L121 40 L142 57 L158 52" fill="none" stroke="#000" stroke-width="5" stroke-linejoin="round"/>`,
-      over: `<circle cx="81" cy="63" r="6"/><circle cx="110" cy="60" r="4.5"/>` },
-    { id: "guino", name: "Guiño", note: "Bruta guiña un ojo: complicidad y buen humor. Para redes y mensajes cercanos.", goo: 0,
-      body: `<path transform="translate(10 32) scale(.45)" d="M60 214 C40 182 46 138 72 110 C92 88 110 66 146 52 C178 40 214 36 246 40 L300 52 L352 118 C368 146 372 178 362 208 C350 240 322 262 284 274 C240 286 186 288 140 280 C102 273 74 248 60 214 Z"/>`,
-      holes: `<circle cx="76" cy="96" r="16"/><path d="M103 96 Q116 106 129 95" fill="none" stroke="#000" stroke-width="6" stroke-linecap="round"/><path d="M118 40 L126 70 L154 92 L180 84" fill="none" stroke="#000" stroke-width="6" stroke-linejoin="round"/>`,
-      over: `<circle cx="72" cy="102" r="7.5"/>` },
+    bru({ id: "bruta", name: "Bruta", note: "La mascota: piedra con la esquina tallada, ojos huecos y pupilas sueltas.", goo: 0, tx: 10, ty: 32, sc: .45 }),
+    bru({ id: "corre", name: "Bruta corre", note: "Bruta con piernas y brazos, en movimiento. Para eventos, avisos y campañas.", tx: 28, ty: 10, sc: .36,
+      limbs: `<path d="M82 110 L68 140 L48 148"/><path d="M118 112 L138 136 L134 168"/><path d="M48 82 L26 70"/><path d="M158 76 L180 58"/>` }),
+    bru({ id: "guino", name: "Guiño", note: "Bruta guiña un ojo: complicidad y buen humor. Para redes y mensajes cercanos.", goo: 0, tx: 10, ty: 32, sc: .45, eyes: "wink" }),
     bru({ id: "salta", name: "Salta", note: "Bruta brinca de gusto: lanzamientos, logros y buenas noticias.", tx: 28, ty: 2, sc: .36, eyes: "up",
       limbs: `<path d="M50 58 L32 30"/><path d="M156 52 L176 24"/><path d="M80 98 L70 124 L84 142"/><path d="M118 98 L132 122 L120 142"/>`,
-      extra: `<g fill="none" stroke-width="6" stroke-linecap="round"><path d="M66 172 L92 172"/><path d="M108 178 L136 178"/></g>` }),
+      lines: `<g stroke-width="6"><path d="M66 172 L92 172"/><path d="M108 178 L136 178"/></g>` }),
     bru({ id: "saluda", name: "Saluda", note: "Bruta dice hola: bienvenidas, contacto y primeros mensajes.", tx: 22, ty: 22, sc: .36,
       limbs: `<path d="M44 104 L30 128"/><path d="M152 92 L172 66 L182 46"/><path d="M78 124 L74 166 L62 170"/><path d="M112 124 L116 166 L128 170"/>`,
-      extra: `<g fill="none" stroke-width="4" stroke-linecap="round"><path d="M176 30 Q190 32 194 46"/><path d="M168 24 Q190 18 200 40"/></g>` }),
+      lines: `<g stroke-width="4"><path d="M176 30 Q190 32 194 46"/><path d="M168 24 Q190 18 200 40"/></g>` }),
     bru({ id: "duerme", name: "Duerme", note: "Bruta descansa: fuera de horario, vacaciones y pausas.", tx: 10, ty: 50, sc: .45, eyes: "closed",
-      extra: `<g fill="none" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><path d="M148 22 L168 22 L148 42 L168 42"/><path d="M174 4 L186 4 L174 16 L186 16"/></g>` }),
+      lines: `<g stroke-width="6"><path d="M148 22 L168 22 L148 42 L168 42"/><path d="M174 4 L186 4 L174 16 L186 16"/></g>` }),
     bru({ id: "sorpresa", name: "Sorpresa", note: "Bruta con los ojos muy abiertos: novedades, avisos y algo que no te esperas.", tx: 10, ty: 40, sc: .45, eyes: "wide",
-      extra: `<g fill="none" stroke-width="7" stroke-linecap="round"><path d="M100 4 L100 24"/><path d="M66 12 L74 30"/><path d="M134 12 L126 30"/></g>` }),
+      lines: `<g stroke-width="7"><path d="M100 4 L100 24"/><path d="M66 12 L74 30"/><path d="M134 12 L126 30"/></g>` }),
     bru({ id: "idea", name: "Idea", note: "A Bruta se le ocurre algo: procesos creativos, talleres y propuestas.", tx: 10, ty: 50, sc: .45, eyes: "up",
-      extra: `<path d="M100 0 C102 18 108 24 126 26 C108 28 102 34 100 52 C98 34 92 28 74 26 C92 24 98 18 100 0 Z"/><g fill="none" stroke-width="5" stroke-linecap="round"><path d="M136 12 L144 6"/><path d="M64 12 L56 6"/></g>` }),
+      fills: `<path d="M100 0 C102 18 108 24 126 26 C108 28 102 34 100 52 C98 34 92 28 74 26 C92 24 98 18 100 0 Z"/>`,
+      lines: `<g stroke-width="5"><path d="M136 12 L144 6"/><path d="M64 12 L56 6"/></g>` }),
     bru({ id: "enamorada", name: "Enamorada", note: "Bruta con ojos de corazón: clientes felices, testimonios y fechas especiales.", tx: 10, ty: 40, sc: .45, eyes: "heart",
-      extra: `<path d="${heart(160, 30, 13)}"/><path d="${heart(182, 10, 8)}"/>` }),
+      fills: `<path d="${heart(160, 30, 13)}"/><path d="${heart(182, 10, 8)}"/>` }),
     bru({ id: "baila", name: "Baila", note: "Bruta bailando: eventos, fiestas y lanzamientos con música.", tx: 28, ty: 10, sc: .36,
       limbs: `<path d="M50 66 L28 46"/><path d="M158 86 L180 104"/><path d="M80 112 L102 146 L92 170"/><path d="M118 112 L98 146 L112 170"/>`,
-      extra: `<circle cx="168" cy="44" r="7"/><path d="M174 44 L174 18 L188 22" fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>` }),
+      lines: `<path d="M174 44 L174 18 L188 22" stroke-width="5"/>`, dots: `<circle cx="168" cy="44" r="7"/>` }),
     bru({ id: "talla", name: "Talla", note: "Bruta trabajando con su cincel: el oficio, el proceso y el detrás de cámaras.", tx: 14, ty: 22, sc: .36,
       limbs: `<path d="M36 104 L22 126"/><path d="M144 92 L164 108"/><path d="M70 124 L66 166 L54 170"/><path d="M104 124 L108 166 L120 170"/>`,
-      extra: `<path d="M160 116 L190 74" fill="none" stroke-width="10" stroke-linecap="round"/><circle cx="180" cy="128" r="4.5"/><circle cx="192" cy="118" r="3.5"/><circle cx="170" cy="136" r="3"/>` }),
-    { id: "molcajete", name: "Molcajete", note: "Piedra volcánica mexicana que muele y mezcla: talleres, ideas y recetas de marca.", goo: 1,
-      body: `<path d="M34 96 L166 96 C166 138 138 158 100 158 C62 158 34 138 34 96 Z"/>
-        <g fill="none" stroke-linecap="round"><g stroke-width="15"><path d="M62 146 L52 180"/><path d="M100 156 L100 184"/><path d="M138 146 L148 180"/></g><path d="M118 80 L158 30" stroke-width="24"/></g>`,
+      fills: `<path d="M158 118 L186 78 L196 86 L168 124 Z"/>`, dots: `<circle cx="180" cy="128" r="4.5"/><circle cx="192" cy="118" r="3.5"/><circle cx="170" cy="136" r="3"/>` }),
+    { id: "molcajete", name: "Molcajete", note: "Piedra volcánica mexicana que muele y mezcla: talleres, ideas y recetas de marca.", goo: 1, noLineHoles: true,
+      body: `<path d="M34 96 L166 96 C166 138 138 158 100 158 C62 158 34 138 34 96 Z"/><path d="M118 80 L158 30" fill="none" stroke-width="24" stroke-linecap="round"/>`,
+      lines: `<g stroke-width="15"><path d="M62 146 L52 180"/><path d="M100 156 L100 184"/><path d="M138 146 L148 180"/></g>`,
       holes: `<circle cx="66" cy="118" r="4"/><circle cx="92" cy="132" r="3.5"/><circle cx="122" cy="122" r="4.5"/><circle cx="142" cy="110" r="3"/><circle cx="104" cy="112" r="3"/><circle cx="78" cy="140" r="3"/>` },
   ];
   let mid = 0;
@@ -440,8 +457,30 @@ footer { padding-block: 32px 48px; border-top: 1px solid var(--linea); color: va
   function symSVG(id, solid) {
     const s = SYMBOLS.find((x) => x.id === id), m = "m" + mid++;
     const line = !solid && lineMode();
-    const mask = s.holes ? `<mask id="${m}" maskUnits="userSpaceOnUse" x="-40" y="-40" width="280" height="280"><rect x="-40" y="-40" width="280" height="280" fill="#fff"/><g fill="#000" filter="url(#goo${s.goo})">${s.holes}</g></mask>` : "";
-    return `<svg viewBox="0 0 200 200" aria-hidden="true">${mask}<g ${line ? 'filter="url(#outline)"' : ""}><g ${s.holes ? `mask="url(#${m})"` : ""}><g fill="currentColor" stroke="currentColor" filter="url(#goo${s.goo})">${s.body}</g></g></g>${s.over ? `<g fill="currentColor" filter="url(#goo${s.goo})">${s.over}</g>` : ""}</svg>`;
+    const LN = 'fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"';
+    if (!line) {
+      const holes = (s.holes || "") + (s.cut ? `<path d="${s.cut}" fill="none" stroke="#000" stroke-width="${s.cw}" stroke-linejoin="round"/>` : "") + (s.eyeLines ? `<g fill="none" stroke="#000" stroke-linecap="round">${s.eyeLines}</g>` : "");
+      const mask = holes ? `<mask id="${m}" maskUnits="userSpaceOnUse" x="-40" y="-40" width="280" height="280"><rect x="-40" y="-40" width="280" height="280" fill="#fff"/><g fill="#000" filter="url(#goo${s.goo})">${holes}</g></mask>` : "";
+      return `<svg viewBox="0 0 200 200" aria-hidden="true">${mask}<g ${holes ? `mask="url(#${m})"` : ""}><g fill="currentColor" stroke="currentColor" filter="url(#goo${s.goo})">${s.body}<g ${LN}>${s.lines || ""}</g></g></g>${s.over ? `<g fill="currentColor" filter="url(#goo${s.goo})">${s.over}</g>` : ""}</svg>`;
+    }
+    // Línea: la piedra se contornea; brazos, corte y ojos cerrados son un solo trazo del mismo grosor
+    const lh = s.eyeRing || s.noLineHoles ? "" : s.holes;
+    const mask = lh ? `<mask id="${m}" maskUnits="userSpaceOnUse" x="-40" y="-40" width="280" height="280"><rect x="-40" y="-40" width="280" height="280" fill="#fff"/><g fill="#000" filter="url(#goo${s.goo})">${lh}</g></mask>` : "";
+    const R = 3.2;
+    return `<svg viewBox="0 0 200 200" aria-hidden="true" data-line="1"><filter id="o${m}" x="-10%" y="-10%" width="120%" height="120%"><feMorphology class="er" in="SourceAlpha" operator="erode" radius="${R}" result="e"/><feComposite in="SourceGraphic" in2="e" operator="out"/></filter>${mask}
+      <g filter="url(#o${m})"><g ${lh ? `mask="url(#${m})"` : ""}><g fill="currentColor" stroke="currentColor" filter="url(#goo${s.goo})">${s.body}</g></g></g>
+      <g class="ln" ${LN} style="--sw:${R}px" filter="url(#wob${s.goo})">${s.lines || ""}${s.cut ? `<path d="${s.cut}"/>` : ""}${s.eyeLines || ""}${s.eyeRing || ""}</g>
+      ${s.over ? `<g fill="currentColor" filter="url(#goo${s.goo})">${s.over}</g>` : ""}</svg>`;
+  }
+  /* Grosor parejo: el trazo depende del tamaño en pantalla, no de la escala del dibujo */
+  function fixStrokes(root) {
+    (root || document).querySelectorAll("svg[data-line]").forEach((svg) => {
+      const w = svg.getBoundingClientRect().width; if (!w) return;
+      const vb = svg.viewBox.baseVal.width || 200;
+      const px = Math.min(10, 0.016 * Math.min(w, 500) + 3), r = Math.min((px * vb) / w, vb > 200 ? 7 : 9);
+      svg.querySelectorAll(".er").forEach((e) => e.setAttribute("radius", r.toFixed(2)));
+      svg.querySelectorAll(".ln").forEach((g) => g.style.setProperty("--sw", r.toFixed(2) + "px"));
+    });
   }
 
   /* ===== Fotografía simulada: manchas de color, barrido de movimiento y grano ===== */
@@ -605,8 +644,13 @@ footer { padding-block: 32px 48px; border-top: 1px solid var(--linea); color: va
   }
 
   /* ===== Secciones fijas ===== */
-  function meltSVG(fill) {
-    return `<svg viewBox="0 0 1000 520" aria-hidden="true" style="display:block;width:100%;height:auto;overflow:visible"><g ${lineMode() ? 'filter="url(#outline-melt)"' : ""}><g filter="url(#melt)" fill="${fill || "currentColor"}" style="font-family:var(--wm);font-stretch:var(--wm-stretch);font-weight:var(--wm-weight);text-transform:var(--wm-case)" font-size="210" text-anchor="middle"><text x="500" y="230">Piedra</text><text x="500" y="450">Bruta</text></g></g></svg>`;
+  function meltSVG(fill, o = {}) {
+    const f = o.level === "suave" ? "melt-suave" : o.level === "intensa" ? "melt-intensa" : "melt";
+    const outl = o.outline ?? lineMode();
+    const mk = "mo" + mid++;
+    const ofilt = outl ? `<filter id="${mk}" x="-10%" y="-20%" width="120%" height="140%"><feMorphology class="er" in="SourceAlpha" operator="erode" radius="5" result="e"/><feComposite in="SourceGraphic" in2="e" operator="out"/></filter>` : "";
+    if (o.one) return `<svg viewBox="0 0 1700 300" aria-hidden="true" ${outl ? 'data-line="1"' : ""} style="display:block;width:100%;height:auto;overflow:visible">${ofilt}<g ${outl ? `filter="url(#${mk})"` : ""}><g filter="url(#${f})" fill="${fill || "currentColor"}" style="font-family:var(--wm);font-stretch:var(--wm-stretch);font-weight:var(--wm-weight);text-transform:var(--wm-case)" font-size="200" text-anchor="middle"><text x="850" y="220">Piedra Bruta</text></g></g></svg>`;
+    return `<svg viewBox="0 0 1000 520" aria-hidden="true" ${outl ? 'data-line="1"' : ""} style="display:block;width:100%;height:auto;overflow:visible">${ofilt}<g ${outl ? `filter="url(#${mk})"` : ""}><g filter="url(#${f})" fill="${fill || "currentColor"}" style="font-family:var(--wm);font-stretch:var(--wm-stretch);font-weight:var(--wm-weight);text-transform:var(--wm-case)" font-size="210" text-anchor="middle"><text x="500" y="230">Piedra</text><text x="500" y="450">Bruta</text></g></g></svg>`;
   }
 
   /* ===== Carteles con información (sistema tipográfico) ===== */
@@ -663,13 +707,18 @@ footer { padding-block: 32px 48px; border-top: 1px solid var(--linea); color: va
       sy.appendChild(d);
     });
     const stackHTML = `<span>Piedra</span><span>Brut<span class="cutA">a</span></span>`, oneHTML = `Piedra Brut<span class="cutA">a</span>`;
-    document.getElementById("marks").innerHTML = `
-      <div class="mcard"><div class="plate"><span class="line"><span class="sym">${symSVG("bruta")}</span><span class="wm1">${oneHTML}</span></span></div><span class="caption">Principal: Bruta y el nombre en una línea</span></div>
-      <div class="mcard"><div class="plate light"><span class="stack">${stackHTML}</span></div><span class="caption">En dos líneas, por palabra</span></div>
-      <div class="mcard"><div class="plate"><span class="wm1" style="font-size:clamp(26px,3.2vw,38px)">${oneHTML}</span></div><span class="caption">Solo el nombre</span></div>
-      <div class="mcard"><div class="plate"><span class="melt" style="width:92%">${meltSVG()}</span></div><span class="caption">Derretida: para carteles, eventos y portadas</span></div>
-      <div class="mcard"><div class="plate light"><span class="line" style="flex-direction:column;gap:.2em;font-size:clamp(26px,3.2vw,36px)"><span class="sym" style="width:2.2em">${symSVG("corre")}</span><span class="wm1">${oneHTML}</span></span></div><span class="caption">Con Bruta corre, para campañas y eventos</span></div>
-      <div class="mcard"><div class="plate cutdemo"><span class="wm1" style="font-size:clamp(90px,12vw,150px)">Brut<span class="cutA">a</span></span></div><span class="caption">El corte: la A pierde la esquina, como la piedra</span></div>`;
+    const lock = (wm, opt = {}) => `<span class="vlock" style="--sy:${opt.sy || "34%"}"><span class="sym">${symSVG(opt.sym || "bruta")}</span>${wm}</span>`;
+    const ml = (o) => `<span class="mw" style="width:${o.w || "64%"}">${meltSVG(null, o)}</span>`;
+    document.getElementById("marks").innerHTML = [
+      ["", lock(`<span class="wm1" style="font-size:clamp(24px,3vw,36px)">${oneHTML}</span>`, { sy: "26%" }), "Principal · Bruta arriba y el nombre en una línea"],
+      ["light", lock(`<span class="stack" style="font-size:clamp(34px,4vw,50px)">${stackHTML}</span>`, { sy: "30%" }), "Vertical · nombre en dos líneas"],
+      ["", lock(ml({ level: "suave", outline: false })), "Derretida suave · casi recta, se lee fácil"],
+      ["", lock(ml({ level: "media", outline: false })), "Derretida media · el punto de la marca"],
+      ["light", lock(ml({ level: "intensa", outline: false })), "Derretida intensa · para carteles y eventos"],
+      ["", lock(ml({ level: "media", outline: true })), "Derretida en contorno · combina con Bruta en línea"],
+      ["light", lock(ml({ level: "suave", one: true, outline: false, w: "96%" }), { sy: "22%" }), "Derretida en una línea · espacios anchos"],
+      ["", lock(ml({ level: "intensa", outline: true }), { sym: "corre" }), "Con Bruta corre · campañas y eventos"],
+    ].map(([cls, html, cap]) => `<div class="mcard"><div class="plate ${cls}">${html}</div><span class="caption">${cap}</span></div>`).join("");
     document.getElementById("type-melt").innerHTML = meltSVG();
     const mo = document.getElementById("moods");
     MOODS.forEach((m, i) => {
@@ -692,7 +741,7 @@ footer { padding-block: 32px 48px; border-top: 1px solid var(--linea); color: va
       ig.appendChild(d);
     });
     document.querySelector("#site .sym").innerHTML = symSVG("bruta");
-    document.querySelector(".bc.front .sym").innerHTML = symSVG("bruta");
+    document.querySelectorAll(".bc.front .sym").forEach((e) => (e.innerHTML = symSVG("bruta")));
     document.querySelector("#bc-back .sym").innerHTML = symSVG("sorpresa");
   }
   function paintStatic() {
@@ -700,10 +749,11 @@ footer { padding-block: 32px 48px; border-top: 1px solid var(--linea); color: va
     document.querySelectorAll("[data-mood]").forEach((d) => drawPhoto(d.querySelector("canvas"), d.dataset.mood, +d.dataset.seed));
     drawPhoto(document.querySelector("#site canvas"), "monte", 30);
     drawPhoto(document.querySelector("#bc-back canvas"), "tierra", 31);
+    requestAnimationFrame(() => fixStrokes());
   }
 
-  function update() { save(); applyFont(); renderChips(); renderHero(); }
-  window.PB = { symSVG, meltSVG, drawPhoto, SYMBOLS, MOODS };
+  function update() { save(); applyFont(); renderChips(); renderHero(); requestAnimationFrame(() => fixStrokes(document.getElementById("hero"))); }
+  window.PB = { symSVG, meltSVG, drawPhoto, SYMBOLS, MOODS, fixStrokes };
   function rebuild() {
     ["symbols", "moods", "posters", "ig", "infoposters"].forEach((id) => (document.getElementById(id).innerHTML = ""));
     infoPosters(); buildStatic(); paintStatic();
@@ -712,6 +762,6 @@ footer { padding-block: 32px 48px; border-top: 1px solid var(--linea); color: va
   buildStatic();
   update();
   paintStatic();
-  let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { renderHero(); paintStatic(); }, 200); });
+  let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { renderHero(); paintStatic(); fixStrokes(); }, 200); });
 })();
 </script>
