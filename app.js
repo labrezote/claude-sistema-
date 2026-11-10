@@ -6,11 +6,25 @@
    ========================================================= */
 /* Datos y utilidades compartidas por las opciones de la web */
 window.PB_DATA = {
-  CATEGORIES: { branding: "Branding", campanas: "Campañas", marcas: "Marcas", digital: "Digital" },
+  CATEGORIES: { branding: "Branding", campanas: "Campañas", marcas: "Marcas", software: "Software" },
   PROJECTS: [
     { photo: "", title: "Identidad para organizadora de eventos", client: "Organizadora de música electrónica", category: "branding", mood: "fogata", sym: "baila", year: "2025", summary: "Branding para eventos de música electrónica. Descripción pendiente.", metric: "" },
     { photo: "", title: "Identidad para despacho de abogados", client: "Despacho jurídico", category: "branding", mood: "papelnoche", sym: "bruta", year: "2025", summary: "Branding para despacho de abogados. Descripción pendiente.", metric: "" },
-    { photo: "", title: "Tarjetas de fidelización en Apple y Google Wallet", client: "App de fidelización", category: "digital", mood: "mar", sym: "idea", year: "2025", summary: "Digitalización de tarjetas de fidelización en Apple Wallet y Google Wallet. Ya cuenta con web.", metric: "" },
+    { photo: "assets/pilon/portada.webp", title: "Pilón: tarjetas de lealtad para Apple y Google Wallet", client: "Pilón · pilon.app", category: "software", mood: "mar", sym: "idea", year: "2026",
+      hideSym: true, url: "https://www.pilon.app",
+      summary: "Pilón es un software mexicano de tarjetas de lealtad digitales. El negocio pone un QR en caja; el cliente lo escanea, deja su nombre y guarda su tarjeta de sellos o puntos en Apple Wallet o Google Wallet, sin descargar ninguna app. Hicimos la marca completa y el producto: naming, identidad, sitio web, panel del negocio, tarjetas y notificaciones.",
+      metric: "",
+      details: [["Rol", "Naming, branding, producto y web"], ["Plataforma", "Apple Wallet · Google Wallet"], ["Para", "Cafeterías, taquerías, barberías, gyms y más"], ["Planes", "Gratis · Esencial · Pro"]],
+      features: [
+        ["Pon tu QR en caja", "El cliente escanea con la cámara, deja su nombre y guarda la tarjeta en su Wallet."],
+        ["Sella en cada compra", "El negocio escanea la tarjeta y el Wallet del cliente se actualiza al instante."],
+        ["Vuelven por su pilón", "Al completar los sellos canjean su premio; mientras, las campañas los traen de vuelta."],
+        ["Diseño en minutos", "80 figuras de sello, 11 marcos y 26 temas para cafeterías, taquerías, barberías y más."],
+        ["Aviso de cercanía", "La tarjeta puede aparecer en la pantalla de bloqueo: «¡Andas cerca! Te faltan 2 sellos»."],
+        ["Campañas sin anuncios", "Promos como «¿Martes flojo? Mándales un 2x1» llegan como notificación a quien tiene la tarjeta."],
+        ["Pili, asistente con IA", "Responde dudas sobre los números del negocio y propone ideas de campañas."],
+      ],
+      gallery: [["assets/pilon/brand-board.webp", "Brand board: logotipo, isotipo, paleta y tipografía"], ["assets/pilon/aplicaciones.webp", "Aplicaciones: sitio web, panel del negocio, notificación, ícono de app y elementos gráficos"]] },
     { photo: "", title: "Branding para dentistas", client: "Consultorio dental", category: "branding", mood: "niebla", sym: "guino", year: "2025", summary: "Identidad para consultorio dental. Descripción pendiente.", metric: "" },
     { photo: "", title: "Marca de miel", client: "Miel", category: "marcas", mood: "cempasuchil", sym: "enamorada", year: "2025", summary: "Marca para producto de miel. Descripción pendiente.", metric: "" },
     { photo: "", title: "Marca de mole", client: "Mole", category: "marcas", mood: "tierra", sym: "molcajete", year: "2025", summary: "Marca para producto de mole. Descripción pendiente.", metric: "" },
@@ -50,7 +64,7 @@ function setStage(p) {
   const st = document.getElementById("stage");
   st.querySelector(".n").textContent = N(p.i);
   st.querySelector(".c").textContent = CATEGORIES[p.category];
-  st.querySelector(".sym").innerHTML = M.symSVG(p.sym);
+  st.querySelector(".sym").innerHTML = p.hideSym ? "" : M.symSVG(p.sym);
   const me = st.querySelector(".metric"); me.hidden = !p.metric; me.textContent = p.metric;
   paintPhoto(st, p.mood, 10 + p.i, p.photo);
   document.getElementById("stage-client").textContent = p.client;
@@ -64,7 +78,7 @@ function render() {
   list = PROJECTS.map((p, i) => ({ ...p, i })).filter((p) => filter === "todos" || p.category === filter);
   document.getElementById("count").textContent = `(${list.length})`;
   document.getElementById("rows").innerHTML = list.map((p) => `<button class="row" type="button" data-i="${p.i}">
-      <span class="thumb onphoto" data-mood="${p.mood}" data-seed="${10 + p.i}" data-photo="${p.photo || ""}"><canvas class="photo"></canvas><span class="n mono">${N(p.i)}</span><span class="sym">${M.symSVG(p.sym)}</span></span>
+      <span class="thumb onphoto" data-mood="${p.mood}" data-seed="${10 + p.i}" data-photo="${p.photo || ""}"><canvas class="photo"></canvas><span class="n mono">${N(p.i)}</span><span class="sym">${p.hideSym ? "" : M.symSVG(p.sym)}</span></span>
       <span class="mono num">${N(p.i)}</span>
       <span><span class="ti">${p.title}</span><span class="cl mono">${CATEGORIES[p.category]} · ${p.client}${p.metric ? " · " + p.metric : ""}</span></span>
       <span class="mono go">Ver caso →</span></button>`).join("");
@@ -73,7 +87,7 @@ function render() {
   let tail = 0; for (let k = list.length - 1; k >= 0 && !big[k]; k--) tail++;
   if (tail % 2) big[list.length - 1] = true;
   document.getElementById("grid-view").innerHTML = list.map((p, k) => `<button class="tile${big[k] ? " big" : ""}" type="button" data-i="${p.i}">
-      <span class="pv onphoto" data-mood="${p.mood}" data-seed="${10 + p.i}" data-photo="${p.photo || ""}"><canvas class="photo"></canvas><span class="n mono">${N(p.i)}</span><span class="c mono">${CATEGORIES[p.category]}</span><span class="sym">${M.symSVG(p.sym)}</span><span class="tt">${p.title}</span></span>
+      <span class="pv onphoto" data-mood="${p.mood}" data-seed="${10 + p.i}" data-photo="${p.photo || ""}"><canvas class="photo"></canvas><span class="n mono">${N(p.i)}</span><span class="c mono">${CATEGORIES[p.category]}</span><span class="sym">${p.hideSym ? "" : M.symSVG(p.sym)}</span><span class="tt">${p.title}</span></span>
       <span class="meta mono"><span>${p.client}</span><span>${p.metric || p.year}</span></span></button>`).join("");
   document.querySelectorAll(".row, .tile").forEach((el) => {
     el.addEventListener("click", () => openCase(+el.dataset.i));
@@ -98,9 +112,15 @@ function openCase(i) {
   const p = list[current];
   document.getElementById("case-kicker").textContent = `${N(p.i)} · ${CATEGORIES[p.category]}`;
   document.getElementById("case-title").textContent = p.title;
-  document.getElementById("case-dl").innerHTML = [["Cliente", p.client], ["Categoría", CATEGORIES[p.category]], ["Año", p.year], ...(p.metric ? [["Resultado", p.metric]] : [])].map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join("");
+  document.getElementById("case-dl").innerHTML = [["Cliente", p.client], ["Categoría", CATEGORIES[p.category]], ["Año", p.year], ...(p.metric ? [["Resultado", p.metric]] : []), ...(p.details || [])].map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join("");
   document.getElementById("case-sum").textContent = p.summary;
-  const cv = document.getElementById("case-cv"); cv.querySelector(".sym").innerHTML = M.symSVG(p.sym);
+  const link = document.getElementById("case-link"); link.hidden = !p.url; if (p.url) { link.href = p.url; link.textContent = "Visitar " + p.url.replace(/^https?:\/\/(www\.)?/, "") + " ↗"; }
+  const feats = document.getElementById("case-features"); feats.hidden = !p.features;
+  feats.innerHTML = (p.features || []).map(([t, d], k) => `<li><span class="mono">${String(k + 1).padStart(2, "0")}</span><h4>${t}</h4><p>${d}</p></li>`).join("");
+  document.getElementById("case-gallery").innerHTML = p.gallery
+    ? p.gallery.map(([src, cap]) => `<figure><img src="${src}" alt="${cap}" loading="lazy"><figcaption class="mono">${cap}</figcaption></figure>`).join("")
+    : `<div class="slots mono"><div class="slot">Imagen 01</div><div class="slot">Imagen 02</div><div class="slot">Resultados</div></div>`;
+  const cv = document.getElementById("case-cv"); cv.querySelector(".sym").innerHTML = p.hideSym ? "" : M.symSVG(p.sym);
   if (!cs.classList.contains("open")) lastFocus = document.activeElement;
   cs.classList.add("open"); cs.scrollTop = 0; document.body.style.overflow = "hidden";
   paintPhoto(cv, p.mood, 40 + p.i, p.photo); M.fixStrokes(cv);
