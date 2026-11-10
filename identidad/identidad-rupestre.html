@@ -1,0 +1,717 @@
+<title>Piedra Bruta Rupestre</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..700&family=Bricolage+Grotesque:opsz,wght@12..96,500..700&family=Marcellus&family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: cuarto oscuro. Fotos a sangre con símbolos blancos encima; el texto es pequeño y va en las orillas, como en los carteles de referencia.
+   Regla: la foto pone el color, el símbolo siempre es blanco hueso. */
+:root {
+  --noche: #0e0e0c;
+  --noche-2: #181815;
+  --hueso: #f3efe4;
+  --ceniza: #9c978a;
+  --linea: #2a2925;
+  --mark: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --sans: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--noche); color: var(--hueso); font-family: var(--sans); font-size: 16px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+h1, h2, h3, p { margin: 0; }
+.wrap { max-width: 1240px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+section { padding-block: 56px; border-top: 1px solid var(--linea); }
+.eyebrow { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--ceniza); }
+h2 { font-family: var(--mark); font-stretch: 112%; font-weight: 600; font-size: clamp(24px, 3vw, 34px); line-height: 1.05; letter-spacing: -0.02em; text-wrap: balance; }
+.head { display: flex; flex-direction: column; gap: 10px; margin-bottom: 26px; max-width: 64ch; }
+.head p { color: var(--ceniza); }
+
+/* Logotipo: nombre completo, en una línea o en dos por palabra. La A final lleva el corte de Bruta. */
+.stack, .wm1 { font-family: var(--wm, var(--mark)); font-stretch: var(--wm-stretch, 112%); font-weight: var(--wm-weight, 600); text-transform: var(--wm-case, uppercase); letter-spacing: var(--wm-track, -0.015em); }
+.stack { line-height: .88; text-align: center; }
+.stack > span { display: block; }
+.wm1 { white-space: nowrap; line-height: 1; }
+.wm1.small { letter-spacing: var(--wm-track-small, 0.06em); }
+.cutA { display: inline-block; clip-path: polygon(0 0, 38% 0, 100% 64%, 100% 100%, 0 100%); }
+.sym { display: block; color: var(--hueso); }
+.sym svg { display: block; width: 100%; height: auto; overflow: visible; }
+
+/* Cartel */
+.poster { position: relative; aspect-ratio: 4 / 5; overflow: hidden; background: var(--noche-2); max-width: 100%; }
+.poster canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.poster .sym { position: absolute; left: 50%; top: 50%; width: 42%; transform: translate(-50%, -50%) rotate(var(--rot, 0deg)); filter: drop-shadow(0 1px 1px rgba(0,0,0,.15)); }
+.poster .corner { position: absolute; left: 0; right: 0; bottom: 5%; text-align: center; font-size: clamp(9px, 1.3vw, 12px); color: var(--hueso); }
+.poster .center-wm { position: absolute; left: 8%; right: 8%; top: 50%; transform: translateY(-50%); text-align: center; font-size: clamp(30px, 5.4vw, 60px); color: var(--hueso); }
+.poster .tag { position: absolute; right: 6%; top: 5%; font-size: 11px; color: var(--hueso); opacity: .8; letter-spacing: .04em; }
+
+/* Portada */
+.cover { padding-block: 32px 56px; border-top: 0; }
+.cover-top { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--ceniza); margin-bottom: 24px; }
+.cover-grid { display: grid; gap: 24px; }
+@media (min-width: 920px) { .cover-grid { grid-template-columns: minmax(0, 1fr) 380px; align-items: start; } }
+.cover-grid > * { min-width: 0; }
+.hero-poster { aspect-ratio: 4 / 5; max-height: 82vh; margin-inline: auto; width: 100%; }
+@media (min-width: 920px) { .hero-poster { aspect-ratio: 5 / 4; max-height: none; } .hero-poster .sym { width: 30%; } }
+.panel { display: flex; flex-direction: column; gap: 22px; }
+.intro { display: flex; flex-direction: column; gap: 12px; }
+.intro .stack { text-align: left; }
+.intro .stack { font-size: clamp(44px, 5.6vw, 68px); }
+.intro p { color: #cfcabe; font-size: 17px; max-width: 46ch; }
+fieldset { border: 0; margin: 0; padding: 0; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+legend { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--ceniza); padding: 0; margin-bottom: 10px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; background: transparent; color: var(--hueso); border: 1px solid var(--linea); font: inherit; font-size: 14px; cursor: pointer; }
+.chip:hover { border-color: var(--ceniza); }
+.chip:focus-visible { outline: 2px solid var(--hueso); outline-offset: 2px; }
+.chip[aria-pressed="true"] { background: var(--hueso); color: var(--noche); border-color: var(--hueso); }
+.chip .ic { width: 22px; display: block; color: inherit; }
+.chip i { width: 14px; height: 14px; border-radius: 50%; display: block; }
+
+/* Concepto */
+.concept { display: grid; gap: 28px; }
+@media (min-width: 860px) { .concept { grid-template-columns: 1fr 1fr; align-items: center; } }
+.concept > * { min-width: 0; }
+.concept .big { font-family: var(--mark); font-stretch: 112%; font-weight: 600; font-size: clamp(26px, 3.6vw, 44px); line-height: 1.04; letter-spacing: -0.02em; text-wrap: balance; }
+.concept p { color: #cfcabe; max-width: 58ch; }
+.rules { display: grid; gap: 10px; margin-top: 18px; padding: 0; list-style: none; }
+.rules li { display: grid; grid-template-columns: 110px 1fr; gap: 14px; padding: 12px 0; border-top: 1px solid var(--linea); font-size: 15px; }
+.rules b { font-weight: 600; }
+.rules span { color: var(--ceniza); }
+
+/* Símbolos */
+.symbols { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr)); }
+.scard { display: flex; flex-direction: column; gap: 10px; }
+.scard .tile { aspect-ratio: 1; background: var(--noche-2); display: grid; place-items: center; border: 1px solid var(--linea); }
+.scard .tile.light { background: var(--hueso); color: var(--noche); }
+.scard .tile .sym { width: 58%; color: inherit; }
+.scard .tile.light .sym { color: var(--noche); }
+.scard h3 { font-size: 16px; font-weight: 600; }
+.scard p { font-size: 14px; color: var(--ceniza); }
+
+/* Logotipo */
+.marks { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
+@media (min-width: 980px) { .marks { grid-template-columns: repeat(2, 1fr); } }
+.mcard { display: flex; flex-direction: column; gap: 10px; }
+.mcard .plate { aspect-ratio: 4 / 3; display: grid; place-items: center; background: var(--noche-2); border: 1px solid var(--linea); padding: 20px; }
+.mcard .plate.light { background: var(--hueso); color: var(--noche); }
+.mcard .stack { font-size: clamp(36px, 4.4vw, 52px); }
+.mcard .row { display: flex; align-items: flex-end; gap: .12em; }
+.mcard .row .sym { width: .9em; color: inherit; margin-bottom: .02em; }
+.mcard .line { font-size: clamp(24px, 3vw, 34px); display: flex; align-items: center; gap: .35em; line-height: 1; max-width: 100%; }
+.mcard .line .sym { width: 1.25em; color: inherit; flex: none; }
+.mcard .plate { overflow: hidden; }
+.mcard .plate.cutdemo { place-items: end start; padding-bottom: 0; }
+.mcard .caption { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 12px; color: var(--ceniza); }
+.fonts { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); margin-top: 20px; }
+.fcard { padding: 18px; border: 1px solid var(--linea); display: flex; flex-direction: column; gap: 10px; }
+.fcard .stack { font-size: 40px; }
+.fcard .stack, .fcard .wm1 { color: var(--hueso); }
+.fcard h3 { font-size: 15px; font-weight: 600; }
+.fcard p { font-size: 14px; color: var(--ceniza); }
+.fcard.on { border-color: var(--hueso); }
+
+/* Sistema tipográfico */
+.mono { font-family: "IBM Plex Mono", ui-monospace, Menlo, monospace; }
+.arch { font-family: "Archivo", "Helvetica Neue", Arial, sans-serif; font-stretch: 110%; }
+.types { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); }
+.type { padding: 22px; border: 1px solid var(--linea); display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.type .role { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--ceniza); }
+.type .spec-big { font-size: clamp(52px, 6vw, 76px); line-height: 1; }
+.type .spec-big.mono { letter-spacing: -0.02em; }
+.type .spec-melt { color: var(--hueso); max-width: 300px; }
+.type h3 { font-size: 16px; font-weight: 600; }
+.type .chars { font-size: 15px; line-height: 1.5; color: #cfcabe; overflow-wrap: anywhere; }
+.type .use { font-size: 14px; color: var(--ceniza); }
+.tscale { margin-top: 18px; border-top: 1px solid var(--linea); }
+.tscale > div { display: grid; grid-template-columns: 90px 1fr; gap: 16px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid var(--linea); }
+.tscale .k { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--ceniza); }
+.tscale .v { min-width: 0; overflow-wrap: anywhere; white-space: normal; }
+
+/* Fotografía y color */
+.moods { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); }
+.mood { display: flex; flex-direction: column; gap: 10px; }
+.mood .swatches { display: flex; }
+.mood .swatches i { flex: 1; height: 34px; }
+.mood h3 { font-size: 16px; font-weight: 600; }
+.mood p { font-size: 14px; color: var(--ceniza); }
+.mood code { font-family: ui-monospace, Menlo, monospace; font-size: 11px; color: var(--ceniza); }
+.photo-rules { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); margin-top: 22px; padding: 0; list-style: none; }
+.photo-rules li { padding: 16px; border: 1px solid var(--linea); font-size: 15px; display: flex; flex-direction: column; gap: 4px; }
+.photo-rules b { font-weight: 600; }
+.photo-rules span { color: var(--ceniza); font-size: 14px; }
+
+/* Carteles */
+.posters { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); }
+
+/* Carteles con información: medidas relativas al ancho del cartel */
+.infoposters { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr)); }
+.ipwrap { margin: 0; display: flex; flex-direction: column; gap: 8px; }
+.ipwrap figcaption { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 12px; color: var(--ceniza); }
+.ip { container-type: inline-size; color: var(--hueso); }
+.ip .t { position: absolute; font-family: var(--mark); font-stretch: 100%; font-weight: 600; text-transform: uppercase; font-size: 3.1cqw; line-height: 1.08; letter-spacing: -0.005em; }
+.ip .t.sub { font-family: var(--wm); font-stretch: var(--wm-stretch); text-transform: none; font-weight: 500; font-size: 3.4cqw; }
+.ip .t.hd { white-space: nowrap; font-family: var(--wm); font-stretch: var(--wm-stretch); font-weight: var(--wm-weight); text-transform: var(--wm-case); font-size: 6cqw; }
+.ip .t.reg { font-weight: 500; font-size: 3.8cqw; line-height: 1.2; }
+.ip .t.mono { font-family: "IBM Plex Mono", ui-monospace, monospace; font-weight: 400; font-size: 2.5cqw; letter-spacing: .04em; }
+.ip .wm1.big { position: absolute; left: 0; right: 0; text-align: center; font-size: 10.5cqw; }
+.ip .wm1.tiny { position: absolute; left: 0; right: 0; bottom: 4%; text-align: center; font-size: 3cqw; }
+.ip .sym { position: absolute; transform: translate(-50%, -50%); }
+.ip .melt { position: absolute; display: block; color: var(--hueso); }
+.ip .badge { position: absolute; left: 50%; top: 5%; width: 30cqw; transform: translateX(-50%); color: var(--hueso); }
+.ip .list { position: absolute; left: 0; right: 0; text-align: center; font-family: var(--wm); font-stretch: var(--wm-stretch); font-weight: var(--wm-weight); text-transform: var(--wm-case); font-size: 6.6cqw; line-height: 1.12; }
+.ip .rep { position: absolute; inset: -2% 0; display: flex; flex-direction: column; justify-content: space-around; align-items: center; text-align: center; }
+.ip .rep > div { display: flex; flex-direction: column; align-items: center; gap: 1.6cqw; }
+.ip .rep .t { position: static; }
+.ip .rbig { font-size: 9.5cqw; }
+.ip .rtag { font-size: 3cqw; }
+.ip .rtag i { font-family: "Instrument Serif", Georgia, serif; font-style: italic; text-transform: none; font-weight: 400; font-size: 1.2em; }
+.mcard .melt { display: block; }
+
+/* Aplicaciones */
+.apps { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); }
+.app { display: flex; flex-direction: column; gap: 10px; }
+.app h3 { font-size: 16px; font-weight: 600; }
+.app p { font-size: 14px; color: var(--ceniza); }
+.browser { border: 1px solid var(--linea); background: var(--noche-2); }
+.browser .bar { display: flex; gap: 6px; padding: 9px 12px; border-bottom: 1px solid var(--linea); }
+.browser .bar i { width: 9px; height: 9px; border-radius: 50%; background: var(--linea); }
+.site { position: relative; aspect-ratio: 16 / 10; overflow: hidden; }
+.site canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.site nav { position: absolute; left: 4%; right: 4%; top: 6%; display: flex; justify-content: center; font-size: 11px; }
+.site .links { position: absolute; left: 0; right: 0; bottom: 5%; display: flex; justify-content: center; gap: 16px; font-size: 11px; opacity: .9; }
+.site nav .wm1 { font-size: 13px; }
+
+.site .sym { position: absolute; left: 50%; top: 50%; width: 22%; transform: translate(-50%, -50%); }
+.site .claim { position: absolute; left: 0; right: 0; margin-inline: auto; text-align: center; bottom: 14%; text-shadow: 0 1px 8px rgba(0,0,0,.6); font-size: clamp(12px, 1.6vw, 16px); max-width: 26ch; line-height: 1.25; }
+.cards { position: relative; display: grid; place-items: center; gap: 18px; padding: 30px 16px; background: var(--noche-2); border: 1px solid var(--linea); min-height: 280px; }
+.bc { width: min(100%, 300px); aspect-ratio: 85 / 55; position: relative; overflow: hidden; box-shadow: 0 18px 30px -14px rgba(0,0,0,.7); }
+.bc.front { background: var(--hueso); color: var(--noche); transform: rotate(-2deg); padding: 6%; display: flex; flex-direction: column; justify-content: space-between; align-items: center; text-align: center; }
+.bc.front .stack { margin-block: auto; }
+.bc.front .r { width: 100%; justify-content: center; flex-direction: column; align-items: center; gap: 4px; }
+.bc.back { transform: rotate(2deg); }
+.bc.back canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.bc.back .sym { position: absolute; left: 50%; top: 50%; width: 26%; transform: translate(-50%, -50%); }
+.bc .stack { font-size: 20px; }
+.bc .who { font-size: 12px; font-weight: 600; line-height: 1.25; }
+.bc .who small { display: block; font-weight: 400; color: #5d594f; }
+.bc .r { display: flex; justify-content: space-between; align-items: flex-end; gap: 8px; }
+.bc .r .sym { width: 30px; color: var(--noche); }
+.ig { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; }
+.ig .poster .sym { width: 46%; }
+
+footer { padding-block: 32px 48px; border-top: 1px solid var(--linea); color: var(--ceniza); font-size: 13px; }
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs id="fx"></defs>
+</svg>
+
+<header class="wrap cover">
+  <div class="cover-top"><span>Piedra Bruta · Dirección 2: Rupestre</span><span>Noviembre 2026</span></div>
+  <div class="cover-grid">
+    <div class="poster hero-poster" id="hero"><canvas></canvas><span class="sym"></span><span class="corner wm1 small">Piedra Brut<span class="cutA">a</span></span><span class="tag">Ⓡ 2026</span></div>
+    <div class="panel">
+      <div class="intro">
+        <div class="stack"><span>Piedra</span><span>Brut<span class="cutA">a</span></span></div>
+        <p>Las primeras marcas de la humanidad se hicieron sobre piedra sin tallar. Esta dirección deja el píxel y toma ese gesto: símbolos blancos, orgánicos y hechos a mano, sobre fotografía analógica con movimiento.</p>
+      </div>
+      <fieldset><legend>Símbolo</legend><div class="chips" id="c-sym"></div></fieldset>
+      <fieldset><legend>Trazo</legend><div class="chips" id="c-trazo"></div></fieldset>
+      <fieldset><legend>Fotografía</legend><div class="chips" id="c-mood"></div></fieldset>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap concept">
+    <div>
+      <p class="big">Marcas hechas a mano sobre piedra bruta.</p>
+    </div>
+    <div>
+      <p>La piedra es el material; el estudio es la mano que la talla. Todos los símbolos salen de ese mundo: la piedra, sus fragmentos, la herramienta, lo que guarda dentro. Bruta sigue siendo la mascota, ahora dibujada como un petroglifo, con los ojos huecos y las pupilas sueltas.</p>
+      <ul class="rules">
+        <li><b>La foto</b><span>Pone el color. Analógica, con grano y barrido de movimiento. Naturaleza y materia mexicana.</span></li>
+        <li><b>El símbolo</b><span>Blanco hueso, al centro y con aire alrededor. Por defecto en línea, como dibujado con el dedo; en relleno solo cuando el tamaño es muy pequeño.</span></li>
+        <li><b>El nombre</b><span>Completo y siempre centrado: en una línea o en dos por palabra. La A final lleva una esquina tallada, igual que Bruta.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="head"><h2>Familia de símbolos</h2><p>Bruta es el personaje de la marca y tiene un gesto para cada mensaje: corre, guiña, salta, saluda, duerme, se sorprende, tiene una idea, se enamora, baila y talla. El molcajete acompaña como objeto de piedra. Todos se dibujan con el mismo trazo derretido. Bruta es el principal; los demás acompañan campañas, secciones y redes.</p></div>
+    <div class="symbols" id="symbols"></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="head"><h2>Logotipo</h2><p>El nombre va completo, nunca partido en sílabas. Su detalle propio es el corte: la A final pierde la esquina superior derecha, como la piedra de Bruta.</p></div>
+    <div class="marks" id="marks"></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="head"><h2>Tipografía</h2><p>Dos familias y una versión especial. Archivo da la voz principal; IBM Plex Mono, con su aire de máquina de escribir, ordena la información. La versión derretida se reserva para carteles y portadas.</p></div>
+    <div class="types">
+      <div class="type">
+        <span class="role">Primaria · Logotipo y títulos</span>
+        <div class="spec-big arch" style="font-weight:600;letter-spacing:-0.02em">Aa Bb</div>
+        <h3>Archivo SemiBold, ancho 110 %</h3>
+        <p class="chars arch">ABCDEFGHIJKLMNÑOPQRSTUVWXYZ<br>abcdefghijklmnñopqrstuvwxyz<br>0123456789 ¿?¡!&amp;@</p>
+        <p class="use">En mayúsculas para el nombre y los titulares, con interletrado apretado. En minúsculas para frases cortas.</p>
+      </div>
+      <div class="type">
+        <span class="role">Secundaria · Información y datos</span>
+        <div class="spec-big mono">Aa Bb</div>
+        <h3>IBM Plex Mono Regular</h3>
+        <p class="chars mono">ABCDEFGHIJKLMNÑOPQRSTUVWXYZ<br>abcdefghijklmnñopqrstuvwxyz<br>0123456789 // + • @</p>
+        <p class="use">Fechas, servicios, contacto, pies de foto y etiquetas. En mayúsculas con un poco de aire entre letras, o en minúsculas para firmas.</p>
+      </div>
+      <div class="type">
+        <span class="role">Display · Carteles y portadas</span>
+        <div class="spec-melt" id="type-melt"></div>
+        <h3>Archivo derretida</h3>
+        <p class="use">El nombre o una palabra corta, en grande, con el mismo trazo derretido de Bruta. Una vez por pieza y nunca en textos de lectura.</p>
+      </div>
+    </div>
+    <div class="tscale">
+      <div><span class="k">Nombre</span><span class="v wm1" style="font-size:clamp(30px,4.6vw,56px)">Piedra Brut<span class="cutA">a</span></span></div>
+      <div><span class="k">Titular</span><span class="v wm1" style="font-size:clamp(22px,2.6vw,30px)">Marcas talladas a mano</span></div>
+      <div><span class="k">Bloque</span><span class="v arch" style="font-size:15px;font-weight:600;text-transform:uppercase;line-height:1.1">Branding +<br>Campañas</span></div>
+      <div><span class="k">Dato</span><span class="v mono" style="font-size:14px;text-transform:uppercase;letter-spacing:.06em">Agenda 2026 abierta • Branding // Campañas // Marcas</span></div>
+      <div><span class="k">Firma</span><span class="v mono" style="font-size:13px">hecho a mano por labre yahel sandoval brito</span></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="head"><h2>Fotografía y color</h2><p>No hay una paleta fija: el color sale de la foto. Estas son dieciséis atmósferas: doce fotos de paisajes y materiales de México, y cuatro papeles lisos con fibra para piezas más editoriales. Las imágenes de esta página son simuladas; las reales serán fotos tuyas o de tus proyectos.</p></div>
+    <div class="moods" id="moods"></div>
+    <ul class="photo-rules">
+      <li><b>Movimiento</b><span>Barrido de cámara o exposición larga. Nada nítido detrás del símbolo.</span></li>
+      <li><b>Grano</b><span>Textura de película visible, sobre todo en cielos y sombras.</span></li>
+      <li><b>Materia</b><span>Piedra, tierra, flores, hojas, agua. Paisajes y texturas de México.</span></li>
+      <li><b>Constantes</b><span>Blanco hueso #F3EFE4 para símbolos y texto; Noche #0E0E0C para fondos sin foto.</span></li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="head"><h2>Carteles</h2><p>La pieza base de la marca: foto a sangre, un símbolo o el nombre al centro, y la firma centrada abajo. Doce carteles, uno por atmósfera.</p></div>
+    <div class="posters" id="posters"></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="head"><h2>Carteles con información</h2><p>Para anunciar servicios, eventos y temporadas. Textos pequeños en mayúsculas repartidos en la composición, una monoespaciada para datos y una cursiva de acento. El correo es de ejemplo.</p></div>
+    <div class="infoposters" id="infoposters"></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="head"><h2>Aplicaciones</h2></div>
+    <div class="apps">
+      <div class="app">
+        <div class="browser"><div class="bar"><i></i><i></i><i></i></div>
+          <div class="site" id="site"><canvas></canvas>
+            <nav><span class="wm1 small">Piedra Brut<span class="cutA">a</span></span></nav><span class="links"><span>Trabajos</span><span>Estudio</span><span>Contacto</span></span>
+            <span class="sym"></span><p class="claim">Branding, campañas y marcas talladas a mano.</p></div>
+        </div>
+        <h3>Portada web</h3><p>Foto en movimiento a pantalla completa, el nombre arriba al centro, Bruta en medio y el menú abajo.</p>
+      </div>
+      <div class="app">
+        <div class="cards">
+          <div class="bc front"><span class="stack"><span>Piedra</span><span>Brut<span class="cutA">a</span></span></span><div class="r"><p class="who">Labre Yahel Sandoval Brito<small>Dirección creativa · Mercadotecnia y publicidad</small></p><span class="sym"></span></div></div>
+          <div class="bc back" id="bc-back"><canvas></canvas><span class="sym"></span></div>
+        </div>
+        <h3>Tarjeta de presentación</h3><p>Frente en blanco hueso con el nombre y los datos centrados; reverso con foto y la Mirada en blanco.</p>
+      </div>
+      <div class="app">
+        <div class="ig" id="ig"></div>
+        <h3>Redes sociales</h3><p>Una cuadrícula que alterna atmósferas y símbolos. El avatar es Bruta en blanco sobre noche.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer><div class="wrap">Piedra Bruta · Dirección 2: Rupestre · Labre Yahel Sandoval Brito</div></footer>
+
+<script>
+(() => {
+  /* ===== Filtros: trazo derretido (desplazamiento + desenfoque + umbral) ===== */
+  const fx = document.getElementById("fx");
+  fx.insertAdjacentHTML("beforeend", `
+    <filter id="melt" x="-10%" y="-20%" width="120%" height="140%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.011 0.018" numOctaves="2" seed="5" result="t"/>
+      <feDisplacementMap in="SourceGraphic" in2="t" scale="34" xChannelSelector="R" yChannelSelector="G" result="d"/>
+      <feGaussianBlur in="d" stdDeviation="4" result="b"/>
+      <feColorMatrix in="b" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -8"/>
+    </filter>`);
+  fx.insertAdjacentHTML("beforeend", `
+    <filter id="outline" x="-10%" y="-10%" width="120%" height="120%"><feMorphology in="SourceAlpha" operator="erode" radius="3.2" result="e"/><feComposite in="SourceGraphic" in2="e" operator="out"/></filter>
+    <filter id="outline-melt" x="-10%" y="-20%" width="120%" height="140%"><feMorphology in="SourceAlpha" operator="erode" radius="5" result="e"/><feComposite in="SourceGraphic" in2="e" operator="out"/></filter>`);
+  [3, 7, 11].forEach((seed, i) => {
+    fx.insertAdjacentHTML("beforeend", `
+      <filter id="goo${i}" x="-25%" y="-25%" width="150%" height="150%" color-interpolation-filters="sRGB">
+        <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="${seed}" result="t"/>
+        <feDisplacementMap in="SourceGraphic" in2="t" scale="10" xChannelSelector="R" yChannelSelector="G" result="d"/>
+        <feGaussianBlur in="d" stdDeviation="3.2" result="b"/>
+        <feColorMatrix in="b" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -9"/>
+      </filter>`);
+  });
+
+  /* ===== Símbolos (caja 200 × 200). Cada uno: formas blancas, huecos y detalles sobre el hueco ===== */
+  const ray = (cx, cy, a, r0, r1, w) => `<line x1="${cx + Math.cos(a) * r0}" y1="${cy + Math.sin(a) * r0}" x2="${cx + Math.cos(a) * r1}" y2="${cy + Math.sin(a) * r1}" stroke-width="${w}"/>`;
+  const spiral = (R = 62, turns = 5.2) => { let d = ""; for (let t = 0; t <= 1; t += 0.01) { const a = t * Math.PI * turns, r = 8 + t * R; d += (t ? " L" : "M") + (100 + Math.cos(a) * r).toFixed(1) + " " + (100 + Math.sin(a) * r).toFixed(1); } return d; };
+  const sun = (cx, cy, r, n, len, w, rot) => `<circle cx="${cx}" cy="${cy}" r="${r}"/>` + Array.from({ length: n }, (_, k) => ray(cx, cy, rot + (k / n) * Math.PI * 2, r * .6, r + len * (0.7 + ((k * 37) % 10) / 22), w)).join("");
+  /* Bruta en distintas poses: misma piedra, ojos y corte; cambian brazos, piernas y gestos */
+  const ROCK = "M60 214 C40 182 46 138 72 110 C92 88 110 66 146 52 C178 40 214 36 246 40 L300 52 L352 118 C368 146 372 178 362 208 C350 240 322 262 284 274 C240 286 186 288 140 280 C102 273 74 248 60 214 Z";
+  const heart = (x, y, r) => `M${x} ${y + r * .85} C${x - r * 1.5} ${y - r * .1} ${x - r * .6} ${y - r * 1.15} ${x} ${y - r * .35} C${x + r * .6} ${y - r * 1.15} ${x + r * 1.5} ${y - r * .1} ${x} ${y + r * .85} Z`;
+  function bru({ tx, ty, sc, eyes = "open", limbs = "", extra = "", w = 11, goo = 1, id, name, note }) {
+    const P = (x, y) => [x * sc + tx, y * sc + ty];
+    const [lx, ly] = P(160, 132), [rx, ry] = P(236, 126), rL = 33 * sc, rR = 26 * sc;
+    const cut = [P(246, 40), P(258, 84), P(316, 130), P(352, 118)].map((q, i) => (i ? "L" : "M") + q[0].toFixed(1) + " " + q[1].toFixed(1)).join(" ");
+    const line = (x, y, r) => `<path d="M${x - r} ${y - r * .1} Q${x} ${y + r * .8} ${x + r} ${y - r * .1}" fill="none" stroke="#000" stroke-width="${Math.max(4, r * .4)}" stroke-linecap="round"/>`;
+    let holes = `<path d="${cut}" fill="none" stroke="#000" stroke-width="${Math.max(4, 12 * sc)}" stroke-linejoin="round"/>`, over = "";
+    const pupil = (x, y, r, dx, dy, k = .47) => `<circle cx="${x + r * dx}" cy="${y + r * dy}" r="${r * k}"/>`;
+    if (eyes === "open" || eyes === "up" || eyes === "wide") {
+      const m = 1;
+      holes += `<circle cx="${lx}" cy="${ly}" r="${rL * m}"/><circle cx="${rx}" cy="${ry}" r="${rR * m}"/>`;
+      const [dx, dy, k] = eyes === "up" ? [.15, -.42, .47] : eyes === "wide" ? [0, .02, .42] : [-.25, .4, .47];
+      over = pupil(lx, ly, rL * m, dx, dy, k) + pupil(rx, ry, rR * m, dx, dy, k);
+    } else if (eyes === "closed") {
+      holes += line(lx, ly, rL) + line(rx, ry, rR);
+    } else if (eyes === "heart") {
+      holes += `<path d="${heart(lx, ly, rL * 1.05)}"/><path d="${heart(rx, ry, rR * 1.05)}"/>`;
+    }
+    return { id, name, note, goo,
+      body: `<path transform="translate(${tx} ${ty}) scale(${sc})" d="${ROCK}"/><g fill="none" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round">${limbs}</g>${extra}`,
+      holes, over };
+  }
+
+  const SYMBOLS = [
+    { id: "bruta", name: "Bruta", note: "La mascota: piedra con la esquina tallada, ojos huecos y pupilas sueltas.", goo: 0,
+      body: `<path transform="translate(10 32) scale(.45)" d="M60 214 C40 182 46 138 72 110 C92 88 110 66 146 52 C178 40 214 36 246 40 L300 52 L352 118 C368 146 372 178 362 208 C350 240 322 262 284 274 C240 286 186 288 140 280 C102 273 74 248 60 214 Z"/>`,
+      holes: `<circle cx="76" cy="96" r="16"/><circle cx="116" cy="94" r="12"/><path d="M118 40 L126 70 L154 92 L180 84" fill="none" stroke="#000" stroke-width="6" stroke-linejoin="round"/>`,
+      over: `<circle cx="72" cy="102" r="7.5"/><circle cx="113" cy="99" r="5.5"/>` },
+    { id: "corre", name: "Bruta corre", note: "Bruta con piernas y brazos, en movimiento. Para eventos, avisos y campañas.", goo: 1,
+      body: `<path transform="translate(28 10) scale(.36)" d="M60 214 C40 182 46 138 72 110 C92 88 110 66 146 52 C178 40 214 36 246 40 L300 52 L352 118 C368 146 372 178 362 208 C350 240 322 262 284 274 C240 286 186 288 140 280 C102 273 74 248 60 214 Z"/>
+        <g fill="none" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"><path d="M82 110 L68 140 L48 148"/><path d="M118 112 L138 136 L134 168"/><path d="M48 82 L26 70"/><path d="M158 76 L180 58"/></g>`,
+      holes: `<circle cx="85" cy="58" r="13"/><circle cx="113" cy="56" r="10"/><path d="M116 22 L121 40 L142 57 L158 52" fill="none" stroke="#000" stroke-width="5" stroke-linejoin="round"/>`,
+      over: `<circle cx="81" cy="63" r="6"/><circle cx="110" cy="60" r="4.5"/>` },
+    { id: "guino", name: "Guiño", note: "Bruta guiña un ojo: complicidad y buen humor. Para redes y mensajes cercanos.", goo: 0,
+      body: `<path transform="translate(10 32) scale(.45)" d="M60 214 C40 182 46 138 72 110 C92 88 110 66 146 52 C178 40 214 36 246 40 L300 52 L352 118 C368 146 372 178 362 208 C350 240 322 262 284 274 C240 286 186 288 140 280 C102 273 74 248 60 214 Z"/>`,
+      holes: `<circle cx="76" cy="96" r="16"/><path d="M103 96 Q116 106 129 95" fill="none" stroke="#000" stroke-width="6" stroke-linecap="round"/><path d="M118 40 L126 70 L154 92 L180 84" fill="none" stroke="#000" stroke-width="6" stroke-linejoin="round"/>`,
+      over: `<circle cx="72" cy="102" r="7.5"/>` },
+    bru({ id: "salta", name: "Salta", note: "Bruta brinca de gusto: lanzamientos, logros y buenas noticias.", tx: 28, ty: 2, sc: .36, eyes: "up",
+      limbs: `<path d="M50 58 L32 30"/><path d="M156 52 L176 24"/><path d="M80 98 L70 124 L84 142"/><path d="M118 98 L132 122 L120 142"/>`,
+      extra: `<g fill="none" stroke-width="6" stroke-linecap="round"><path d="M66 172 L92 172"/><path d="M108 178 L136 178"/></g>` }),
+    bru({ id: "saluda", name: "Saluda", note: "Bruta dice hola: bienvenidas, contacto y primeros mensajes.", tx: 22, ty: 22, sc: .36,
+      limbs: `<path d="M44 104 L30 128"/><path d="M152 92 L172 66 L182 46"/><path d="M78 124 L74 166 L62 170"/><path d="M112 124 L116 166 L128 170"/>`,
+      extra: `<g fill="none" stroke-width="4" stroke-linecap="round"><path d="M176 30 Q190 32 194 46"/><path d="M168 24 Q190 18 200 40"/></g>` }),
+    bru({ id: "duerme", name: "Duerme", note: "Bruta descansa: fuera de horario, vacaciones y pausas.", tx: 10, ty: 50, sc: .45, eyes: "closed",
+      extra: `<g fill="none" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><path d="M148 22 L168 22 L148 42 L168 42"/><path d="M174 4 L186 4 L174 16 L186 16"/></g>` }),
+    bru({ id: "sorpresa", name: "Sorpresa", note: "Bruta con los ojos muy abiertos: novedades, avisos y algo que no te esperas.", tx: 10, ty: 40, sc: .45, eyes: "wide",
+      extra: `<g fill="none" stroke-width="7" stroke-linecap="round"><path d="M100 4 L100 24"/><path d="M66 12 L74 30"/><path d="M134 12 L126 30"/></g>` }),
+    bru({ id: "idea", name: "Idea", note: "A Bruta se le ocurre algo: procesos creativos, talleres y propuestas.", tx: 10, ty: 50, sc: .45, eyes: "up",
+      extra: `<path d="M100 0 C102 18 108 24 126 26 C108 28 102 34 100 52 C98 34 92 28 74 26 C92 24 98 18 100 0 Z"/><g fill="none" stroke-width="5" stroke-linecap="round"><path d="M136 12 L144 6"/><path d="M64 12 L56 6"/></g>` }),
+    bru({ id: "enamorada", name: "Enamorada", note: "Bruta con ojos de corazón: clientes felices, testimonios y fechas especiales.", tx: 10, ty: 40, sc: .45, eyes: "heart",
+      extra: `<path d="${heart(160, 30, 13)}"/><path d="${heart(182, 10, 8)}"/>` }),
+    bru({ id: "baila", name: "Baila", note: "Bruta bailando: eventos, fiestas y lanzamientos con música.", tx: 28, ty: 10, sc: .36,
+      limbs: `<path d="M50 66 L28 46"/><path d="M158 86 L180 104"/><path d="M80 112 L102 146 L92 170"/><path d="M118 112 L98 146 L112 170"/>`,
+      extra: `<circle cx="168" cy="44" r="7"/><path d="M174 44 L174 18 L188 22" fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>` }),
+    bru({ id: "talla", name: "Talla", note: "Bruta trabajando con su cincel: el oficio, el proceso y el detrás de cámaras.", tx: 14, ty: 22, sc: .36,
+      limbs: `<path d="M36 104 L22 126"/><path d="M144 92 L164 108"/><path d="M70 124 L66 166 L54 170"/><path d="M104 124 L108 166 L120 170"/>`,
+      extra: `<path d="M160 116 L190 74" fill="none" stroke-width="10" stroke-linecap="round"/><circle cx="180" cy="128" r="4.5"/><circle cx="192" cy="118" r="3.5"/><circle cx="170" cy="136" r="3"/>` }),
+    { id: "molcajete", name: "Molcajete", note: "Piedra volcánica mexicana que muele y mezcla: talleres, ideas y recetas de marca.", goo: 1,
+      body: `<path d="M34 96 L166 96 C166 138 138 158 100 158 C62 158 34 138 34 96 Z"/>
+        <g fill="none" stroke-linecap="round"><g stroke-width="15"><path d="M62 146 L52 180"/><path d="M100 156 L100 184"/><path d="M138 146 L148 180"/></g><path d="M118 80 L158 30" stroke-width="24"/></g>`,
+      holes: `<circle cx="66" cy="118" r="4"/><circle cx="92" cy="132" r="3.5"/><circle cx="122" cy="122" r="4.5"/><circle cx="142" cy="110" r="3"/><circle cx="104" cy="112" r="3"/><circle cx="78" cy="140" r="3"/>` },
+  ];
+  let mid = 0;
+  const lineMode = () => typeof state !== "undefined" && state.trazo === "linea";
+  function symSVG(id, solid) {
+    const s = SYMBOLS.find((x) => x.id === id), m = "m" + mid++;
+    const line = !solid && lineMode();
+    const mask = s.holes ? `<mask id="${m}" maskUnits="userSpaceOnUse" x="-40" y="-40" width="280" height="280"><rect x="-40" y="-40" width="280" height="280" fill="#fff"/><g fill="#000" filter="url(#goo${s.goo})">${s.holes}</g></mask>` : "";
+    return `<svg viewBox="0 0 200 200" aria-hidden="true">${mask}<g ${line ? 'filter="url(#outline)"' : ""}><g ${s.holes ? `mask="url(#${m})"` : ""}><g fill="currentColor" stroke="currentColor" filter="url(#goo${s.goo})">${s.body}</g></g></g>${s.over ? `<g fill="currentColor" filter="url(#goo${s.goo})">${s.over}</g>` : ""}</svg>`;
+  }
+
+  /* ===== Fotografía simulada: manchas de color, barrido de movimiento y grano ===== */
+  const MOODS = [
+    { id: "monte", name: "Monte", note: "Bosque visto desde la carretera: musgo, ocre y destellos de luz.", sw: ["#2c2c1b", "#4f4e2a", "#8a7a3c", "#b49a5c", "#d9d5c9"], dir: [-0.94, 0.34] },
+    { id: "cempasuchil", name: "Cempasúchil", note: "Campo de flor de muerto: naranja, amarillo y un cielo pálido.", sw: ["#2f3a1e", "#5d6b2c", "#d9481a", "#ef7d1d", "#f2b51e", "#cfdfe2"], dir: [0, 1] },
+    { id: "tierra", name: "Tierra", note: "Ladera volcánica bajo cielo despejado: barro, café y azul.", sw: ["#3d2717", "#6b4a2e", "#9a7550", "#7fa6d6", "#c9d9ec"], dir: [-0.6, -0.8] },
+    { id: "agave", name: "Agave", note: "Hojas a contraluz: verde profundo y verde lima.", sw: ["#0d1f0c", "#1f4a17", "#3f8f2a", "#7cc23a", "#c7ef7a"], dir: [0.5, -0.86] },
+    { id: "fogata", name: "Fogata", note: "Fuego de noche movido: brasas naranjas sobre negro.", sw: ["#120a06", "#3a1a0c", "#b8410f", "#f08a1e", "#ffd27a"], dir: [0.15, -1], blur: 6, len: 80 },
+    { id: "mar", name: "Mar", note: "Pacífico desde la lancha: azul profundo, espuma y horizonte pálido.", sw: ["#0f3f55", "#1f6f8b", "#4fa3b8", "#d8e4ea", "#f4f1ea"], dir: [1, 0], blur: 3, len: 140 },
+    { id: "desierto", name: "Desierto", note: "Dunas de Sonora al atardecer: arena, sombra y cielo cálido.", sw: ["#7a4a24", "#a86c38", "#d9a66a", "#efc99a", "#f6e6cf"], dir: [1, 0.1], blur: 2, len: 50 },
+    { id: "bugambilia", name: "Bugambilia", note: "Bugambilias fuera de foco: magenta intenso sobre verde oscuro.", sw: ["#1f2a17", "#3d5a2a", "#8e1060", "#c2187a", "#f08cc4"], dir: [0.7, 0.7], blur: 10, len: 30 },
+    { id: "niebla", name: "Niebla", note: "Bosque de niebla: troncos que se pierden en gris verdoso.", sw: ["#2e3a34", "#4a5650", "#7f8a82", "#b4bab2", "#dfe1dc"], dir: [0, 1], blur: 6, len: 50 },
+    { id: "carretera", name: "Carretera", note: "Luces de autos de noche en exposición larga: rojo, ámbar y blanco.", sw: ["#07080c", "#1a1d2a", "#ff3b2f", "#ffb347", "#f5efe0"], dir: [1, 0], blur: 2, len: 180 },
+    { id: "atardecer", name: "Atardecer", note: "Sol bajo detrás del cerro: violeta, rojo y naranja.", sw: ["#1a1210", "#2b1b3a", "#c4462c", "#f2a33a", "#ffd9a0"], dir: [1, 0], blur: 4, len: 70 },
+    { id: "papelverde", name: "Papel verde", note: "Papel de algodón verde con fibras: plano, táctil y editorial.", sw: ["#2f4a3a", "#3f5f4a", "#56735f", "#8fa58f", "#dfe6d8"], paper: "#3f5f4a", dir: [1, 0], blur: .3, len: 0 },
+    { id: "kraft", name: "Kraft", note: "Papel kraft de empaque: café cálido con fibras visibles.", sw: ["#6e4f33", "#8a6644", "#a58157", "#c9ad86", "#efe3cc"], paper: "#9a744d", dir: [1, 0], blur: .3, len: 0 },
+    { id: "papelnoche", name: "Papel noche", note: "Cartulina negra con fibras: sobria y elegante para papelería.", sw: ["#121211", "#1b1b19", "#2c2b28", "#55524b", "#f3efe4"], paper: "#1b1b19", dir: [1, 0], blur: .3, len: 0 },
+    { id: "oxido", name: "Papel óxido", note: "Papel rojo tierra, como el tezontle: cálido y con carácter.", sw: ["#5e2418", "#7a3022", "#8e3a2a", "#b0604c", "#f1dccf"], paper: "#8e3a2a", dir: [1, 0], blur: .3, len: 0 },
+    { id: "cantera", name: "Cantera", note: "Piedra de cantera rosa de cerca: textura, poros y tono cálido.", sw: ["#8a5a4a", "#b07c69", "#c99a86", "#d9b3a1", "#efd9cc"], dir: [1, 0.3], blur: 0.8, len: 4 },
+  ];
+  function rng(seed) { let s = seed >>> 0; return () => { s = (s + 0x6d2b79f5) >>> 0; let t = s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+  const cache = {};
+  function photo(mood, seed, W, H) {
+    const key = [mood, seed, W, H].join("-"); if (cache[key]) return cache[key];
+    const M = MOODS.find((m) => m.id === mood), r = rng(seed * 131 + mood.length);
+    const base = document.createElement("canvas"); base.width = W; base.height = H;
+    const b = base.getContext("2d");
+    const pick = (arr) => arr[Math.floor(r() * arr.length)];
+    if (mood === "monte") {
+      b.fillStyle = "#3a3a22"; b.fillRect(0, 0, W, H);
+      for (let i = 0; i < 70; i++) { b.fillStyle = pick(M.sw.slice(0, 4)); b.beginPath(); b.ellipse(r() * W, r() * H, 20 + r() * W * .2, 10 + r() * H * .12, r() * 3, 0, 7); b.fill(); }
+      for (let i = 0; i < 6; i++) { b.fillStyle = "#e4e0d4"; b.beginPath(); b.ellipse(r() * W, (r() < .5 ? r() * .25 : .75 + r() * .25) * H, 30 + r() * W * .25, 8 + r() * 20, 0, 0, 7); b.fill(); }
+    } else if (mood === "cempasuchil") {
+      const g = b.createLinearGradient(0, 0, 0, H * .38); g.addColorStop(0, "#d3e3e6"); g.addColorStop(1, "#e9e3d4");
+      b.fillStyle = "#3d4a22"; b.fillRect(0, 0, W, H); b.fillStyle = g; b.fillRect(0, 0, W, H * .36);
+      for (let i = 0; i < 260; i++) { const y = H * .36 + r() * H * .66, s = (y / H) ** 2.2; b.fillStyle = pick(["#d9481a", "#ef7d1d", "#f2b51e", "#ef7d1d", "#5d6b2c", "#2f3a1e"]); b.beginPath(); b.ellipse(r() * W, y, 6 + s * 40, 10 + s * 50, 0, 0, 7); b.fill(); }
+    } else if (mood === "tierra") {
+      const g = b.createLinearGradient(W, 0, 0, H); g.addColorStop(0, "#c9d9ec"); g.addColorStop(.6, "#7fa6d6");
+      b.fillStyle = g; b.fillRect(0, 0, W, H);
+      b.fillStyle = "#e9eef5"; for (let i = 0; i < 4; i++) { b.beginPath(); b.ellipse(W * (.5 + r() * .5), H * r() * .3, 40 + r() * 60, 12 + r() * 14, 0, 0, 7); b.fill(); }
+      b.fillStyle = "#6b4a2e"; b.beginPath(); b.moveTo(0, H * .28); b.lineTo(W, H * .78); b.lineTo(W, H); b.lineTo(0, H); b.closePath(); b.fill();
+      for (let i = 0; i < 900; i++) { const x = r() * W, y = r() * H; if (y < H * .28 + (x / W) * H * .5) continue; b.fillStyle = pick(["#3d2717", "#4f3420", "#9a7550", "#7a5a3a"]); b.beginPath(); b.ellipse(x, y, 2 + r() * 9, 2 + r() * 6, r() * 3, 0, 7); b.fill(); }
+    } else if (M.paper) {
+      b.fillStyle = M.paper; b.fillRect(0, 0, W, H);
+      for (let i = 0; i < 26; i++) { b.fillStyle = r() < .5 ? "rgba(255,255,255,.035)" : "rgba(0,0,0,.05)"; b.beginPath(); b.ellipse(r() * W, r() * H, 40 + r() * 120, 30 + r() * 90, r() * 3, 0, 7); b.fill(); }
+      for (let i = 0; i < W * H / 260; i++) { const a = r() * 3.14, l = 3 + r() * 12, x = r() * W, y = r() * H; b.strokeStyle = r() < .5 ? "rgba(255,255,255,.18)" : "rgba(0,0,0,.2)"; b.lineWidth = .6 + r() * .6; b.beginPath(); b.moveTo(x, y); b.quadraticCurveTo(x + Math.cos(a) * l * .5 + (r() - .5) * 3, y + Math.sin(a) * l * .5 + (r() - .5) * 3, x + Math.cos(a) * l, y + Math.sin(a) * l); b.stroke(); }
+    } else if (mood === "fogata") {
+      b.fillStyle = "#120a06"; b.fillRect(0, 0, W, H);
+      for (let i = 0; i < 140; i++) { const y = H * (.35 + r() * .7), x = W * (.5 + (r() - .5) * (1.2 - (y / H) * .6)); b.fillStyle = pick(["#3a1a0c", "#b8410f", "#f08a1e", "#f08a1e", "#ffd27a", "#b8410f"]); b.beginPath(); b.ellipse(x, y, 4 + r() * 26, 8 + r() * 40, 0, 0, 7); b.fill(); }
+      for (let i = 0; i < 40; i++) { b.fillStyle = "#ffcf7a"; b.beginPath(); b.arc(r() * W, r() * H * .6, 1 + r() * 3, 0, 7); b.fill(); }
+    } else if (mood === "mar") {
+      const g = b.createLinearGradient(0, 0, 0, H * .42); g.addColorStop(0, "#c9dbe4"); g.addColorStop(1, "#eef0ea");
+      b.fillStyle = g; b.fillRect(0, 0, W, H * .42);
+      const s2 = b.createLinearGradient(0, H * .42, 0, H); s2.addColorStop(0, "#2f7f98"); s2.addColorStop(1, "#0d3346");
+      b.fillStyle = s2; b.fillRect(0, H * .42, W, H);
+      for (let i = 0; i < 160; i++) { const y = H * (.43 + r() * .57); b.fillStyle = pick(["#4fa3b8", "#1f6f8b", "#0f3f55", "#f4f1ea", "#4fa3b8"]); b.beginPath(); b.ellipse(r() * W, y, 10 + r() * 70, 1 + (y / H) * 6, 0, 0, 7); b.fill(); }
+    } else if (mood === "desierto") {
+      const g = b.createLinearGradient(0, 0, 0, H * .5); g.addColorStop(0, "#e8b98a"); g.addColorStop(1, "#f6e6cf");
+      b.fillStyle = g; b.fillRect(0, 0, W, H);
+      [[.42, "#efc99a"], [.55, "#d9a66a"], [.68, "#c48a4e"], [.82, "#a86c38"]].forEach(([y0, c]) => {
+        b.fillStyle = c; b.beginPath(); b.moveTo(0, H); let x = 0; b.lineTo(0, H * y0);
+        while (x <= W) { x += W / 6; b.quadraticCurveTo(x - W / 12, H * (y0 - .06 * r()), x, H * (y0 + (r() - .5) * .06)); }
+        b.lineTo(W, H); b.closePath(); b.fill();
+        b.fillStyle = "rgba(122,74,36,.35)"; b.beginPath(); b.ellipse(W * r(), H * (y0 + .05), W * .3, H * .02, 0, 0, 7); b.fill();
+      });
+    } else if (mood === "bugambilia") {
+      b.fillStyle = "#1f2a17"; b.fillRect(0, 0, W, H);
+      for (let i = 0; i < 30; i++) { b.fillStyle = pick(["#3d5a2a", "#2a3d1d"]); b.beginPath(); b.ellipse(r() * W, r() * H, 30 + r() * 60, 15 + r() * 30, r() * 3, 0, 7); b.fill(); }
+      for (let i = 0; i < 90; i++) { b.fillStyle = pick(["#8e1060", "#c2187a", "#e04aa0", "#f08cc4", "#c2187a"]); b.beginPath(); b.ellipse(r() * W, r() * H, 8 + r() * 34, 8 + r() * 26, r() * 3, 0, 7); b.fill(); }
+    } else if (mood === "niebla") {
+      const g = b.createLinearGradient(0, 0, 0, H); g.addColorStop(0, "#d9dcd6"); g.addColorStop(1, "#9aa29a");
+      b.fillStyle = g; b.fillRect(0, 0, W, H);
+      for (let i = 0; i < 26; i++) { const d = r(); b.globalAlpha = .25 + d * .7; b.fillStyle = d > .6 ? "#2e3a34" : "#4a5650"; const x = r() * W, w = 6 + d * 26; b.fillRect(x, 0, w, H); b.beginPath(); b.ellipse(x + w / 2, H * (.1 + r() * .4), w * 3, H * .12, 0, 0, 7); b.fill(); }
+      b.globalAlpha = .55; b.fillStyle = "#e6e8e3"; for (let i = 0; i < 5; i++) { b.beginPath(); b.ellipse(W * r(), H * (.3 + r() * .6), W * .6, H * .06, 0, 0, 7); b.fill(); }
+      b.globalAlpha = 1;
+    } else if (mood === "carretera") {
+      const g = b.createLinearGradient(0, 0, 0, H); g.addColorStop(0, "#07080c"); g.addColorStop(.6, "#1a1d2a"); g.addColorStop(1, "#0b0c10");
+      b.fillStyle = g; b.fillRect(0, 0, W, H);
+      for (let i = 0; i < 26; i++) { const y = H * (.45 + r() * .4); b.strokeStyle = pick(["#ff3b2f", "#ff3b2f", "#ffb347", "#f5efe0"]); b.lineWidth = 1.5 + r() * 5; b.beginPath(); b.moveTo(-20, y); b.bezierCurveTo(W * .3, y - 10 + r() * 20, W * .7, y - 30 + r() * 30, W + 20, y - 20 + r() * 40); b.stroke(); }
+      for (let i = 0; i < 12; i++) { b.fillStyle = pick(["#ffb347", "#f5efe0"]); b.beginPath(); b.arc(r() * W, H * r() * .4, 2 + r() * 6, 0, 7); b.fill(); }
+    } else if (mood === "atardecer") {
+      const g = b.createLinearGradient(0, 0, 0, H * .75); g.addColorStop(0, "#2b1b3a"); g.addColorStop(.55, "#c4462c"); g.addColorStop(1, "#f2a33a");
+      b.fillStyle = g; b.fillRect(0, 0, W, H);
+      b.fillStyle = "#ffd9a0"; b.beginPath(); b.arc(W * .62, H * .66, W * .09, 0, 7); b.fill();
+      b.fillStyle = "#1a1210"; b.beginPath(); b.moveTo(0, H * .72); b.quadraticCurveTo(W * .3, H * .6, W * .55, H * .74); b.quadraticCurveTo(W * .8, H * .68, W, H * .76); b.lineTo(W, H); b.lineTo(0, H); b.closePath(); b.fill();
+    } else if (mood === "cantera") {
+      b.fillStyle = "#d9b3a1"; b.fillRect(0, 0, W, H);
+      for (let i = 0; i < 1400; i++) { b.fillStyle = pick(["#c99a86", "#e8c9b9", "#b07c69", "#d9b3a1", "#efd9cc"]); b.beginPath(); b.ellipse(r() * W, r() * H, 2 + r() * 14, 2 + r() * 8, r() * 3, 0, 7); b.fill(); }
+      for (let i = 0; i < 160; i++) { b.fillStyle = "#8a5a4a"; b.beginPath(); b.arc(r() * W, r() * H, .8 + r() * 2.4, 0, 7); b.fill(); }
+      b.strokeStyle = "rgba(138,90,74,.5)"; b.lineWidth = 2; b.beginPath(); b.moveTo(0, H * .7); b.lineTo(W * .4, H * .62); b.lineTo(W, H * .66); b.stroke();
+    } else {
+      b.fillStyle = "#0d1f0c"; b.fillRect(0, 0, W, H);
+      for (let i = 0; i < 12; i++) { b.strokeStyle = pick(["#1f4a17", "#3f8f2a", "#7cc23a", "#c7ef7a"]); b.lineWidth = 30 + r() * 70; b.lineCap = "round"; b.beginPath(); const x = r() * W; b.moveTo(x, H * 1.1); b.quadraticCurveTo(x + (r() - .5) * W, H * .5, x + (r() - .5) * W * 1.2, -H * .1); b.stroke(); }
+    }
+    // desenfoque + barrido
+    const out = document.createElement("canvas"); out.width = W; out.height = H;
+    const o = out.getContext("2d");
+    const blur = M.blur ?? (mood === "tierra" ? 1.2 : mood === "agave" ? 14 : 5);
+    const len = M.len ?? (mood === "tierra" ? 6 : mood === "agave" ? 20 : 90);
+    o.filter = `blur(${blur}px)`;
+    o.drawImage(base, 0, 0);
+    const steps = 22;
+    for (let i = 1; i <= steps; i++) { o.globalAlpha = 1 / (i + 1); const t = (i / steps - .5) * len; o.drawImage(base, M.dir[0] * t, M.dir[1] * t); }
+    o.globalAlpha = 1; o.filter = "none";
+    // grano y viñeta
+    const img = o.getImageData(0, 0, W, H), d = img.data;
+    for (let i = 0; i < d.length; i += 4) { const n = (r() - .5) * 46; d[i] += n; d[i + 1] += n; d[i + 2] += n; }
+    o.putImageData(img, 0, 0);
+    const v = o.createRadialGradient(W / 2, H / 2, Math.min(W, H) * .3, W / 2, H / 2, Math.max(W, H) * .75);
+    v.addColorStop(0, "rgba(0,0,0,0)"); v.addColorStop(1, "rgba(0,0,0,.35)"); o.fillStyle = v; o.fillRect(0, 0, W, H);
+    return (cache[key] = out);
+  }
+  function drawPhoto(canvas, mood, seed) {
+    const rect = canvas.getBoundingClientRect();
+    const W = Math.max(160, Math.round(Math.min(900, rect.width || 400))), H = Math.round(W * ((rect.height || 500) / (rect.width || 400)));
+    canvas.width = W; canvas.height = H;
+    canvas.getContext("2d").drawImage(photo(mood, seed, W, H), 0, 0);
+  }
+
+  /* ===== Tipografías del logotipo ===== */
+  const FONTS = [
+    { id: "archivo", name: "Archivo", css: '"Archivo"', stretch: "110%", weight: 600, case: "uppercase", track: "-0.015em", small: "0.08em", note: "Grotesca ancha y firme. Seria, clara y moderna." },
+    { id: "bricolage", name: "Bricolage Grotesque", css: '"Bricolage Grotesque"', stretch: "100%", weight: 600, case: "none", track: "-0.03em", small: "0.01em", note: "Grotesca con trazos irregulares, como hecha a mano. Combina con los símbolos derretidos." },
+    { id: "marcellus", name: "Marcellus", css: '"Marcellus"', stretch: "100%", weight: 400, case: "uppercase", track: "0.04em", small: "0.14em", note: "Letra lapidaria, inspirada en las inscripciones talladas en piedra. Elegante y con historia." },
+    { id: "instrument", name: "Instrument Serif", css: '"Instrument Serif"', stretch: "100%", weight: 400, case: "none", track: "-0.01em", small: "0.02em", note: "Serif fina y editorial. El contraste con los símbolos rudos la hace sofisticada." },
+  ];
+
+  /* ===== Estado ===== */
+  const state = { sym: "bruta", mood: "monte", font: "archivo", trazo: "linea" };
+  try { Object.assign(state, JSON.parse(localStorage.getItem("pb-rupestre2") || "{}")); } catch (e) {}
+  if (!["archivo","bricolage","marcellus","instrument"].includes(state.font)) state.font = "archivo";
+  if (!SYMBOLS.some((x) => x.id === state.sym)) state.sym = "bruta";
+  state.font = "archivo";
+  const save = () => { try { localStorage.setItem("pb-rupestre2", JSON.stringify(state)); } catch (e) {} };
+
+  function applyFont() {
+    const f = FONTS.find((x) => x.id === state.font) || FONTS[0];
+    document.documentElement.style.setProperty("--wm", f.css + ', "Helvetica Neue", Arial, sans-serif');
+    const r = document.documentElement.style;
+    r.setProperty("--wm-stretch", f.stretch); r.setProperty("--wm-weight", f.weight); r.setProperty("--wm-case", f.case);
+    r.setProperty("--wm-track", f.track); r.setProperty("--wm-track-small", f.small);
+    document.querySelectorAll("#fonts .fcard").forEach((c) => c.classList.toggle("on", c.dataset.id === f.id));
+  }
+  function chip(label, pressed, onClick, html) {
+    const b = document.createElement("button"); b.type = "button"; b.className = "chip"; b.setAttribute("aria-pressed", String(pressed));
+    b.innerHTML = html || label; b.addEventListener("click", onClick); return b;
+  }
+  function renderChips() {
+    const cs = document.getElementById("c-sym"); cs.innerHTML = "";
+    SYMBOLS.forEach((s) => cs.appendChild(chip(s.name, s.id === state.sym, () => { state.sym = s.id; update(); }, `<span class="ic sym">${symSVG(s.id, true)}</span>${s.name}`)));
+    const ct = document.getElementById("c-trazo"); ct.innerHTML = "";
+    [["linea", "Línea"], ["relleno", "Relleno"]].forEach(([id, label]) => ct.appendChild(chip(label, state.trazo === id, () => { if (state.trazo === id) return; state.trazo = id; update(); rebuild(); })));
+    const cm = document.getElementById("c-mood"); cm.innerHTML = "";
+    MOODS.forEach((m) => cm.appendChild(chip(m.name, m.id === state.mood, () => { state.mood = m.id; update(); }, `<i style="background:linear-gradient(135deg,${m.sw[1]},${m.sw[3]})"></i>${m.name}`)));
+  }
+  function renderHero() {
+    const h = document.getElementById("hero");
+    h.querySelector(".sym").innerHTML = symSVG(state.sym);
+    drawPhoto(h.querySelector("canvas"), state.mood, 1);
+  }
+
+  /* ===== Secciones fijas ===== */
+  function meltSVG(fill) {
+    return `<svg viewBox="0 0 1000 520" aria-hidden="true" style="display:block;width:100%;height:auto;overflow:visible"><g ${lineMode() ? 'filter="url(#outline-melt)"' : ""}><g filter="url(#melt)" fill="${fill || "currentColor"}" style="font-family:var(--wm);font-stretch:var(--wm-stretch);font-weight:var(--wm-weight);text-transform:var(--wm-case)" font-size="210" text-anchor="middle"><text x="500" y="230">Piedra</text><text x="500" y="450">Bruta</text></g></g></svg>`;
+  }
+
+  /* ===== Carteles con información (sistema tipográfico) ===== */
+  function infoPosters() {
+    const root = document.getElementById("infoposters");
+    const L = [
+      { mood: "monte", seed: 41, cap: "Manifiesto: bloques de texto pequeños alrededor del nombre", html: `
+        <span class="t" style="left:9%;top:11%">Piedra Bruta<br>Estudio</span><span class="t" style="left:39%;top:11%">Branding +<br>Campañas</span><span class="t" style="left:68%;top:11%">Labre Yahel<br>Sandoval Brito</span>
+        <span class="sym" style="left:38%;top:47%;width:20cqw;opacity:.55">${symSVG("idea")}</span>
+        <span class="wm1 big" style="top:40%">Piedra Brut<span class="cutA">a</span>.</span>
+        <span class="t sub" style="left:46%;top:53%">— Marcas talladas a mano.</span>
+        <span class="t" style="left:9%;top:68%">Temporada 2026<br>Agenda abierta</span><span class="t" style="left:54%;top:68%">Identidad +<br>Naming</span>
+        <span class="t" style="left:30%;top:80%">Fotografía<br>+ Video</span><span class="t" style="left:64%;top:78%">Redes sociales<br>Sitios web<br>Empaques<br>+ Más</span>` },
+      { mood: "papelverde", seed: 42, cap: "Lista: Bruta corre como insignia y servicios centrados", html: `
+        <span class="badge">${badgeSVG()}</span>
+        <span class="list" style="top:36%">Branding<br>Naming<br>Campañas • Redes<br>Fotografía • Video<br>Sitios web</span>
+        <span class="t mono" style="left:0;right:0;top:78%;text-align:center">Agenda 2026 abierta • Escríbenos<br>Identidad para negocios de todos los tamaños</span>
+        <span class="wm1 tiny">Piedra Brut<span class="cutA">a</span></span>` },
+      { mood: "niebla", seed: 43, cap: "Servicios: nombre y año arriba, lista y contacto", html: `
+        <span class="t hd" style="left:7%;top:9%">Piedra Brut<span class="cutA">a</span></span><span class="t hd" style="right:7%;top:9%">2026</span>
+        <span class="t reg" style="left:35%;top:46%">Dirección de arte<br>Branding<br>Campañas publicitarias<br>Redes sociales + sitio web</span>
+        <span class="t reg" style="left:35%;top:70%">Hablemos<br>hola@piedrabruta.mx</span>
+        <span class="sym" style="left:auto;right:7%;top:auto;bottom:6%;width:11cqw;transform:none">${symSVG("sorpresa")}</span>` },
+      { mood: "kraft", seed: 44, cap: "Repetición: el nombre como patrón, con acento en cursiva", html: `
+        <div class="rep">${[0, 1, 2].map((i) => `<div style="transform:rotate(${[-2, 1.5, -1][i]}deg)"><span class="wm1 rbig">Piedra Brut<span class="cutA">a</span></span><span class="t rtag">Estudio donde la idea <i>se vuelve</i> marca</span><span class="t mono">Branding &nbsp;//&nbsp; Campañas &nbsp;//&nbsp; Marcas</span><span class="t rtag">MX (2026)</span></div>`).join("")}</div>` },
+      { mood: "cantera", seed: 45, cap: "Derretida: el nombre se funde como los símbolos", html: `
+        <span class="t mono" style="left:0;right:0;top:5%;text-align:center;text-transform:none">piedra bruta presenta</span>
+        <span class="t" style="right:8%;top:20%;text-align:right">Temporada 2026<br>Identidad + Campañas<br>Agenda abierta</span>
+        <span class="melt" style="left:7%;right:7%;top:30%">${meltSVG()}</span>
+        <span class="t" style="left:8%;top:74%">Branding<br>Naming<br>Fotografía<br>Redes sociales<br>Sitios web</span>
+        <span class="t mono" style="left:0;right:0;bottom:5%;text-align:center;text-transform:none">hecho a mano por labre yahel sandoval brito</span>` },
+      { mood: "mar", seed: 46, cap: "Derretida sobre foto, con Bruta corre", html: `
+        <span class="melt" style="left:8%;right:8%;top:20%">${meltSVG()}</span>
+        <span class="sym" style="left:50%;top:70%;width:20cqw">${symSVG("corre")}</span>
+        <span class="t" style="left:0;right:0;bottom:6%;text-align:center">Marcas que se mueven</span>` },
+    ];
+    L.forEach((l) => {
+      const fig = document.createElement("figure"); fig.className = "ipwrap";
+      fig.innerHTML = `<div class="poster ip" data-mood="${l.mood}" data-seed="${l.seed}"><canvas></canvas>${l.html}</div><figcaption>${l.cap}</figcaption>`;
+      root.appendChild(fig);
+    });
+  }
+  function badgeSVG() {
+    return `<svg viewBox="0 0 200 200" aria-hidden="true" style="display:block;width:100%;height:auto;overflow:visible"><defs><path id="circ" d="M100 100 m-82 0 a82 82 0 1 1 164 0 a82 82 0 1 1 -164 0"/></defs>
+      <text fill="currentColor" font-size="15" letter-spacing="3" style="font-family:var(--mark);font-weight:600;text-transform:uppercase"><textPath href="#circ" startOffset="0">Piedra Bruta • Estudio • 2026 • Hecho a mano •</textPath></text>
+      <g transform="translate(40 40) scale(.6)">${symSVG("corre").replace(/^<svg[^>]*>|<\/svg>$/g, "")}</g></svg>`;
+  }
+
+  function buildStatic() {
+    const sy = document.getElementById("symbols");
+    SYMBOLS.forEach((s, i) => {
+      const d = document.createElement("div"); d.className = "scard";
+      d.innerHTML = `<div class="tile${i % 4 === 3 ? " light" : ""}"><span class="sym">${symSVG(s.id)}</span></div><h3>${s.name}</h3><p>${s.note}</p>`;
+      sy.appendChild(d);
+    });
+    const stackHTML = `<span>Piedra</span><span>Brut<span class="cutA">a</span></span>`, oneHTML = `Piedra Brut<span class="cutA">a</span>`;
+    document.getElementById("marks").innerHTML = `
+      <div class="mcard"><div class="plate"><span class="line"><span class="sym">${symSVG("bruta")}</span><span class="wm1">${oneHTML}</span></span></div><span class="caption">Principal: Bruta y el nombre en una línea</span></div>
+      <div class="mcard"><div class="plate light"><span class="stack">${stackHTML}</span></div><span class="caption">En dos líneas, por palabra</span></div>
+      <div class="mcard"><div class="plate"><span class="wm1" style="font-size:clamp(26px,3.2vw,38px)">${oneHTML}</span></div><span class="caption">Solo el nombre</span></div>
+      <div class="mcard"><div class="plate"><span class="melt" style="width:92%">${meltSVG()}</span></div><span class="caption">Derretida: para carteles, eventos y portadas</span></div>
+      <div class="mcard"><div class="plate light"><span class="line" style="flex-direction:column;gap:.2em;font-size:clamp(26px,3.2vw,36px)"><span class="sym" style="width:2.2em">${symSVG("corre")}</span><span class="wm1">${oneHTML}</span></span></div><span class="caption">Con Bruta corre, para campañas y eventos</span></div>
+      <div class="mcard"><div class="plate cutdemo"><span class="wm1" style="font-size:clamp(90px,12vw,150px)">Brut<span class="cutA">a</span></span></div><span class="caption">El corte: la A pierde la esquina, como la piedra</span></div>`;
+    document.getElementById("type-melt").innerHTML = meltSVG();
+    const mo = document.getElementById("moods");
+    MOODS.forEach((m, i) => {
+      const d = document.createElement("div"); d.className = "mood";
+      d.innerHTML = `<div class="poster"><canvas></canvas><span class="sym" style="--rot:${[-8, 0, 12, -4, 6, -10][i % 6]}deg">${symSVG(SYMBOLS[i % SYMBOLS.length].id)}</span></div>
+        <div class="swatches">${m.sw.map((c) => `<i style="background:${c}" title="${c}"></i>`).join("")}</div><h3>${m.name}</h3><p>${m.note}</p><code>${m.sw.join(" · ").toUpperCase()}</code>`;
+      mo.appendChild(d);
+    });
+    const po = document.getElementById("posters");
+    [["fogata", "bruta", 2, ""], ["mar", "", 3, "wm"], ["cempasuchil", "idea", 4, ""], ["desierto", "salta", 5, ""], ["carretera", "saluda", 6, ""], ["niebla", "duerme", 7, ""], ["atardecer", "", 8, "wm"], ["bugambilia", "sorpresa", 9, ""], ["cantera", "baila", 10, ""], ["tierra", "molcajete", 11, ""], ["agave", "", 12, "wm"], ["monte", "bruta", 13, ""]].forEach(([mood, sym, seed, kind]) => {
+      const d = document.createElement("div"); d.className = "poster"; d.dataset.mood = mood; d.dataset.seed = seed;
+      d.innerHTML = `<canvas></canvas>${sym ? `<span class="sym" style="--rot:${(seed % 3 - 1) * 8}deg">${symSVG(sym)}</span>` : `<span class="center-wm stack">${stackHTML}</span>`}<span class="corner wm1 small">${oneHTML}</span>`;
+      po.appendChild(d);
+    });
+    const ig = document.getElementById("ig");
+    [["noche", "bruta"], ["fogata", "idea"], ["mar", "saluda"], ["desierto", "salta"], ["noche", "sorpresa"], ["bugambilia", "baila"], ["niebla", "duerme"], ["noche", "wm"], ["atardecer", "molcajete"]].forEach(([mood, sym], i) => {
+      const d = document.createElement("div"); d.className = "poster"; d.style.aspectRatio = "1";
+      if (mood !== "noche") { d.dataset.mood = mood; d.dataset.seed = 20 + i; d.innerHTML = "<canvas></canvas>"; }
+      d.innerHTML += sym === "wm" ? `<span class="center-wm stack" style="font-size:clamp(14px,3vw,24px)">${stackHTML}</span>` : sym ? `<span class="sym">${symSVG(sym)}</span>` : `<span class="center-wm stack" style="font-size:clamp(12px,2.4vw,20px)">${stackHTML}</span>`;
+      ig.appendChild(d);
+    });
+    document.querySelector("#site .sym").innerHTML = symSVG("bruta");
+    document.querySelector(".bc.front .sym").innerHTML = symSVG("bruta");
+    document.querySelector("#bc-back .sym").innerHTML = symSVG("sorpresa");
+  }
+  function paintStatic() {
+    document.querySelectorAll(".mood .poster canvas").forEach((c, i) => drawPhoto(c, MOODS[i].id, 11 + i));
+    document.querySelectorAll("[data-mood]").forEach((d) => drawPhoto(d.querySelector("canvas"), d.dataset.mood, +d.dataset.seed));
+    drawPhoto(document.querySelector("#site canvas"), "monte", 30);
+    drawPhoto(document.querySelector("#bc-back canvas"), "tierra", 31);
+  }
+
+  function update() { save(); applyFont(); renderChips(); renderHero(); }
+  window.PB = { symSVG, meltSVG, drawPhoto, SYMBOLS, MOODS };
+  function rebuild() {
+    ["symbols", "moods", "posters", "ig", "infoposters"].forEach((id) => (document.getElementById(id).innerHTML = ""));
+    infoPosters(); buildStatic(); paintStatic();
+  }
+  infoPosters();
+  buildStatic();
+  update();
+  paintStatic();
+  let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { renderHero(); paintStatic(); }, 200); });
+})();
+</script>
