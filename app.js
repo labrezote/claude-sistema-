@@ -11,7 +11,7 @@ window.PB_DATA = {
     { photo: "", title: "Identidad para organizadora de eventos", client: "Organizadora de música electrónica", category: "branding", mood: "fogata", sym: "baila", year: "2025", summary: "Branding para eventos de música electrónica. Descripción pendiente.", metric: "" },
     { photo: "", title: "Identidad para despacho de abogados", client: "Despacho jurídico", category: "branding", mood: "papelnoche", sym: "bruta", year: "2025", summary: "Branding para despacho de abogados. Descripción pendiente.", metric: "" },
     { photo: "", title: "Pilón: tarjetas de lealtad para Apple y Google Wallet", client: "Pilón · pilon.app", category: "software", mood: "agave", sym: "idea", year: "2026",
-      url: "https://www.pilon.app",
+      url: "https://www.pilon.app", interactive: "pilon",
       summary: "Pilón es un software mexicano de tarjetas de lealtad digitales. El negocio pone un QR en caja; el cliente lo escanea, deja su nombre y guarda su tarjeta de sellos o puntos en Apple Wallet o Google Wallet, sin descargar ninguna app. Hicimos la marca completa y el producto: naming, identidad, sitio web, panel del negocio, tarjetas y notificaciones. Hoy más de 150 negocios usan Pilón.",
       metric: "+150 negocios usando Pilón",
       details: [["Rol", "Naming, branding, producto y web"], ["Plataforma", "Apple Wallet · Google Wallet"], ["Para", "Cafeterías, taquerías, barberías, gyms y más"], ["Planes", "Gratis · Esencial · Pro"]],
@@ -24,7 +24,7 @@ window.PB_DATA = {
         ["Campañas sin anuncios", "Promos como «¿Martes flojo? Mándales un 2x1» llegan como notificación a quien tiene la tarjeta."],
         ["Pili, asistente con IA", "Responde dudas sobre los números del negocio y propone ideas de campañas."],
       ],
-      gallery: [["assets/pilon/brand-board.webp", "Brand board: logotipo, isotipo, paleta y tipografía"], ["assets/pilon/aplicaciones.webp", "Aplicaciones: sitio web, panel del negocio, notificación, ícono de app y elementos gráficos"]] },
+      gallery: [["assets/pilon/brand-board.webp", "Brand board original: logotipo, isotipo, paleta y tipografía"], ["assets/pilon/aplicaciones.webp", "Aplicaciones: sitio web, panel del negocio, notificación, ícono de app y elementos gráficos"]] },
     { photo: "", title: "Branding para dentistas", client: "Consultorio dental", category: "branding", mood: "niebla", sym: "guino", year: "2025", summary: "Identidad para consultorio dental. Descripción pendiente.", metric: "" },
     { photo: "", title: "Marca de miel", client: "Miel", category: "marcas", mood: "cempasuchil", sym: "enamorada", year: "2025", summary: "Marca para producto de miel. Descripción pendiente.", metric: "" },
     { photo: "", title: "Marca de mole", client: "Mole", category: "marcas", mood: "tierra", sym: "molcajete", year: "2025", summary: "Marca para producto de mole. Descripción pendiente.", metric: "" },
@@ -117,6 +117,8 @@ function openCase(i) {
   const link = document.getElementById("case-link"); link.hidden = !p.url; if (p.url) { link.href = p.url; link.textContent = "Visitar " + p.url.replace(/^https?:\/\/(www\.)?/, "") + " ↗"; }
   const feats = document.getElementById("case-features"); feats.hidden = !p.features;
   feats.innerHTML = (p.features || []).map(([t, d], k) => `<li><span class="mono">${String(k + 1).padStart(2, "0")}</span><h4>${t}</h4><p>${d}</p></li>`).join("");
+  const ix = document.getElementById("case-interactive");
+  if (p.interactive && window.CaseInteractive && window.CaseInteractive[p.interactive]) window.CaseInteractive[p.interactive](ix); else ix.innerHTML = "";
   document.getElementById("case-gallery").innerHTML = p.gallery
     ? p.gallery.map(([src, cap]) => `<figure><img src="${src}" alt="${cap}" loading="lazy"><figcaption class="mono">${cap}</figcaption></figure>`).join("")
     : `<div class="slots mono"><div class="slot">Imagen 01</div><div class="slot">Imagen 02</div><div class="slot">Resultados</div></div>`;
