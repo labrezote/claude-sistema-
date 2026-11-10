@@ -1,0 +1,50 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..700&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet"><link rel="stylesheet" href="base.css">
+<title>Piedra Bruta — Opción D: Papel</title>
+<style>
+:root{color-scheme:light}
+body{background:#ece6d8;color:var(--noche)}
+.paper{position:fixed;inset:0;z-index:-1;pointer-events:none}
+.top{display:flex;justify-content:space-between;align-items:center;padding-top:18px;padding-bottom:18px;border-bottom:1px solid #cfc7b4}
+.top nav{display:flex;gap:18px}
+.hero{display:flex;flex-direction:column;align-items:center;text-align:center;gap:18px;padding-top:9vh;padding-bottom:10vh}
+.hero .sym{width:clamp(150px,20vw,240px)}
+.hero h1{font-size:clamp(56px,12vw,180px);line-height:.86}
+.hero p{max-width:40ch;font-size:clamp(17px,1.8vw,21px);line-height:1.45}
+.hero p i{font-family:"Instrument Serif",serif;font-size:1.2em}
+.marquee{overflow:hidden;border-block:1px solid var(--noche);padding:14px 0;white-space:nowrap}
+.marquee div{display:inline-flex;gap:40px;animation:mq 30s linear infinite;align-items:center}
+.marquee span.wm{font-size:22px}
+@keyframes mq{to{transform:translateX(-50%)}}
+.works{max-width:1240px;margin:0 auto;padding-top:80px;padding-bottom:80px}
+.works h2{font-size:clamp(28px,4vw,48px);margin-bottom:28px;text-align:center}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,280px),1fr));gap:28px 18px}
+.card .cv{position:relative;aspect-ratio:4/5;overflow:hidden}
+.card .cv .sym{position:absolute;left:50%;top:46%;width:40%;transform:translate(-50%,-50%);color:var(--hueso)}
+.card h3{font-family:"Archivo";font-stretch:105%;font-weight:600;text-transform:uppercase;font-size:18px;margin-top:12px}
+.card p{color:#6d6656}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:0;border-top:1px solid var(--noche);max-width:1240px;margin:0 auto}
+.steps li{padding:26px 20px;border-right:1px solid #cfc7b4;display:flex;flex-direction:column;gap:8px;align-items:center;text-align:center}
+.steps .sym{width:110px}
+.steps h3{font-family:"Archivo";font-stretch:110%;font-weight:600;text-transform:uppercase}
+.contact{background:var(--noche);color:var(--hueso);display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;padding-top:90px;padding-bottom:90px;margin-top:80px}
+.contact .sym{width:140px}
+.contact h2{font-size:clamp(48px,9vw,110px)}
+@media (prefers-reduced-motion:reduce){.marquee div{animation:none}}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs id="fx"></defs></svg>
+<header class="top gut"><nav class="mono"><a href="#trabajos">Trabajos</a><a href="#proceso">Proceso</a></nav><span class="wm" style="font-size:15px;letter-spacing:.06em">Piedra Brut<span class="cutA">a</span></span><nav class="mono"><a href="#contacto">Contacto</a></nav></header>
+<section class="hero gut"><span class="sym" data-s="bruta"></span><h1 class="wm">Piedra<br>Brut<span class="cutA">a</span></h1><p>Estudio donde la idea <i>se vuelve</i> marca. Branding, campañas y piezas digitales talladas a mano.</p><p class="mono">Labre Yahel Sandoval Brito</p></section>
+<div class="marquee" aria-hidden="true"><div id="mq"></div></div>
+<section class="works gut" id="trabajos"><h2 class="wm">Trabajos</h2><div class="cards" id="cards"></div></section>
+<ol class="steps gut" id="proceso"></ol>
+<section class="contact gut" id="contacto"><span class="sym" data-s="saluda"></span><h2 class="wm">Hablemos</h2><p class="mono">hola@piedrabruta.mx · @piedrabruta</p></section>
+<script src="../marca.js"></script><script src="comun.js"></script>
+<script>
+const { PROJECTS, CATEGORIES } = PB_DATA, M = window.Marca;
+document.querySelectorAll("[data-s]").forEach((e) => (e.innerHTML = M.symSVG(e.dataset.s)));
+const unit = `<span class="wm">Piedra Bruta</span><span class="mono">Branding // Campañas // Marcas</span><span class="sym" style="width:34px">${M.symSVG("corre")}</span>`;
+document.getElementById("mq").innerHTML = unit.repeat(8);
+document.getElementById("cards").innerHTML = PROJECTS.map((p, i) => `<a class="card" href="#"><span class="cv onphoto" data-mood="${p.mood}" data-seed="${10 + i}" style="display:block"><canvas class="photo"></canvas><span class="sym">${M.symSVG(p.sym)}</span></span><h3>${p.title}</h3><p class="mono">${CATEGORIES[p.category]} · ${p.client}</p></a>`).join("");
+document.getElementById("proceso").innerHTML = [["saluda", "Escuchar"], ["idea", "Idear"], ["talla", "Tallar"], ["salta", "Lanzar"]].map(([s, t], i) => `<li><span class="mono">0${i + 1}</span><span class="sym">${M.symSVG(s)}</span><h3>${t}</h3></li>`).join("");
+paintAll();
+</script></body></html>

@@ -1,0 +1,56 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..700&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet"><link rel="stylesheet" href="base.css">
+<title>Piedra Bruta — Opción C: Manifiesto</title>
+<style>
+body{background:var(--noche);color:var(--hueso)}
+.hero{position:relative;min-height:100svh;overflow:hidden;container-type:inline-size}
+.t{position:absolute;font-family:"Archivo",sans-serif;font-weight:600;text-transform:uppercase;font-size:clamp(11px,1.15vw,15px);line-height:1.1;z-index:1}
+.t.m{font-family:"IBM Plex Mono",monospace;font-weight:400;letter-spacing:.06em}
+.name{position:absolute;left:0;right:0;top:44%;transform:translateY(-50%);text-align:center;font-size:clamp(44px,10.5vw,170px);line-height:.9;z-index:1;white-space:nowrap}
+.hero .bsym{position:absolute;left:50%;top:44%;width:clamp(120px,15vw,230px);transform:translate(-50%,-125%);z-index:1}
+.sub{text-shadow:0 1px 12px rgba(0,0,0,.55);position:absolute;left:0;right:0;top:calc(44% + clamp(30px,6vw,96px));text-align:center;z-index:1;font-family:"Archivo";font-size:clamp(15px,1.6vw,22px)}
+.sub i{font-family:"Instrument Serif",serif;font-style:italic;font-size:1.25em;text-transform:none}
+.index{max-width:1240px;margin:0 auto;padding-top:96px;padding-bottom:96px}
+.index h2{font-size:clamp(28px,4vw,48px);margin-bottom:24px}
+.row{display:grid;grid-template-columns:60px 1fr 160px 120px;gap:16px;align-items:center;padding:18px 0;border-top:1px solid var(--linea);position:relative}
+.row:last-child{border-bottom:1px solid var(--linea)}
+.row .ti{font-family:"Archivo";font-stretch:105%;font-weight:600;text-transform:uppercase;font-size:clamp(16px,2vw,24px);letter-spacing:-.01em}
+.row .thumb{display:none}
+.row:hover .ti{padding-left:10px;transition:padding .2s}
+.preview{position:fixed;width:260px;aspect-ratio:4/5;pointer-events:none;z-index:9;opacity:0;transition:opacity .2s;overflow:hidden}
+.preview .sym{position:absolute;left:50%;top:46%;width:42%;transform:translate(-50%,-50%)}
+.preview.on{opacity:1}
+@media (max-width:760px){.row{grid-template-columns:70px 1fr;}.row .cat,.row .go{display:none}.row .thumb{display:block;position:relative;aspect-ratio:1;overflow:hidden}.row .thumb .sym{position:absolute;left:50%;top:50%;width:60%;transform:translate(-50%,-50%)}.t.hide-m{display:none}}
+.end{min-height:70svh;position:relative;overflow:hidden;display:grid;place-items:center;text-align:center}
+.end .in{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:12px}
+.end h2{font-size:clamp(48px,9vw,120px)}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs id="fx"></defs></svg>
+<section class="hero onphoto" data-mood="niebla" data-seed="3"><canvas class="photo"></canvas>
+  <span class="t" style="left:6%;top:6%">Piedra Bruta<br>Estudio</span>
+  <span class="t hide-m" style="left:38%;top:6%">Branding +<br>Campañas</span>
+  <span class="t" style="right:6%;top:6%;text-align:right"><a href="#trabajos">Trabajos</a><br><a href="#contacto">Contacto</a></span>
+  <span class="bsym sym" data-s="bruta"></span>
+  <h1 class="name wm">Piedra Brut<span class="cutA">a</span>.</h1>
+  <p class="sub">— Marcas talladas <i>a mano</i>.</p>
+  <span class="t m" style="left:6%;bottom:12%">Temporada 2026<br>Agenda abierta</span>
+  <span class="t hide-m" style="left:38%;bottom:16%">Identidad +<br>Naming</span>
+  <span class="t m hide-m" style="left:38%;bottom:6%">Labre Yahel Sandoval Brito</span>
+  <span class="t" style="right:6%;bottom:8%;text-align:right" id="svc"></span>
+</section>
+<section class="index gut" id="trabajos"><h2 class="wm">Trabajos</h2><div id="rows"></div></section>
+<div class="preview onphoto" id="pv"><canvas class="photo"></canvas><span class="sym"></span></div>
+<section class="end onphoto" id="contacto" data-mood="fogata" data-seed="4"><canvas class="photo"></canvas><div class="in"><span class="sym" data-s="saluda" style="width:150px"></span><h2 class="wm">Hablemos</h2><p class="mono">hola@piedrabruta.mx · @piedrabruta</p></div></section>
+<script src="../marca.js"></script><script src="comun.js"></script>
+<script>
+const { PROJECTS, CATEGORIES, SERVICES } = PB_DATA, M = window.Marca;
+document.querySelectorAll("[data-s]").forEach((e) => (e.innerHTML = M.symSVG(e.dataset.s)));
+document.getElementById("svc").innerHTML = SERVICES.slice(2).join("<br>");
+document.getElementById("rows").innerHTML = PROJECTS.map((p, i) => `<a class="row" href="#" data-i="${i}"><span class="mono">${String(i + 1).padStart(2, "0")}</span><span class="thumb onphoto" data-mood="${p.mood}" data-seed="${10 + i}"><canvas class="photo"></canvas><span class="sym">${M.symSVG(p.sym)}</span></span><span><span class="ti">${p.title}</span><br><span class="mono" style="color:var(--ceniza)">${p.client}</span></span><span class="mono cat">${CATEGORIES[p.category]}</span><span class="mono go">Ver →</span></a>`).join("");
+const pv = document.getElementById("pv");
+document.querySelectorAll(".row").forEach((r) => {
+  r.addEventListener("mouseenter", () => { const p = PROJECTS[+r.dataset.i]; pv.querySelector(".sym").innerHTML = M.symSVG(p.sym); pv.classList.add("on"); M.drawPhoto(pv.querySelector("canvas"), p.mood, 10 + +r.dataset.i); M.fixStrokes(pv); });
+  r.addEventListener("mouseleave", () => pv.classList.remove("on"));
+  r.addEventListener("mousemove", (e) => { pv.style.left = e.clientX + 24 + "px"; pv.style.top = e.clientY - 160 + "px"; });
+});
+paintAll();
+</script></body></html>

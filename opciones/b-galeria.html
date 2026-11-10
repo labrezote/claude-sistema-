@@ -1,0 +1,49 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..700&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet"><link rel="stylesheet" href="base.css">
+<title>Piedra Bruta — Opción B: Galería</title>
+<style>
+body{background:var(--noche);color:var(--hueso)}
+.top{position:fixed;inset:0 0 auto;z-index:5;display:flex;justify-content:space-between;align-items:center;padding-top:16px;padding-bottom:16px;background:linear-gradient(rgba(14,14,12,.85),rgba(14,14,12,0))}
+.top .logo{font-size:15px;letter-spacing:.06em}
+.top nav{display:flex;gap:18px}
+.mosaic{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;min-height:100svh;padding-top:0}
+.tile{position:relative;overflow:hidden;min-height:46svh;display:block}
+.tile .sym{position:absolute;left:50%;top:46%;width:40%;transform:translate(-50%,-50%);transition:transform .3s}
+.tile .t{position:absolute;left:0;right:0;bottom:16px;text-align:center;font-size:11px;padding:0 10px}
+.tile:hover .sym{transform:translate(-50%,-56%) rotate(-5deg)}
+.center{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:4;pointer-events:none;width:min(86vw,520px);display:flex;flex-direction:column;align-items:center;gap:14px;padding:30px 28px;background:rgba(14,14,12,.9);border:1px solid var(--linea);transition:opacity .3s}
+.center .sym{width:110px}
+.center.hide{opacity:0}
+.about{max-width:1100px;margin:0 auto;padding-top:110px;padding-bottom:110px;display:grid;gap:28px}
+.about h2{font-size:clamp(30px,5vw,64px);line-height:1}
+.about p{max-width:60ch;color:#d8d3c7;font-size:18px;line-height:1.55}
+.about ul{display:flex;flex-wrap:wrap;gap:10px}
+.about li{border:1px solid var(--linea);padding:8px 12px}
+.foot{display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;padding-top:80px;padding-bottom:80px;border-top:1px solid var(--linea)}
+.foot .sym{width:140px}
+.foot h2{font-size:clamp(44px,8vw,96px)}
+@media (max-width:900px){.mosaic{grid-template-columns:repeat(2,1fr)}.tile{min-height:42svh}.center{position:absolute;top:50svh}}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs id="fx"></defs></svg>
+<header class="top gut"><nav class="mono"><a href="#trabajos">Trabajos</a><a href="#estudio">Estudio</a></nav><span class="logo wm">Piedra Brut<span class="cutA">a</span></span><nav class="mono"><a href="#contacto">Contacto</a></nav></header>
+<main>
+  <section class="mosaic" id="trabajos"></section>
+  <div class="center" id="center"><span class="sym" data-s="bruta"></span><span class="melt" style="width:100%"></span><span class="mono">Branding · Campañas · Marcas</span></div>
+  <section class="about gut" id="estudio">
+    <p class="mono" style="color:var(--ceniza)">Estudio</p>
+    <h2 class="wm">Marcas talladas a mano sobre piedra bruta.</h2>
+    <p>Identidad, campañas y piezas digitales para negocios de todos los tamaños. Piedra Bruta es el estudio de Labre Yahel Sandoval Brito, con formación en mercadotecnia y publicidad.</p>
+    <ul class="mono" id="services"></ul>
+  </section>
+  <section class="foot gut" id="contacto"><span class="sym" data-s="saluda"></span><h2 class="wm">Hablemos</h2><p class="mono">hola@piedrabruta.mx</p></section>
+</main>
+<script src="../marca.js"></script><script src="comun.js"></script>
+<script>
+const { PROJECTS, CATEGORIES, SERVICES } = PB_DATA, M = window.Marca;
+document.getElementById("trabajos").innerHTML = PROJECTS.map((p, i) => `<a class="tile onphoto" href="#" data-mood="${p.mood}" data-seed="${10 + i}"><canvas class="photo"></canvas><span class="sym">${M.symSVG(p.sym)}</span><span class="t mono">${p.title}</span></a>`).join("");
+document.querySelectorAll("[data-s]").forEach((e) => (e.innerHTML = M.symSVG(e.dataset.s)));
+document.querySelector(".center .melt").innerHTML = M.meltSVG(null, { level: "media", outline: false });
+document.getElementById("services").innerHTML = SERVICES.map((s) => `<li>${s}</li>`).join("");
+const c = document.getElementById("center");
+addEventListener("scroll", () => c.classList.toggle("hide", scrollY > innerHeight * .35), { passive: true });
+paintAll();
+</script></body></html>
