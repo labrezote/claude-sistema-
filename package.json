@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/labrezote/claude-sistema-#readme",
   "dependencies": {
-    "@material/web": "2.5.0"
+    "@material/web": "2.5.0",
+    "@paper-design/shaders": "0.0.82"
   }
 }
