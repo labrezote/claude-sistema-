@@ -49,7 +49,7 @@
           <figure><div class="sr-plate light"><span class="sr-s" style="background:#0b0b0b"></span><span class="sr-wm sm" style="background:#0b0b0b"></span></div><figcaption>Positivo</figcaption></figure>
           <figure><div class="sr-plate dark"><span class="sr-s big" style="background:#fff"></span></div><figcaption>Isotipo · S que se lee como rayo y como puerta</figcaption></figure>
         </div>
-        <p class="sr-note">Cada evento reinterpreta la misma S con una textura propia, un color y un ambiente. El logotipo, el orden del flyer y la tipografía espaciada se mantienen, así la serie se reconoce aunque cambie todo lo demás.</p>
+        <p class="sr-note">La S tiene volumen propio: se extruye y bisela a partir del contorno del logo, y cambia de material en cada vuelta. Arrástrala para girarla. En los flyers, cada evento reinterpreta la misma S con una textura propia, un color y un ambiente. El logotipo, el orden del flyer y la tipografía espaciada se mantienen, así la serie se reconoce aunque cambie todo lo demás.</p>
       </section>
 
       <section class="sr-sec">
@@ -92,24 +92,40 @@
           <ul class="head">${e.head.map((n) => `<li${hl(n)}>${n}</li>`).join("")}</ul>
           <ul class="sup">${e.support.map((n) => `<li${hl(n)}>${n}</li>`).join("")}</ul>
           <span class="sr-k">Sede</span><p>Santomar</p>
-          <span class="sr-k">Textura de la S</span><p>${e.texture}</p>
-          <button type="button" class="sr-use" id="sr-use">Ver esta S en 3D ↑</button>
+          <span class="sr-k">Textura del flyer</span><p>${e.texture}</p>
         </div>`;
-      $("#sr-use").addEventListener("click", () => { setTexture(i); stage.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" }); });
     }
     function markArtist() {
       root.querySelectorAll("#sr-cloud button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.a === artist)));
       root.querySelectorAll(".sr-thumb").forEach((t) => t.classList.toggle("dim", !!artist && !artists[artist].has(+t.dataset.i)));
       showEvent(artist && !artists[artist].has(sel) ? [...artists[artist]][0] : sel);
     }
-    spin.addEventListener("animationiteration", () => setTexture(cur + 1));
-    $("#sr-play").addEventListener("click", () => { playing = !playing; spin.classList.toggle("paused", !playing); $("#sr-play").textContent = playing ? "Pausar" : "Girar"; spin.classList.remove("still"); });
-    $("#sr-next").addEventListener("click", () => setTexture(cur + 1));
-    $("#sr-prev").addEventListener("click", () => setTexture(cur - 1));
+    // S en 3D con volumen (Three.js). Si el navegador no tiene WebGL, queda la versión CSS.
+    const scene = $(".sr-scene");
+    const gl = window.SR3D && window.SR3D.mount(scene, { still: reduce, onChange: (k, t) => {
+      stage.style.setProperty("--tone", t.tone); stage.style.setProperty("--glow", t.glow);
+      $("#sr-sub").textContent = t.name;
+      const T = window.SR3D.TEXTURES;
+      $("#sr-tex").innerHTML = `<b>${String(k + 1).padStart(2, "0")} / ${String(T.length).padStart(2, "0")}</b> Textura · ${t.name}`;
+      $("#sr-dots").innerHTML = T.map((x, j) => `<button type="button" data-k="${j}" aria-label="Textura ${x.name}" aria-pressed="${j === k}" style="--t:${x.tone}"></button>`).join("");
+      $("#sr-dots").querySelectorAll("button").forEach((b) => b.addEventListener("click", () => gl.go(+b.dataset.k)));
+    } });
+    if (gl) {
+      scene.classList.add("is-gl");
+      $("#sr-play").addEventListener("click", () => { playing = !playing; gl.play(playing); $("#sr-play").textContent = playing ? "Pausar" : "Girar"; });
+      $("#sr-next").addEventListener("click", () => gl.next());
+      $("#sr-prev").addEventListener("click", () => gl.prev());
+    } else {
+      spin.addEventListener("animationiteration", () => setTexture(cur + 1));
+      $("#sr-play").addEventListener("click", () => { playing = !playing; spin.classList.toggle("paused", !playing); $("#sr-play").textContent = playing ? "Pausar" : "Girar"; spin.classList.remove("still"); });
+      $("#sr-next").addEventListener("click", () => setTexture(cur + 1));
+      $("#sr-prev").addEventListener("click", () => setTexture(cur - 1));
+    }
     root.querySelectorAll(".sr-thumb").forEach((t) => t.addEventListener("click", () => showEvent(+t.dataset.i)));
     root.querySelectorAll("#sr-cloud button").forEach((b) => b.addEventListener("click", () => { artist = artist === b.dataset.a ? null : b.dataset.a; markArtist(); }));
     if (!playing) spin.classList.add("paused");
-    setTexture(cur); showEvent(sel);
+    if (!gl) setTexture(cur);
+    showEvent(sel);
   }
   window.CaseInteractive = Object.assign(window.CaseInteractive || {}, { secretroom: render });
 })();

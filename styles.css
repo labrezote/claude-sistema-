@@ -397,3 +397,9 @@ img.photo{object-position:center top}
 .sr-sec>*{min-width:0;max-width:100%}
 .case .body{grid-template-columns:minmax(0,1fr)}
 .sr-face{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+
+.sr-scene.is-gl{perspective:none}
+.sr-scene.is-gl .sr-spin{display:none}
+.sr-gl{position:absolute;inset:0;width:100%!important;height:100%!important;display:block;cursor:grab;touch-action:pan-y}
+.sr-gl:active{cursor:grabbing}
+.sr-scene{min-height:clamp(320px,48vh,520px)}
