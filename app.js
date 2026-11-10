@@ -17,7 +17,7 @@ window.PB_DATA = {
     { photo: "", title: "Branding para entrenador fitness", client: "Entrenador fitness", category: "branding", mood: "desierto", sym: "corre", year: "2025", summary: "Identidad para entrenador fitness. Descripción pendiente.", metric: "" },
     { photo: "", title: "Campaña JEEP", client: "JEEP", category: "campanas", mood: "carretera", sym: "salta", year: "2025", summary: "Campañas publicitarias para la marca JEEP. Descripción pendiente.", metric: "150+ autos vendidos" },
   ],
-  SERVICES: ["Branding e identidad", "Naming", "Campañas publicitarias", "Redes sociales", "Fotografía y video", "Sitios web y digital"],
+  SERVICES: ["Estrategia y marketing", "Branding e identidad", "Campañas publicitarias", "Redes sociales y contenido", "Fotografía y video", "Sitios web y digital"],
 };
 /* Pinta la foto de un contenedor: imagen real si tiene ruta en data-photo, si no la foto simulada */
 window.paintPhoto = (el, mood, seed, photo) => {
