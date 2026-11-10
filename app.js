@@ -12,8 +12,8 @@ window.PB_DATA = {
     { photo: "", title: "Identidad para despacho de abogados", client: "Despacho jurídico", category: "branding", mood: "papelnoche", sym: "bruta", year: "2025", summary: "Branding para despacho de abogados. Descripción pendiente.", metric: "" },
     { photo: "assets/pilon/portada.webp", title: "Pilón: tarjetas de lealtad para Apple y Google Wallet", client: "Pilón · pilon.app", category: "software", mood: "mar", sym: "idea", year: "2026",
       hideSym: true, url: "https://www.pilon.app",
-      summary: "Pilón es un software mexicano de tarjetas de lealtad digitales. El negocio pone un QR en caja; el cliente lo escanea, deja su nombre y guarda su tarjeta de sellos o puntos en Apple Wallet o Google Wallet, sin descargar ninguna app. Hicimos la marca completa y el producto: naming, identidad, sitio web, panel del negocio, tarjetas y notificaciones.",
-      metric: "",
+      summary: "Pilón es un software mexicano de tarjetas de lealtad digitales. El negocio pone un QR en caja; el cliente lo escanea, deja su nombre y guarda su tarjeta de sellos o puntos en Apple Wallet o Google Wallet, sin descargar ninguna app. Hicimos la marca completa y el producto: naming, identidad, sitio web, panel del negocio, tarjetas y notificaciones. Hoy más de 150 negocios usan Pilón.",
+      metric: "+150 negocios usando Pilón",
       details: [["Rol", "Naming, branding, producto y web"], ["Plataforma", "Apple Wallet · Google Wallet"], ["Para", "Cafeterías, taquerías, barberías, gyms y más"], ["Planes", "Gratis · Esencial · Pro"]],
       features: [
         ["Pon tu QR en caja", "El cliente escanea con la cámara, deja su nombre y guarda la tarjeta en su Wallet."],
