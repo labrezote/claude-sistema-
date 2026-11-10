@@ -8,7 +8,7 @@
 window.PB_DATA = {
   CATEGORIES: { branding: "Branding", campanas: "Campañas", marcas: "Marcas", software: "Software" },
   PROJECTS: [
-    { photo: "", title: "Secret Room: identidad para eventos de música electrónica", client: "Secret Room · @secretroom.mx", category: "branding", mood: "fogata", sym: "baila", year: "2026",
+    { photo: "", title: "Secret Room: identidad para eventos de música electrónica", client: "Secret Room · @secretroom.mx", category: "branding", mood: "fiesta", sym: "baila", year: "2026", cycle: true,
       url: "https://www.instagram.com/secretroom.mx/", interactive: "secretroom",
       summary: "Secret Room es una serie de eventos de música electrónica en Santomar. Diseñamos su identidad: una S que se lee como rayo y como puerta, y un sistema de flyers en el que cada fecha reinterpreta la S con su propia textura, color y ambiente: piedra maya, ámbar, planeta Tierra, metal orgánico y hierro forjado.",
       metric: "",
@@ -69,6 +69,7 @@ function setStage(p) {
   st.querySelector(".c").textContent = CATEGORIES[p.category];
   st.querySelector(".sym").innerHTML = p.hideSym ? "" : M.symSVG(p.sym);
   const me = st.querySelector(".metric"); me.hidden = !p.metric; me.textContent = p.metric;
+  st.dataset.mood = p.mood; st.dataset.seed = 10 + p.i; st.dataset.cycle = p.cycle ? 1 : ""; st.dataset.ck = 0;
   paintPhoto(st, p.mood, 10 + p.i, p.photo);
   document.getElementById("stage-client").textContent = p.client;
   document.getElementById("stage-year").textContent = p.year;
@@ -81,7 +82,7 @@ function render() {
   list = PROJECTS.map((p, i) => ({ ...p, i })).filter((p) => filter === "todos" || p.category === filter);
   document.getElementById("count").textContent = `(${list.length})`;
   document.getElementById("rows").innerHTML = list.map((p) => `<button class="row" type="button" data-i="${p.i}">
-      <span class="thumb onphoto" data-mood="${p.mood}" data-seed="${10 + p.i}" data-photo="${p.photo || ""}"><canvas class="photo"></canvas><span class="n mono">${N(p.i)}</span><span class="sym">${p.hideSym ? "" : M.symSVG(p.sym)}</span></span>
+      <span class="thumb onphoto" data-mood="${p.mood}" data-seed="${10 + p.i}" data-photo="${p.photo || ""}" data-cycle="${p.cycle ? 1 : ""}"><canvas class="photo"></canvas><span class="n mono">${N(p.i)}</span><span class="sym">${p.hideSym ? "" : M.symSVG(p.sym)}</span></span>
       <span class="mono num">${N(p.i)}</span>
       <span><span class="ti">${p.title}</span><span class="cl mono">${CATEGORIES[p.category]} · ${p.client}${p.metric ? " · " + p.metric : ""}</span></span>
       <span class="mono go">Ver caso →</span></button>`).join("");
@@ -90,7 +91,7 @@ function render() {
   let tail = 0; for (let k = list.length - 1; k >= 0 && !big[k]; k--) tail++;
   if (tail % 2) big[list.length - 1] = true;
   document.getElementById("grid-view").innerHTML = list.map((p, k) => `<button class="tile${big[k] ? " big" : ""}" type="button" data-i="${p.i}">
-      <span class="pv onphoto" data-mood="${p.mood}" data-seed="${10 + p.i}" data-photo="${p.photo || ""}"><canvas class="photo"></canvas><span class="n mono">${N(p.i)}</span><span class="c mono">${CATEGORIES[p.category]}</span><span class="sym">${p.hideSym ? "" : M.symSVG(p.sym)}</span><span class="tt">${p.title}</span></span>
+      <span class="pv onphoto" data-mood="${p.mood}" data-seed="${10 + p.i}" data-photo="${p.photo || ""}" data-cycle="${p.cycle ? 1 : ""}"><canvas class="photo"></canvas><span class="n mono">${N(p.i)}</span><span class="c mono">${CATEGORIES[p.category]}</span><span class="sym">${p.hideSym ? "" : M.symSVG(p.sym)}</span><span class="tt">${p.title}</span></span>
       <span class="meta mono"><span>${p.client}</span><span>${p.metric || p.year}</span></span></button>`).join("");
   document.querySelectorAll(".row, .tile").forEach((el) => {
     el.addEventListener("click", () => openCase(+el.dataset.i));
@@ -128,6 +129,7 @@ function openCase(i) {
   const cv = document.getElementById("case-cv"); cv.querySelector(".sym").innerHTML = p.hideSym ? "" : M.symSVG(p.sym);
   if (!cs.classList.contains("open")) lastFocus = document.activeElement;
   cs.classList.add("open"); cs.scrollTop = 0; document.body.style.overflow = "hidden";
+  cv.dataset.mood = p.mood; cv.dataset.seed = 40 + p.i; cv.dataset.cycle = p.cycle ? 1 : ""; cv.dataset.ck = 0;
   paintPhoto(cv, p.mood, 40 + p.i, p.photo); M.fixStrokes(cv);
   document.getElementById("case-close").focus();
 }
@@ -147,3 +149,16 @@ document.getElementById("steps").innerHTML = [["saluda", "Escuchar", "Conocemos 
 paintAll();
 let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => paintAll(), 250); });
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => M.fixStrokes(document));
+
+/* Portadas que cambian solas (data-cycle): cada 3 s aparece una nueva variación con fundido */
+if (!matchMedia("(prefers-reduced-motion: reduce)").matches) setInterval(() => {
+  document.querySelectorAll('[data-cycle="1"]').forEach((el) => {
+    const r = el.getBoundingClientRect(); if (!r.width || r.bottom < 0 || r.top > innerHeight) return;
+    const old = el.querySelector(".photo"); if (!old || old.tagName !== "CANVAS") return;
+    const k = (+el.dataset.ck || 0) + 1; el.dataset.ck = k;
+    const c = document.createElement("canvas"); c.className = "photo"; c.style.opacity = "0"; c.style.transition = "opacity .9s ease";
+    old.after(c); M.drawPhoto(c, el.dataset.mood, +el.dataset.seed + k * 7);
+    requestAnimationFrame(() => (c.style.opacity = "1"));
+    setTimeout(() => old.remove(), 950);
+  });
+}, 3000);
