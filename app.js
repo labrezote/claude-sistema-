@@ -28,8 +28,7 @@ window.PB_DATA = {
         ["Aviso de cercanía", "La tarjeta puede aparecer en la pantalla de bloqueo: «¡Andas cerca! Te faltan 2 sellos»."],
         ["Campañas sin anuncios", "Promos como «¿Martes flojo? Mándales un 2x1» llegan como notificación a quien tiene la tarjeta."],
         ["Pili, asistente con IA", "Responde dudas sobre los números del negocio y propone ideas de campañas."],
-      ],
-      gallery: [["assets/pilon/brand-board.webp", "Brand board original: logotipo, isotipo, paleta y tipografía"], ["assets/pilon/aplicaciones.webp", "Aplicaciones: sitio web, panel del negocio, notificación, ícono de app y elementos gráficos"]] },
+      ] },
     { photo: "", title: "Branding para dentistas", client: "Consultorio dental", category: "branding", mood: "niebla", sym: "guino", year: "2025", summary: "Identidad para consultorio dental. Descripción pendiente.", metric: "" },
     { photo: "", title: "Marca de miel", client: "Miel", category: "marcas", mood: "cempasuchil", sym: "enamorada", year: "2025", summary: "Marca para producto de miel. Descripción pendiente.", metric: "" },
     { photo: "", title: "Marca de mole", client: "Mole", category: "marcas", mood: "tierra", sym: "molcajete", year: "2025", summary: "Marca para producto de mole. Descripción pendiente.", metric: "" },
@@ -124,7 +123,7 @@ function openCase(i) {
   feats.innerHTML = (p.features || []).map(([t, d], k) => `<li><span class="mono">${String(k + 1).padStart(2, "0")}</span><h4>${t}</h4><p>${d}</p></li>`).join("");
   const ix = document.getElementById("case-interactive");
   if (p.interactive && window.CaseInteractive && window.CaseInteractive[p.interactive]) window.CaseInteractive[p.interactive](ix); else ix.innerHTML = "";
-  document.getElementById("case-gallery").innerHTML = p.gallery
+  document.getElementById("case-gallery").innerHTML = p.interactive && !p.gallery ? "" : p.gallery
     ? p.gallery.map(([src, cap]) => `<figure><img src="${src}" alt="${cap}" loading="lazy"><figcaption class="mono">${cap}</figcaption></figure>`).join("")
     : `<div class="slots mono"><div class="slot">Imagen 01</div><div class="slot">Imagen 02</div><div class="slot">Resultados</div></div>`;
   const cv = document.getElementById("case-cv"); cv.querySelector(".sym").innerHTML = p.hideSym ? "" : M.symSVG(p.sym);
