@@ -30,29 +30,81 @@
   const mix = (a, b, t) => a.map((v, i) => v + (b[i] - v) * t);
   const cl = (t) => Math.max(0, Math.min(1, t));
 
+  // ---------- texturas con relieve (color + altura + brillo) ----------
+  function canvas2(size, draw) { const c = document.createElement("canvas"); c.width = c.height = size; const x = c.getContext("2d"); draw(x, size); return c; }
+  function pixels(c) { return c.getContext("2d").getImageData(0, 0, c.width, c.height).data; }
+  function fromFn(size, fn) { return paint(size, fn); }
+  function voronoi(seed, n) {
+    let s = seed; const rnd = () => ((s = (s * 16807) % 2147483647) / 2147483647);
+    const P = []; for (let j = 0; j < n; j++) for (let i = 0; i < n; i++) P.push([(i + .15 + rnd() * .7) / n, (j + .15 + rnd() * .7) / n]);
+    return (u, v) => { let f1 = 9, f2 = 9, id = 0; const ci = Math.floor(u * n), cj = Math.floor(v * n);
+      for (let dj = -1; dj <= 1; dj++) for (let di = -1; di <= 1; di++) {
+        const i = ci + di, j = cj + dj, wi = ((i % n) + n) % n, wj = ((j % n) + n) % n, k = wj * n + wi;
+        const px = P[k][0] + (i - wi) / n, py = P[k][1] + (j - wj) / n, d = Math.hypot(u - px, v - py);
+        if (d < f1) { f2 = f1; f1 = d; id = k; } else if (d < f2) f2 = d; }
+      return [f1, f2, id]; };
+  }
+  const S = 512;
+  function greca(x, n) { // greca escalonada mesoamericana en mosaico
+    const t = n / 8; x.lineCap = "square"; x.lineJoin = "miter";
+    for (let gy = 0; gy < n; gy += t * 2) for (let gx = 0; gx < n; gx += t * 2) {
+      x.beginPath(); x.moveTo(gx + t * .2, gy + t * 1.8); x.lineTo(gx + t * .2, gy + t * .2); x.lineTo(gx + t * 1.8, gy + t * .2); x.lineTo(gx + t * 1.8, gy + t * 1.4);
+      x.lineTo(gx + t * .7, gy + t * 1.4); x.lineTo(gx + t * .7, gy + t * .75); x.lineTo(gx + t * 1.25, gy + t * .75); x.stroke(); }
+  }
+  function volutas(x, n, seed) { let s = seed; const rnd = () => ((s = (s * 16807) % 2147483647) / 2147483647);
+    for (let k = 0; k < 26; k++) { const cx = rnd() * n, cy = rnd() * n, r0 = 18 + rnd() * 34, rot = rnd() * 6.28; x.beginPath();
+      for (let t = 0; t < 1; t += .01) { const a = rot + t * 11, r = r0 * (1 - t * .85); const px = cx + Math.cos(a) * r, py = cy + Math.sin(a) * r; t ? x.lineTo(px, py) : x.moveTo(px, py); } x.stroke();
+      x.beginPath(); x.ellipse(cx + r0 * 1.3, cy, r0 * .5, r0 * .18, rot, 0, 7); x.fill(); } }
+
   const TEXTURES = [
-    { id: "cromo", name: "Cromo líquido", tone: "#c9d3df", glow: "rgba(170,190,215,.35)",
-      mat: { color: 0xeeeeee, metalness: 1, roughness: .05, clearcoat: 1, clearcoatRoughness: .05 } },
-    { id: "holo", name: "Holográfico", tone: "#b48cff", glow: "rgba(150,110,255,.4)",
-      tex: () => { const N = noise2(7); return paint(512, (u, v) => { const t = N(u * 2.2, v * 2.2, 4) * 2.4 + u * .8 + v * .5;
-        return [127 + 127 * Math.sin(6.28 * t), 127 + 127 * Math.sin(6.28 * t + 2.1), 127 + 127 * Math.sin(6.28 * t + 4.2)]; }); },
-      mat: { metalness: .85, roughness: .12, clearcoat: 1, clearcoatRoughness: .08 } },
-    { id: "obsidiana", name: "Obsidiana y oro", tone: "#d6a640", glow: "rgba(214,166,64,.35)",
-      tex: () => { const N = noise2(11); return paint(1024, (u, v) => { const n = N(u * 5, v * 5, 5), vein = Math.abs(N(u * 3 + 9, v * 3, 4) - .5);
-        const base = mix([8, 8, 10], [26, 24, 30], n); return vein < .018 ? mix([255, 214, 120], [190, 130, 40], vein / .018) : base; }); },
-      mat: { metalness: .45, roughness: .18, clearcoat: 1, clearcoatRoughness: .04 } },
-    { id: "marmol", name: "Mármol blanco", tone: "#e9e4dc", glow: "rgba(235,228,218,.3)",
-      tex: () => { const N = noise2(23); return paint(1024, (u, v) => { const t = Math.sin((u * 6 + v * 3 + N(u * 4, v * 4, 6) * 6) * 1.6);
-        const vein = Math.pow(1 - Math.abs(t), 9); return mix([242, 238, 232], [70, 72, 80], vein * .85); }); },
-      mat: { metalness: 0, roughness: .22, clearcoat: .8, clearcoatRoughness: .15 } },
-    { id: "lava", name: "Roca de lava", tone: "#ff5a1f", glow: "rgba(255,80,20,.5)", emissive: true,
-      tex: () => { const N = noise2(31); return paint(1024, (u, v) => { const c = Math.abs(N(u * 4, v * 4, 5) - .5), n = N(u * 14, v * 14, 3);
-        return c < .016 ? mix([255, 220, 110], [230, 60, 10], c / .016) : mix([16, 12, 12], [52, 40, 38], n); }); },
-      mat: { metalness: .1, roughness: .85 } },
-    { id: "jade", name: "Jade", tone: "#3fbf86", glow: "rgba(63,191,134,.4)",
-      tex: () => { const N = noise2(43); return paint(1024, (u, v) => { const n = N(u * 3, v * 3, 6), m = N(u * 9 + 4, v * 9, 3);
-        return mix(mix([10, 70, 48], [80, 190, 130], n), [210, 250, 225], cl((m - .62) * 3)); }); },
-      mat: { metalness: .05, roughness: .2, clearcoat: 1, clearcoatRoughness: .1, sheen: 0 } },
+    { id: "piedra", name: "Piedra tallada", tone: "#d63a2a", glow: "rgba(214,58,42,.42)",
+      build() { const N = noise2(5);
+        const h = canvas2(S, (x, n) => { x.fillStyle = "#c8c8c8"; x.fillRect(0, 0, n, n); x.strokeStyle = "#2a2a2a"; x.lineWidth = n / 64; greca(x, n); });
+        const hp = pixels(h);
+        const col = fromFn(S, (u, v) => { const k = ((v * S | 0) * S + (u * S | 0)) * 4, g = hp[k] / 255, nn = N(u * 7, v * 7, 5);
+          return g < .5 ? [70, 12, 10] : mix([34, 40, 36], [86, 92, 82], nn).map((c) => c * (.85 + .3 * N(u * 30, v * 30, 2))); });
+        const em = fromFn(S, (u, v) => { const k = ((v * S | 0) * S + (u * S | 0)) * 4; return hp[k] < 128 ? [255, 50, 25] : [0, 0, 0]; });
+        return { map: col, bump: h, emissive: em, emissiveColor: 0xff3020, emissiveIntensity: 1.6 }; },
+      mat: { metalness: .05, roughness: .9, bumpScale: .035 } },
+    { id: "plata", name: "Plata repujada", tone: "#b9bcc4", glow: "rgba(185,188,196,.3)",
+      build() { const N = noise2(9);
+        const h = canvas2(S, (x, n) => { x.fillStyle = "#6a6a6a"; x.fillRect(0, 0, n, n); x.strokeStyle = "#f0f0f0"; x.fillStyle = "#f0f0f0"; x.lineWidth = 7; x.shadowColor = "#fff"; x.shadowBlur = 6; volutas(x, n, 3); });
+        const hp = pixels(h);
+        const col = fromFn(S, (u, v) => { const k = ((v * S | 0) * S + (u * S | 0)) * 4, g = hp[k] / 255; return mix([60, 60, 64], [196, 198, 204], g * .7 + N(u * 10, v * 10, 3) * .3); });
+        return { map: col, bump: h }; },
+      mat: { metalness: .9, roughness: .42, bumpScale: .05 } },
+    { id: "bronce", name: "Bronce orgánico", tone: "#c08a4a", glow: "rgba(192,138,74,.35)",
+      build() { const V = voronoi(13, 6), N = noise2(17); const hh = []; let qi = 0;
+        const col = fromFn(S, (u, v) => { const [f1, f2] = V(u, v), e = f2 - f1, ridge = cl(1 - e / .05); hh.push(ridge);
+          return ridge > .25 ? mix([92, 60, 30], [200, 150, 90], ridge * .8 + N(u * 12, v * 12, 3) * .2) : mix([12, 9, 7], [34, 24, 16], cl(e * 6)); });
+        const bump = fromFn(S, () => { const r = hh[qi++] || 0; const g = 40 + 215 * r; return [g, g, g]; });
+        return { map: col, bump }; },
+      mat: { metalness: .8, roughness: .5, bumpScale: .06 } },
+    { id: "ambar", name: "Ámbar engarzado", tone: "#ff8a2a", glow: "rgba(255,138,42,.4)",
+      build() { const V = voronoi(21, 4), N = noise2(23); const em = [], hh = []; let qi = 0, qj = 0;
+        const col = fromFn(S, (u, v) => { const [f1, f2] = V(u, v), e = f2 - f1, frame = e < .025;
+          const t = cl(f1 * 5), c = frame ? mix([18, 16, 16], [70, 66, 64], N(u * 20, v * 20, 2)) : mix(mix([220, 130, 40], [110, 34, 6], t), [60, 18, 4], cl((N(u * 6, v * 6, 4) - .55) * 3));
+          em.push(frame ? 0 : (1 - t) * .5); hh.push(frame ? 1 : .3 + .3 * (1 - t)); return c; });
+        const emissive = fromFn(S, () => { const k = em[qj++] || 0; return [255 * k, 110 * k, 20 * k]; });
+        const bump = fromFn(S, () => { const g = 255 * (hh[qi++] || 0); return [g, g, g]; });
+        return { map: col, bump, emissive, emissiveColor: 0xffffff, emissiveIntensity: .45 }; },
+      mat: { metalness: .25, roughness: .32, clearcoat: .4, clearcoatRoughness: .3, bumpScale: .05 } },
+    { id: "luna", name: "Superficie lunar", tone: "#a9b4c8", glow: "rgba(150,170,200,.3)",
+      build() { const N = noise2(29); let s0 = 77; const rnd = () => ((s0 = (s0 * 16807) % 2147483647) / 2147483647);
+        const C = Array.from({ length: 40 }, () => [rnd(), rnd(), .02 + rnd() * .07]); const hh = []; let qi = 0;
+        const col = fromFn(S, (u, v) => { let h = N(u * 8, v * 8, 6) * .6 + .2;
+          for (const [cx, cy, r] of C) { const d = Math.hypot(u - cx, v - cy) / r; if (d < 1.25) h += d < 1 ? -.35 * (1 - d * d) : .25 * (1.25 - d) * 4 * .1; }
+          hh.push(cl(h)); const g = 46 + 96 * cl(h); return [g, g, g + 6]; });
+        const bump = fromFn(S, () => { const g = 255 * (hh[qi++] || 0); return [g, g, g]; });
+        return { map: col, bump }; },
+      mat: { metalness: 0, roughness: .95, bumpScale: .07 } },
+    { id: "obsidiana", name: "Obsidiana roja", tone: "#ff2a2a", glow: "rgba(255,30,30,.4)",
+      build() { const N = noise2(37); const em = []; let qj = 0;
+        const col = fromFn(S, (u, v) => { const c = Math.abs(N(u * 3, v * 3, 5) - .5), k = c < .012 ? 1 - c / .012 : 0; em.push(k);
+          return k ? mix([60, 4, 4], [255, 60, 40], k) : mix([6, 6, 8], [30, 28, 34], N(u * 9, v * 9, 4)); });
+        const emissive = fromFn(S, () => { const k = em[qj++] || 0; return [255 * k, 40 * k, 30 * k]; });
+        return { map: col, emissive, emissiveColor: 0xffffff, emissiveIntensity: 1.5 }; },
+      mat: { metalness: .2, roughness: .3, clearcoat: .6, clearcoatRoughness: .2 } },
   ];
 
   function envMap(renderer) {
@@ -78,9 +130,9 @@
     };
     OUTLINE.forEach((pts) => {
       const s = new THREE.Shape(pts.map(([x, y]) => new THREE.Vector2((x - .5) * Ww, (.5 - y) * Hh)));
-      geos.push(new THREE.ExtrudeGeometry(s, { depth: .42, bevelEnabled: true, bevelThickness: .09, bevelSize: .045, bevelSegments: 8, curveSegments: 4, UVGenerator: uv }));
+      geos.push(new THREE.ExtrudeGeometry(s, { depth: .16, bevelEnabled: true, bevelThickness: .035, bevelSize: .025, bevelSegments: 5, curveSegments: 4, UVGenerator: uv }));
     });
-    geos.forEach((g) => g.translate(0, 0, -.21));
+    geos.forEach((g) => g.translate(0, 0, -.08));
     return geos;
   }
 
@@ -90,19 +142,21 @@
     try { renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true }); } catch (e) { return null; }
     if (!renderer.getContext()) return null;
     renderer.setPixelRatio(Math.min(2, devicePixelRatio || 1));
-    renderer.outputEncoding = THREE.sRGBEncoding; renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.1;
+    renderer.outputEncoding = THREE.sRGBEncoding; renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
     const cv = renderer.domElement; cv.className = "sr-gl"; host.appendChild(cv);
     const scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(32, 1, .1, 50); cam.position.set(0, 0, 5.6);
     scene.environment = envMap(renderer);
     scene.add(new THREE.AmbientLight(0xffffff, .25));
-    const key = new THREE.DirectionalLight(0xffffff, 2.2); key.position.set(3, 4, 5); scene.add(key);
-    const rim = new THREE.PointLight(0xffffff, 18, 12); rim.position.set(-3, 1, -3); scene.add(rim);
+    const key = new THREE.DirectionalLight(0xffffff, 1.8); key.position.set(2.5, 3.5, 4); scene.add(key);
+    const rim = new THREE.PointLight(0xffffff, 10, 12); rim.position.set(-3, 1, -3); scene.add(rim);
     const fill = new THREE.PointLight(0xffffff, 6, 12); fill.position.set(0, -3, 3); scene.add(fill);
 
     const mats = TEXTURES.map((t) => {
-      const m = new THREE.MeshPhysicalMaterial(Object.assign({ envMapIntensity: 1.4 }, t.mat));
-      if (t.tex) { const c = t.tex(), tx = new THREE.CanvasTexture(c); tx.encoding = THREE.sRGBEncoding; tx.anisotropy = 8; tx.wrapS = tx.wrapT = THREE.RepeatWrapping;
-        m.map = tx; if (t.emissive) { m.emissiveMap = tx; m.emissive = new THREE.Color(0xff5a1f); m.emissiveIntensity = 1.1; } }
+      const m = new THREE.MeshPhysicalMaterial(Object.assign({ envMapIntensity: .6 }, t.mat));
+      const b = t.build(), tx = (c, srgb) => { const x = new THREE.CanvasTexture(c); if (srgb) x.encoding = THREE.sRGBEncoding; x.anisotropy = 8; x.wrapS = x.wrapT = THREE.RepeatWrapping; return x; };
+      m.map = tx(b.map, true);
+      if (b.bump) m.bumpMap = tx(b.bump);
+      if (b.emissive) { m.emissiveMap = tx(b.emissive, true); m.emissive = new THREE.Color(b.emissiveColor); m.emissiveIntensity = b.emissiveIntensity; }
       return m;
     });
     const group = new THREE.Group(); scene.add(group);

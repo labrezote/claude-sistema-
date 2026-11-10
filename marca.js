@@ -158,6 +158,7 @@
     { id: "kraft", name: "Kraft", note: "Papel kraft de empaque: café cálido con fibras visibles.", sw: ["#6e4f33", "#8a6644", "#a58157", "#c9ad86", "#efe3cc"], paper: "#9a744d", dir: [1, 0], blur: .3, len: 0 },
     { id: "papelnoche", name: "Papel noche", note: "Cartulina negra con fibras: sobria y elegante para papelería.", sw: ["#121211", "#1b1b19", "#2c2b28", "#55524b", "#f3efe4"], paper: "#1b1b19", dir: [1, 0], blur: .3, len: 0 },
     { id: "oxido", name: "Papel óxido", note: "Papel rojo tierra, como el tezontle: cálido y con carácter.", sw: ["#5e2418", "#7a3022", "#8e3a2a", "#b0604c", "#f1dccf"], paper: "#8e3a2a", dir: [1, 0], blur: .3, len: 0 },
+    { id: "fiesta", name: "Fiesta", note: "Pista de noche: haces de luz roja, humo y gente con las manos arriba.", sw: ["#050303", "#1a0505", "#6e0b0b", "#d01818", "#ff5a4a"], dir: [0.25, 1], blur: 2.5, len: 26 },
     { id: "cantera", name: "Cantera", note: "Piedra de cantera rosa de cerca: textura, poros y tono cálido.", sw: ["#8a5a4a", "#b07c69", "#c99a86", "#d9b3a1", "#efd9cc"], dir: [1, 0.3], blur: 0.8, len: 4 },
   ];
   function rng(seed) { let s = seed >>> 0; return () => { s = (s + 0x6d2b79f5) >>> 0; let t = s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
@@ -215,6 +216,27 @@
       for (let i = 0; i < 26; i++) { const d = r(); b.globalAlpha = .25 + d * .7; b.fillStyle = d > .6 ? "#2e3a34" : "#4a5650"; const x = r() * W, w = 6 + d * 26; b.fillRect(x, 0, w, H); b.beginPath(); b.ellipse(x + w / 2, H * (.1 + r() * .4), w * 3, H * .12, 0, 0, 7); b.fill(); }
       b.globalAlpha = .55; b.fillStyle = "#e6e8e3"; for (let i = 0; i < 5; i++) { b.beginPath(); b.ellipse(W * r(), H * (.3 + r() * .6), W * .6, H * .06, 0, 0, 7); b.fill(); }
       b.globalAlpha = 1;
+    } else if (mood === "fiesta") {
+      b.fillStyle = "#050303"; b.fillRect(0, 0, W, H);
+      const halo = b.createRadialGradient(W * .5, H * .12, 0, W * .5, H * .12, W * .9);
+      halo.addColorStop(0, "rgba(255,40,30,.55)"); halo.addColorStop(.45, "rgba(140,8,8,.35)"); halo.addColorStop(1, "rgba(0,0,0,0)");
+      b.fillStyle = halo; b.fillRect(0, 0, W, H);
+      b.globalCompositeOperation = "lighter";
+      for (let i = 0; i < 16; i++) { // haces de luz desde el techo
+        const x0 = W * (.2 + r() * .6), ang = (r() - .5) * 1.5, len = H * 1.3, w0 = 3 + r() * 10, w1 = 40 + r() * 140;
+        const x1 = x0 + Math.sin(ang) * len, y1 = Math.cos(ang) * len;
+        const g = b.createLinearGradient(x0, 0, x1, y1); g.addColorStop(0, `rgba(255,${30 + r() * 50 | 0},30,.55)`); g.addColorStop(1, "rgba(120,0,0,0)");
+        b.fillStyle = g; b.beginPath(); b.moveTo(x0 - w0, 0); b.lineTo(x0 + w0, 0); b.lineTo(x1 + w1, y1); b.lineTo(x1 - w1, y1); b.closePath(); b.fill();
+      }
+      for (let i = 0; i < 70; i++) { b.fillStyle = `rgba(255,${40 + r() * 80 | 0},${30 + r() * 40 | 0},${.12 + r() * .35})`; b.beginPath(); b.arc(r() * W, r() * H * .7, 2 + r() * 16, 0, 7); b.fill(); }
+      b.globalCompositeOperation = "source-over";
+      b.fillStyle = "rgba(60,4,4,.35)"; for (let i = 0; i < 6; i++) { b.beginPath(); b.ellipse(r() * W, H * (.45 + r() * .3), W * .5, H * .08, 0, 0, 7); b.fill(); }
+      b.fillStyle = "#020101"; // público con las manos arriba
+      for (let i = 0; i < 46; i++) {
+        const x = (i / 45) * W + (r() - .5) * 30, hy = H * (.8 + r() * .1), hr = 14 + r() * 12;
+        b.beginPath(); b.arc(x, hy, hr, 0, 7); b.fill(); b.fillRect(x - hr * 1.6, hy + hr * .6, hr * 3.2, H);
+        if (r() < .45) { b.save(); b.translate(x + (r() - .5) * hr, hy); b.rotate((r() - .5) * .6); b.fillRect(-4, -hr * 4.5, 8, hr * 4.5); b.beginPath(); b.arc(0, -hr * 4.6, 7, 0, 7); b.fill(); b.restore(); }
+      }
     } else if (mood === "carretera") {
       const g = b.createLinearGradient(0, 0, 0, H); g.addColorStop(0, "#07080c"); g.addColorStop(.6, "#1a1d2a"); g.addColorStop(1, "#0b0c10");
       b.fillStyle = g; b.fillRect(0, 0, W, H);
