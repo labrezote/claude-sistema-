@@ -133,7 +133,7 @@
       const w = svg.getBoundingClientRect().width; if (!w) return;
       const vb = svg.viewBox.baseVal.width || 200;
       // Sobre foto: trazo fino, proporcional (como la primera versión). Sin foto: trazo más presente.
-      const onPhoto = !!svg.closest(".poster, .site, .bc.back, .onphoto");
+      const onPhoto = !!svg.closest(".poster, .site, .bc.back, .onphoto, .thin");
       const px = onPhoto ? Math.max(2, w * 0.022) : Math.min(16, 0.026 * Math.min(w, 600) + 3.5);
       const r = Math.min((px * vb) / w, vb > 200 ? 7 : 12);
       svg.querySelectorAll(".er").forEach((e) => e.setAttribute("radius", r.toFixed(2)));
