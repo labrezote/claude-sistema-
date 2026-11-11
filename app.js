@@ -10,9 +10,9 @@ window.PB_DATA = {
   PROJECTS: [
     { photo: "", title: "Secret Room: identidad para eventos de música electrónica", client: "Secret Room · @secretroom.mx", category: "branding", mood: "fiesta", sym: "baila", year: "2026", cycle: true,
       url: "https://www.instagram.com/secretroom.mx/", interactive: "secretroom",
-      summary: "Secret Room es una serie de eventos de música electrónica en Santomar. Diseñamos su identidad: una S que se lee como rayo y como puerta, y un sistema de flyers en el que cada fecha reinterpreta la S con su propia textura, color y ambiente: piedra maya, ámbar, planeta Tierra, metal orgánico y hierro forjado.",
-      metric: "",
-      details: [["Rol", "Branding, flyers y dirección de arte"], ["Giro", "Eventos de música electrónica"], ["Sede", "Santomar"], ["Temporada", "6 eventos · 2026"]] },
+      summary: "Secret Room nació en 2020 como una reunión privada y secreta entre amigos amantes de la música electrónica en Morelos. Hoy es la comunidad más grande dedicada a la música electrónica en Cuernavaca: hace dos eventos al mes, llega a más de 200 mil personas al mes en redes y ha llevado su marca a Puebla y Ciudad de México. Diseñamos su identidad y un sistema de flyers en el que cada fecha reinterpreta la S con su propia textura, color y ambiente.",
+      metric: "200 mil+ personas al mes en redes",
+      details: [["Rol", "Branding, flyers y dirección de arte"], ["Giro", "Eventos de música electrónica"], ["Origen", "Morelos · 2020"], ["Ciudades", "Cuernavaca, Puebla y CDMX"], ["Web", "secretroom.mx"]] },
     { photo: "", title: "Identidad para despacho de abogados", client: "Despacho jurídico", category: "branding", mood: "papelnoche", sym: "bruta", year: "2025", summary: "Branding para despacho de abogados. Descripción pendiente.", metric: "" },
     { photo: "", title: "Pilón: tarjetas de lealtad para Apple y Google Wallet", client: "Pilón · pilon.app", category: "software", mood: "agave", sym: "idea", year: "2026",
       url: "https://www.pilon.app", interactive: "pilon",
