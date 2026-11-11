@@ -12,7 +12,7 @@ window.PB_DATA = {
       url: "https://www.instagram.com/secretroom.mx/", interactive: "secretroom",
       summary: "Secret Room es una serie de eventos de música electrónica en Santomar. Diseñamos su identidad: una S que se lee como rayo y como puerta, y un sistema de flyers en el que cada fecha reinterpreta la S con su propia textura, color y ambiente: piedra maya, ámbar, planeta Tierra, metal orgánico y hierro forjado.",
       metric: "",
-      details: [["Rol", "Branding, flyers y dirección de arte"], ["Giro", "Eventos de música electrónica"], ["Sede", "Santomar"], ["Temporada", "5 eventos · 2026"]] },
+      details: [["Rol", "Branding, flyers y dirección de arte"], ["Giro", "Eventos de música electrónica"], ["Sede", "Santomar"], ["Temporada", "6 eventos · 2026"]] },
     { photo: "", title: "Identidad para despacho de abogados", client: "Despacho jurídico", category: "branding", mood: "papelnoche", sym: "bruta", year: "2025", summary: "Branding para despacho de abogados. Descripción pendiente.", metric: "" },
     { photo: "", title: "Pilón: tarjetas de lealtad para Apple y Google Wallet", client: "Pilón · pilon.app", category: "software", mood: "agave", sym: "idea", year: "2026",
       url: "https://www.pilon.app", interactive: "pilon",
@@ -157,8 +157,37 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) setInterval(() => {
     const old = el.querySelector(".photo"); if (!old || old.tagName !== "CANVAS") return;
     const k = (+el.dataset.ck || 0) + 1; el.dataset.ck = k;
     const c = document.createElement("canvas"); c.className = "photo"; c.style.opacity = "0"; c.style.transition = "opacity .9s ease";
-    old.after(c); M.drawPhoto(c, el.dataset.mood, +el.dataset.seed + k * 7);
+    const moods = el.dataset.moods ? el.dataset.moods.split(",") : null;
+    old.after(c); M.drawPhoto(c, moods ? moods[k % moods.length] : el.dataset.mood, +el.dataset.seed + k * 7);
     requestAnimationFrame(() => (c.style.opacity = "1"));
     setTimeout(() => old.remove(), 950);
   });
 }, 3000);
+
+/* El nombre de la portada se derrite al pasar el cursor (o al tocarlo), como en el brand book */
+(() => {
+  const name = document.getElementById("hero-name"), fx = document.getElementById("fx"); if (!name || !fx) return;
+  fx.insertAdjacentHTML("beforeend", `<filter id="melt-hover" x="-10%" y="-40%" width="120%" height="180%" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency="0.006 0.012" numOctaves="2" seed="5" result="t"/>
+    <feDisplacementMap in="SourceGraphic" in2="t" scale="0" xChannelSelector="R" yChannelSelector="G" result="d"/>
+    <feGaussianBlur in="d" stdDeviation="0" result="b"/>
+    <feColorMatrix in="b" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -8"/></filter>`);
+  const f = fx.querySelector("#melt-hover"), disp = f.querySelector("feDisplacementMap"), blur = f.querySelector("feGaussianBlur"), turb = f.querySelector("feTurbulence");
+  const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let t = 0, target = 0, raf = 0, t0 = 0;
+  function tick(now) {
+    t += (target - t) * (still ? 1 : 0.09);
+    if (Math.abs(target - t) < 0.004) t = target;
+    const size = parseFloat(getComputedStyle(name).fontSize) || 100;
+    disp.setAttribute("scale", (t * size * 0.42).toFixed(1));
+    blur.setAttribute("stdDeviation", (t * size * 0.035).toFixed(2));
+    if (!still) turb.setAttribute("baseFrequency", `${(0.006 + Math.sin(now / 1900) * 0.0012).toFixed(5)} ${(0.012 + Math.cos(now / 2300) * 0.002).toFixed(5)}`);
+    name.style.filter = t > 0.004 ? "url(#melt-hover)" : "";
+    raf = (t !== target || (target === 1 && !still)) ? requestAnimationFrame(tick) : 0;
+  }
+  const go = (v) => { target = v; if (!raf) raf = requestAnimationFrame(tick); };
+  name.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") go(1); });
+  name.addEventListener("pointerleave", (e) => { if (e.pointerType === "mouse") go(0); });
+  name.addEventListener("click", () => go(target ? 0 : 1));
+  name.addEventListener("focus", () => go(1)); name.addEventListener("blur", () => go(0));
+})();

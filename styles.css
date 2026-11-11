@@ -403,3 +403,12 @@ img.photo{object-position:center top}
 .sr-gl{position:absolute;inset:0;width:100%!important;height:100%!important;display:block;cursor:grab;touch-action:pan-y}
 .sr-gl:active{cursor:grabbing}
 .sr-scene{min-height:clamp(320px,48vh,520px)}
+
+/* Secret Room: S animada con los videos de los flyers */
+.sr-stage{--bg:#02030b;background:var(--bg)!important;color:var(--w);transition:background .6s,color .6s}
+.sr-stage .sr-wm{background:var(--w)}
+.sr-stage .sr-btns button{border-color:color-mix(in srgb,var(--w) 40%,transparent);background:color-mix(in srgb,var(--w) 8%,transparent);color:var(--w)}
+.sr-stage .sr-tex b{color:var(--w);opacity:.6}
+.sr-clip{width:min(100%,560px);aspect-ratio:560/547;object-fit:cover;display:block;-webkit-mask:radial-gradient(closest-side,#000 72%,transparent 100%);mask:radial-gradient(closest-side,#000 72%,transparent 100%)}
+.sr-detail video{width:100%;border-radius:14px;display:block}
+.name{cursor:pointer;outline:none}

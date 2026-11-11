@@ -14,12 +14,12 @@
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs id="fx"></defs></svg>
 <!-- Para usar una foto real: escribe su ruta en data-photo, p. ej. data-photo="assets/portada.jpg" -->
-<section class="hero onphoto" data-mood="niebla" data-seed="3" data-photo=""><canvas class="photo"></canvas>
+<section class="hero onphoto" data-mood="niebla" data-seed="3" data-photo="" data-cycle="1" data-moods="niebla,fiesta,mar,fogata,cempasuchil,carretera,agave,atardecer,desierto,bugambilia"><canvas class="photo"></canvas>
   <span class="t" style="left:6%;top:6%">Piedra Bruta<br>Estudio creativo</span>
   <span class="t hide-m" style="left:38%;top:6%">Marketing +<br>Contenido</span>
   <nav class="t" style="right:6%;top:6%;text-align:right" aria-label="Secciones"><a href="#trabajos">Trabajos</a><br><a href="#estudio">Estudio</a><br><a href="#contacto">Contacto</a></nav>
   <span class="bsym sym" data-s="bruta"></span>
-  <h1 class="name wm">Piedra Brut<span class="cutA">a</span>.</h1>
+  <h1 class="name wm" id="hero-name" tabindex="0">Piedra Brut<span class="cutA">a</span>.</h1>
   <p class="sub">— Ideas talladas <i>a mano</i>.</p>
   <span class="t m" style="left:6%;bottom:12%">Temporada 2026<br>Agenda abierta</span>
   <span class="t hide-m" style="left:38%;bottom:16%">Estrategia +<br>Branding</span>
@@ -84,8 +84,6 @@
 <p class="mono">hola@piedrabruta.mx · @piedrabruta</p></div></section>
 <script src="marca.js"></script>
 <script src="pilon-board.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="secretroom-3d.js"></script>
 <script src="secretroom-board.js"></script>
 <script src="app.js"></script>
 </body>
