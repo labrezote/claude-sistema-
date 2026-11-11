@@ -37,6 +37,16 @@ window.PB_DATA = {
   SERVICES: ["Estrategia y marketing", "Branding e identidad", "Campañas publicitarias", "Redes sociales y contenido", "Fotografía y video", "Sitios web y digital"],
 };
 /* Pinta la foto de un contenedor: imagen real si tiene ruta en data-photo, si no la foto simulada */
+/* Contraste automático: si la imagen es clara, lo que va encima (texto y Bruta) pasa a negro */
+window.autoContrast = (el, canvas) => {
+  try {
+    const t = document.createElement("canvas"); t.width = 24; t.height = 24;
+    const x = t.getContext("2d"); x.drawImage(canvas, 0, 0, 24, 24);
+    const d = x.getImageData(0, 0, 24, 24).data; let sum = 0;
+    for (let i = 0; i < d.length; i += 4) sum += 0.2126 * d[i] + 0.7152 * d[i + 1] + 0.0722 * d[i + 2];
+    el.classList.toggle("on-light", sum / (d.length / 4) / 255 > 0.56);
+  } catch (e) {}
+};
 window.paintPhoto = (el, mood, seed, photo) => {
   const old = el.querySelector(".photo");
   if (photo) {
@@ -46,7 +56,7 @@ window.paintPhoto = (el, mood, seed, photo) => {
   }
   let c = old;
   if (!c || c.tagName !== "CANVAS") { c = document.createElement("canvas"); c.className = "photo"; old ? old.replaceWith(c) : el.prepend(c); }
-  window.Marca.drawPhoto(c, mood, seed);
+  window.Marca.drawPhoto(c, mood, seed); window.autoContrast(el, c);
 };
 window.paintAll = (root = document) => {
   root.querySelectorAll("[data-mood]").forEach((el) => window.paintPhoto(el, el.dataset.mood, +(el.dataset.seed || 1), el.dataset.photo));
@@ -158,7 +168,7 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) setInterval(() => {
     const k = (+el.dataset.ck || 0) + 1; el.dataset.ck = k;
     const c = document.createElement("canvas"); c.className = "photo"; c.style.opacity = "0"; c.style.transition = "opacity .9s ease";
     const moods = el.dataset.moods ? el.dataset.moods.split(",") : null;
-    old.after(c); M.drawPhoto(c, moods ? moods[k % moods.length] : el.dataset.mood, +el.dataset.seed + k * 7);
+    old.after(c); M.drawPhoto(c, moods ? moods[k % moods.length] : el.dataset.mood, +el.dataset.seed + k * 7); autoContrast(el, c);
     requestAnimationFrame(() => (c.style.opacity = "1"));
     setTimeout(() => old.remove(), 950);
   });

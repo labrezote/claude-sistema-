@@ -412,3 +412,9 @@ img.photo{object-position:center top}
 .sr-clip{width:min(100%,560px);aspect-ratio:560/547;object-fit:cover;display:block;-webkit-mask:radial-gradient(closest-side,#000 72%,transparent 100%);mask:radial-gradient(closest-side,#000 72%,transparent 100%)}
 .sr-detail video{width:100%;border-radius:14px;display:block}
 .name{cursor:pointer;outline:none}
+
+/* Contraste automático sobre imágenes claras */
+.onphoto{transition:color .7s ease}
+.hero.on-light,.end.on-light,.row .thumb.on-light,.stage .pv.on-light,.tile .pv.on-light,.case .cv.on-light{color:var(--noche)}
+.hero.on-light .sub{text-shadow:0 1px 12px rgba(255,255,255,.5)}
+.stage .pv.on-light .metric{border-color:var(--noche)}

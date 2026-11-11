@@ -159,6 +159,10 @@
     { id: "papelnoche", name: "Papel noche", note: "Cartulina negra con fibras: sobria y elegante para papelería.", sw: ["#121211", "#1b1b19", "#2c2b28", "#55524b", "#f3efe4"], paper: "#1b1b19", dir: [1, 0], blur: .3, len: 0 },
     { id: "oxido", name: "Papel óxido", note: "Papel rojo tierra, como el tezontle: cálido y con carácter.", sw: ["#5e2418", "#7a3022", "#8e3a2a", "#b0604c", "#f1dccf"], paper: "#8e3a2a", dir: [1, 0], blur: .3, len: 0 },
     { id: "fiesta", name: "Fiesta", note: "Pista de noche: haces de luz roja, humo y gente con las manos arriba.", sw: ["#050303", "#1a0505", "#6e0b0b", "#d01818", "#ff5a4a"], dir: [0.25, 1], blur: 2.5, len: 26 },
+    { id: "cielo", name: "Cielo", note: "Nubes altas en un cielo claro de mediodía.", sw: ["#8fb6dc", "#b9d3ea", "#dfeaf3", "#f4f6f5", "#ffffff"], dir: [1, 0], blur: 8, len: 70 },
+    { id: "salinas", name: "Salinas", note: "Salinas rosadas de Yucatán: agua rosa, sal blanca y cielo pálido.", sw: ["#e9a6b0", "#f2c4c6", "#f7dedb", "#fbf1ec", "#dcebf0"], dir: [1, 0], blur: 4, len: 90 },
+    { id: "maiz", name: "Maíz", note: "Milpa dorada a contraluz al final de la tarde.", sw: ["#8a6a1e", "#c79a2e", "#e8c75a", "#f6e4a0", "#fdf5d6"], dir: [0.1, 1], blur: 5, len: 80 },
+    { id: "estrellas", name: "Estrellas", note: "Cielo nocturno de la sierra: azul profundo y rastro de estrellas.", sw: ["#03040c", "#0a1030", "#1a2a5c", "#6f86c8", "#e8eeff"], dir: [0.6, 0.8], blur: 1, len: 30 },
     { id: "cantera", name: "Cantera", note: "Piedra de cantera rosa de cerca: textura, poros y tono cálido.", sw: ["#8a5a4a", "#b07c69", "#c99a86", "#d9b3a1", "#efd9cc"], dir: [1, 0.3], blur: 0.8, len: 4 },
   ];
   function rng(seed) { let s = seed >>> 0; return () => { s = (s + 0x6d2b79f5) >>> 0; let t = s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
@@ -237,6 +241,22 @@
         b.beginPath(); b.arc(x, hy, hr, 0, 7); b.fill(); b.fillRect(x - hr * 1.6, hy + hr * .6, hr * 3.2, H);
         if (r() < .45) { b.save(); b.translate(x + (r() - .5) * hr, hy); b.rotate((r() - .5) * .6); b.fillRect(-4, -hr * 4.5, 8, hr * 4.5); b.beginPath(); b.arc(0, -hr * 4.6, 7, 0, 7); b.fill(); b.restore(); }
       }
+    } else if (mood === "cielo") {
+      const g = b.createLinearGradient(0, 0, 0, H); g.addColorStop(0, "#9cc0e2"); g.addColorStop(1, "#e6eef4"); b.fillStyle = g; b.fillRect(0, 0, W, H);
+      for (let i = 0; i < 46; i++) { b.fillStyle = pick(["#ffffff", "#f4f6f5", "#e7eef3"]); b.globalAlpha = .5 + r() * .5; b.beginPath(); b.ellipse(r() * W, r() * H, 40 + r() * W * .22, 14 + r() * 40, 0, 0, 7); b.fill(); }
+      b.globalAlpha = 1;
+    } else if (mood === "salinas") {
+      const g = b.createLinearGradient(0, 0, 0, H * .45); g.addColorStop(0, "#d6e8ee"); g.addColorStop(1, "#f6ece8"); b.fillStyle = "#f2c4c6"; b.fillRect(0, 0, W, H); b.fillStyle = g; b.fillRect(0, 0, W, H * .45);
+      for (let i = 0; i < 120; i++) { const y = H * (.46 + r() * .54); b.fillStyle = pick(["#e9a6b0", "#f7dedb", "#fbf1ec", "#f2c4c6", "#ffffff"]); b.beginPath(); b.ellipse(r() * W, y, 20 + r() * 110, 2 + (y / H) * 7, 0, 0, 7); b.fill(); }
+    } else if (mood === "maiz") {
+      const g = b.createLinearGradient(0, 0, 0, H); g.addColorStop(0, "#fdf5d6"); g.addColorStop(.5, "#f0d27a"); g.addColorStop(1, "#b98a28"); b.fillStyle = g; b.fillRect(0, 0, W, H);
+      for (let i = 0; i < 90; i++) { b.strokeStyle = pick(["#c79a2e", "#e8c75a", "#f6e4a0", "#8a6a1e"]); b.lineWidth = 4 + r() * 14; b.lineCap = "round"; const x = r() * W; b.beginPath(); b.moveTo(x, H * 1.05); b.quadraticCurveTo(x + (r() - .5) * 80, H * .6, x + (r() - .5) * 140, H * (.15 + r() * .35)); b.stroke(); }
+      b.fillStyle = "rgba(255,250,225,.55)"; b.beginPath(); b.arc(W * .7, H * .2, W * .22, 0, 7); b.fill();
+    } else if (mood === "estrellas") {
+      const g = b.createLinearGradient(0, 0, W, H); g.addColorStop(0, "#03040c"); g.addColorStop(.6, "#0a1030"); g.addColorStop(1, "#1a2a5c"); b.fillStyle = g; b.fillRect(0, 0, W, H);
+      for (let i = 0; i < 420; i++) { b.fillStyle = pick(["#e8eeff", "#ffffff", "#9fb2ea", "#ffe9c4"]); b.globalAlpha = .3 + r() * .7; b.beginPath(); b.arc(r() * W, r() * H, .6 + r() * 2.2, 0, 7); b.fill(); }
+      b.globalAlpha = .25; b.fillStyle = "#6f86c8"; b.beginPath(); b.ellipse(W * .5, H * .45, W * .7, H * .12, -.5, 0, 7); b.fill(); b.globalAlpha = 1;
+      b.fillStyle = "#020207"; b.beginPath(); b.moveTo(0, H * .86); b.quadraticCurveTo(W * .3, H * .74, W * .6, H * .88); b.quadraticCurveTo(W * .82, H * .8, W, H * .9); b.lineTo(W, H); b.lineTo(0, H); b.closePath(); b.fill();
     } else if (mood === "carretera") {
       const g = b.createLinearGradient(0, 0, 0, H); g.addColorStop(0, "#07080c"); g.addColorStop(.6, "#1a1d2a"); g.addColorStop(1, "#0b0c10");
       b.fillStyle = g; b.fillRect(0, 0, W, H);
