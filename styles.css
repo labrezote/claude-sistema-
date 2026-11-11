@@ -447,3 +447,58 @@ img.photo{object-position:center top}
 .sr-hito summary{cursor:pointer;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#8d8a84;margin-top:6px}
 .sr-lu{letter-spacing:.08em;text-transform:uppercase;font-size:12px!important;margin-top:6px!important}
 @media (max-width:760px){.sr-story{grid-template-columns:1fr}.sr-stats.four{grid-template-columns:1fr 1fr}.sr-years{margin-left:0;width:100%}}
+
+/* Secret Room: identidad, merch, stickers y línea fotográfica */
+.sr-garet{font-family:"Garet","Outfit","Montserrat",sans-serif;font-weight:800;letter-spacing:.21em;text-transform:uppercase}
+.sr-mont{font-family:"Montserrat",sans-serif;font-weight:400}
+.sr-brand{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:12px}
+.sr-brand figure{margin:0;display:flex;flex-direction:column;gap:8px}
+.sr-brand figcaption,.sr-tees figcaption{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#8d8a84}
+.sr-brand .sr-plate{aspect-ratio:auto;height:230px;transition:background .4s,color .4s}
+.sr-brand[data-m="neg"] .sr-plate{background:#000;color:#fff;border-color:#1d1d1d}
+.sr-brand[data-m="pos"] .sr-plate{background:#fff;color:#000}
+.sr-brand .sr-s,.sr-brand .sr-wm{background:currentColor!important}
+.sr-brand .sr-s{width:auto;height:46%}.sr-brand .sr-s.big{height:62%}
+.sr-out{height:62%;display:block}.sr-out svg{height:100%;width:auto;display:block}
+.sr-type{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.sr-type>div{border:1px solid #1d1d1d;border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.sr-type .sr-k{margin:0}
+.sr-type p{margin:0;overflow-wrap:anywhere}
+.sr-type .big{font-size:clamp(22px,3.2vw,38px);line-height:1.15}
+.sr-type .sr-garet:not(.big){font-size:13px;font-weight:700;line-height:1.7}
+.sr-type .sr-mont:not(.big){font-size:15px}
+.sr-tnote{font-size:13px;color:#8d8a84}
+.sr-colors{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}
+.sr-colors span{border-radius:12px;padding:44px 12px 12px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border:1px solid #1d1d1d;display:flex;flex-direction:column}
+.sr-colors small{font-weight:400;opacity:.8;letter-spacing:.06em}
+.sr-tees{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.sr-tees figure{margin:0;display:flex;flex-direction:column;gap:8px;background:#151515;border-radius:14px;padding:14px}
+.sr-tee-svg{width:100%;height:auto;display:block;filter:drop-shadow(0 14px 18px rgba(0,0,0,.5))}
+.sr-teetext{font-family:"Garet","Outfit",sans-serif;font-weight:800;letter-spacing:.21em}
+.sr-stickers{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.sr-stkbg{aspect-ratio:1;border-radius:14px;display:grid;place-items:center;overflow:hidden;position:relative}
+.sr-stkbg::before{content:"";position:absolute;inset:0;background:rgba(0,0,0,.25)}
+.stk{position:relative;display:grid;place-items:center;width:62%;transform:rotate(-6deg);transition:color .3s}
+.stk svg{width:100%;height:auto;display:block;overflow:visible}
+.stk.word{width:88%;transform:rotate(4deg)}
+.stk.round{width:70%;aspect-ratio:1;border:5px solid currentColor;border-radius:50%;transform:rotate(8deg)}
+.stk.round svg{width:46%}
+.stk.lock{gap:8px}.stk.lock svg:first-child{width:46%}
+.sr-stktext{font-family:"Garet","Outfit",sans-serif;font-weight:800;font-size:84px;letter-spacing:.14em;fill:none;stroke:currentColor;stroke-width:3.5}
+.sr-stickers[data-b="blanco"] .stk{color:#fff}
+.sr-stickers[data-b="negro"] .stk{color:#000}
+.sr-stickers[data-b="negro"] .sr-stkbg::before{background:rgba(255,255,255,.35)}
+.sr-fotos{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.sr-fotos figure{margin:0;display:flex;flex-direction:column;gap:10px}
+.sr-foto{position:relative;aspect-ratio:3/4;border-radius:14px;overflow:hidden;background:#3a0508}
+.sr-foto img{width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(1) contrast(1.35) brightness(1.05);mix-blend-mode:screen;opacity:.95}
+.sr-foto::before{content:"";position:absolute;inset:0;background:linear-gradient(160deg,#ff3b1f,#b0101e 55%,#2a0206);z-index:0}
+.sr-foto img{position:relative;z-index:1;mix-blend-mode:multiply}
+.sr-foto::after{content:"";position:absolute;inset:0;z-index:2;background:radial-gradient(120% 90% at 50% 40%,transparent 40%,rgba(0,0,0,.55));pointer-events:none}
+.sr-foto .tag,.sr-foto .wm{position:absolute;z-index:3;font-family:"Garet","Outfit",sans-serif;font-weight:700;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#fff}
+.sr-foto .tag{left:10px;top:50%}.sr-foto .wm{right:10px;bottom:10px;letter-spacing:.21em}
+.sr-fotos figcaption{font-size:13px;line-height:1.5;color:#c9c6c0}
+.sr-fotos figcaption b{display:block;color:var(--w);letter-spacing:.12em;text-transform:uppercase;font-size:12px;margin-bottom:2px}
+.sr-rules{margin:0}
+@media (max-width:760px){.sr-brand{grid-template-columns:1fr 1fr}.sr-brand .wide{grid-column:span 2}.sr-type{grid-template-columns:1fr}.sr-tees,.sr-stickers,.sr-fotos{grid-template-columns:1fr 1fr}}
+.sr-tees figure{background:#2b2b2e}

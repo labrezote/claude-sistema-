@@ -166,13 +166,13 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) setInterval(() => {
     const r = el.getBoundingClientRect(); if (!r.width || r.bottom < 0 || r.top > innerHeight) return;
     const old = el.querySelector(".photo"); if (!old || old.tagName !== "CANVAS") return;
     const k = (+el.dataset.ck || 0) + 1; el.dataset.ck = k;
-    const c = document.createElement("canvas"); c.className = "photo"; c.style.opacity = "0"; c.style.transition = "opacity .9s ease";
+    const c = document.createElement("canvas"); c.className = "photo"; c.style.opacity = "0"; c.style.transition = "opacity 1.8s ease";
     const moods = el.dataset.moods ? el.dataset.moods.split(",") : null;
     old.after(c); M.drawPhoto(c, moods ? moods[k % moods.length] : el.dataset.mood, +el.dataset.seed + k * 7); autoContrast(el, c);
     requestAnimationFrame(() => (c.style.opacity = "1"));
-    setTimeout(() => old.remove(), 950);
+    setTimeout(() => old.remove(), 1900);
   });
-}, 3000);
+}, 8000);
 
 /* El nombre de la portada se derrite al pasar el cursor (o al tocarlo), como en el brand book */
 (() => {
@@ -186,7 +186,7 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) setInterval(() => {
   const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
   let t = 0, target = 0, raf = 0, t0 = 0;
   function tick(now) {
-    t += (target - t) * (still ? 1 : 0.09);
+    t += (target - t) * (still ? 1 : target > t ? 0.05 : 0.012); // entra en ~1.5 s y regresa muy despacio
     if (Math.abs(target - t) < 0.004) t = target;
     const size = parseFloat(getComputedStyle(name).fontSize) || 100;
     disp.setAttribute("scale", (t * size * 0.42).toFixed(1));
@@ -200,4 +200,9 @@ if (!matchMedia("(prefers-reduced-motion: reduce)").matches) setInterval(() => {
   name.addEventListener("pointerleave", (e) => { if (e.pointerType === "mouse") go(0); });
   name.addEventListener("click", () => go(target ? 0 : 1));
   name.addEventListener("focus", () => go(1)); name.addEventListener("blur", () => go(0));
+  // Automático (pensado para celular): se derrite, se queda así un momento largo y regresa lentamente
+  if (!still) {
+    const cycle = () => { go(1); setTimeout(() => go(0), 6500); };
+    setTimeout(cycle, 2500); setInterval(cycle, 20000);
+  }
 })();
